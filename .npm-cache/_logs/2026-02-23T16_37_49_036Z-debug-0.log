@@ -1,0 +1,913 @@
+0 verbose cli /usr/local/bin/node /usr/local/lib/node_modules/npm/bin/npm-cli.js
+1 info using npm@10.2.4
+2 info using node@v20.11.0
+3 timing npm:load:whichnode Completed in 1ms
+4 timing config:load:defaults Completed in 2ms
+5 timing config:load:file:/usr/local/lib/node_modules/npm/npmrc Completed in 0ms
+6 timing config:load:builtin Completed in 0ms
+7 timing config:load:cli Completed in 2ms
+8 timing config:load:env Completed in 0ms
+9 timing config:load:file:/Users/khavasfayzullaevgmail.com/Documents/test-platform-deploy/.npmrc Completed in 0ms
+10 timing config:load:project Completed in 0ms
+11 timing config:load:file:/Users/khavasfayzullaevgmail.com/.npmrc Completed in 0ms
+12 timing config:load:user Completed in 0ms
+13 timing config:load:file:/usr/local/etc/npmrc Completed in 1ms
+14 timing config:load:global Completed in 1ms
+15 timing config:load:setEnvs Completed in 0ms
+16 timing config:load Completed in 6ms
+17 timing npm:load:configload Completed in 6ms
+18 timing config:load:flatten Completed in 2ms
+19 timing npm:load:mkdirpcache Completed in 0ms
+20 timing npm:load:mkdirplogs Completed in 0ms
+21 verbose title npm exec vercel --prod --yes
+22 verbose argv "exec" "--yes" "--" "vercel" "--prod" "--yes"
+23 timing npm:load:setTitle Completed in 10ms
+24 timing npm:load:display Completed in 0ms
+25 verbose logfile logs-max:10 dir:/Users/khavasfayzullaevgmail.com/Documents/test-platform-deploy/.npm-cache/_logs/2026-02-23T16_37_49_036Z-
+26 verbose logfile /Users/khavasfayzullaevgmail.com/Documents/test-platform-deploy/.npm-cache/_logs/2026-02-23T16_37_49_036Z-debug-0.log
+27 timing npm:load:logFile Completed in 7ms
+28 timing npm:load:timers Completed in 0ms
+29 timing npm:load:configScope Completed in 0ms
+30 timing npm:load Completed in 38ms
+31 silly logfile done cleaning log files
+32 timing arborist:ctor Completed in 0ms
+33 http fetch GET 200 https://registry.npmjs.org/npm 1324ms (cache miss)
+34 http fetch GET 200 https://registry.npmjs.org/vercel 1366ms (cache miss)
+35 timing arborist:ctor Completed in 0ms
+36 timing arborist:ctor Completed in 0ms
+37 timing arborist:ctor Completed in 0ms
+38 timing idealTree:init Completed in 2ms
+39 timing idealTree:userRequests Completed in 1ms
+40 silly idealTree buildDeps
+41 silly fetch manifest vercel@50.22.1
+42 http fetch GET 200 https://registry.npmjs.org/vercel 10ms (cache hit)
+43 silly placeDep ROOT vercel@50.22.1 OK for:  want: 50.22.1
+44 silly fetch manifest jose@5.9.6
+45 silly fetch manifest luxon@^3.4.0
+46 silly fetch manifest esbuild@0.27.0
+47 silly fetch manifest chokidar@4.0.0
+48 silly fetch manifest form-data@^4.0.0
+49 silly fetch manifest @vercel/go@3.4.1
+50 silly fetch manifest @vercel/h3@0.1.48
+51 silly fetch manifest @vercel/fun@1.3.0
+52 silly fetch manifest @vercel/koa@0.1.22
+53 silly fetch manifest proxy-agent@6.4.0
+54 silly fetch manifest @vercel/blob@2.3.0
+55 silly fetch manifest @vercel/hono@0.2.42
+56 silly fetch manifest @vercel/next@4.15.31
+57 silly fetch manifest @vercel/node@5.6.6
+58 silly fetch manifest @vercel/ruby@2.3.1
+59 silly fetch manifest @vercel/rust@1.0.5
+60 silly fetch manifest @vercel/elysia@0.1.39
+61 silly fetch manifest @vercel/nestjs@0.2.43
+62 silly fetch manifest @vercel/python@6.15.1
+63 silly fetch manifest @vercel/express@0.1.48
+64 silly fetch manifest @vercel/fastify@0.1.42
+65 silly fetch manifest @vercel/redwood@2.4.9
+66 silly fetch manifest @vercel/backends@0.0.36
+67 silly fetch manifest @vercel/hydrogen@1.3.5
+68 silly fetch manifest @vercel/build-utils@13.4.3
+69 silly fetch manifest @vercel/detect-agent@1.1.0
+70 silly fetch manifest @vercel/static-build@2.8.40
+71 silly fetch manifest @vercel/remix-builder@5.5.10
+72 http fetch GET 200 https://registry.npmjs.org/jose 411ms (cache miss)
+73 http fetch GET 200 https://registry.npmjs.org/luxon 526ms (cache miss)
+74 http fetch GET 200 https://registry.npmjs.org/@vercel%2ffun 796ms (cache miss)
+75 http fetch GET 200 https://registry.npmjs.org/form-data 884ms (cache miss)
+76 http fetch GET 200 https://registry.npmjs.org/@vercel%2ffastify 906ms (cache miss)
+77 http fetch GET 200 https://registry.npmjs.org/chokidar 918ms (cache miss)
+78 http fetch GET 200 https://registry.npmjs.org/@vercel%2fnestjs 930ms (cache miss)
+79 http fetch GET 200 https://registry.npmjs.org/proxy-agent 934ms (cache miss)
+80 http fetch GET 200 https://registry.npmjs.org/@vercel%2fdetect-agent 981ms (cache miss)
+81 http fetch GET 200 https://registry.npmjs.org/@vercel%2fbackends 1114ms (cache miss)
+82 http fetch GET 200 https://registry.npmjs.org/@vercel%2fblob 1146ms (cache miss)
+83 http fetch GET 200 https://registry.npmjs.org/@vercel%2fremix-builder 1215ms (cache miss)
+84 http fetch GET 200 https://registry.npmjs.org/@vercel%2fkoa 1222ms (cache miss)
+85 http fetch GET 200 https://registry.npmjs.org/@vercel%2fexpress 1283ms (cache miss)
+86 http fetch GET 200 https://registry.npmjs.org/@vercel%2fhono 1294ms (cache miss)
+87 http fetch GET 200 https://registry.npmjs.org/@vercel%2frust 1296ms (cache miss)
+88 http fetch GET 200 https://registry.npmjs.org/@vercel%2felysia 1479ms (cache miss)
+89 http fetch GET 200 https://registry.npmjs.org/@vercel%2fruby 1674ms (cache miss)
+90 http fetch GET 200 https://registry.npmjs.org/@vercel%2fh3 1695ms (cache miss)
+91 http fetch GET 200 https://registry.npmjs.org/@vercel%2fhydrogen 1841ms (cache miss)
+92 http fetch GET 200 https://registry.npmjs.org/@vercel%2fpython 2007ms (cache miss)
+93 http fetch GET 200 https://registry.npmjs.org/@vercel%2fredwood 2080ms (cache miss)
+94 http fetch GET 200 https://registry.npmjs.org/esbuild 2088ms (cache miss)
+95 http fetch GET 200 https://registry.npmjs.org/@vercel%2fgo 2208ms (cache miss)
+96 http fetch GET 200 https://registry.npmjs.org/@vercel%2fnode 2358ms (cache miss)
+97 http fetch GET 200 https://registry.npmjs.org/@vercel%2fstatic-build 2421ms (cache miss)
+98 http fetch GET 200 https://registry.npmjs.org/@vercel%2fbuild-utils 2484ms (cache miss)
+99 http fetch GET 200 https://registry.npmjs.org/@vercel%2fnext 2635ms (cache miss)
+100 timing idealTree:#root Completed in 2683ms
+101 silly fetch manifest typescript@^4.0.0 || ^5.0.0
+102 http fetch GET 200 https://registry.npmjs.org/typescript 1386ms (cache miss)
+103 silly placeDep ROOT @vercel/backends@0.0.36 OK for: vercel@50.22.1 want: 0.0.36
+104 silly placeDep ROOT typescript@5.9.3 OK for: @vercel/backends@0.0.36 want: ^4.0.0 || ^5.0.0
+105 silly fetch manifest tsx@4.21.0
+106 silly fetch manifest zod@3.22.4
+107 silly fetch manifest srvx@0.8.9
+108 silly fetch manifest execa@3.2.0
+109 silly fetch manifest fs-extra@11.1.0
+110 silly fetch manifest rolldown@1.0.0-rc.1
+111 silly fetch manifest @vercel/nft@1.3.0
+112 silly fetch manifest oxc-transform@0.111.0
+113 silly fetch manifest path-to-regexp@8.3.0
+114 silly fetch manifest resolve.exports@2.0.3
+115 silly placeDep ROOT @vercel/blob@2.3.0 OK for: vercel@50.22.1 want: 2.3.0
+116 silly fetch manifest async-retry@^1.3.3
+117 silly fetch manifest is-buffer@^2.0.5
+118 silly fetch manifest is-node-process@^1.2.0
+119 silly fetch manifest throttleit@^2.1.0
+120 silly fetch manifest undici@^6.23.0
+121 silly placeDep ROOT @vercel/build-utils@13.4.3 OK for: vercel@50.22.1 want: 13.4.3
+122 silly fetch manifest @vercel/python-analysis@0.6.0
+123 silly placeDep ROOT @vercel/detect-agent@1.1.0 OK for: vercel@50.22.1 want: 1.1.0
+124 silly placeDep ROOT @vercel/elysia@0.1.39 OK for: vercel@50.22.1 want: 0.1.39
+125 silly fetch manifest @vercel/static-config@3.1.2
+126 silly placeDep ROOT @vercel/express@0.1.48 OK for: vercel@50.22.1 want: 0.1.48
+127 silly fetch manifest ts-morph@12.0.0
+128 silly fetch manifest @vercel/nft@1.1.1
+129 silly fetch manifest @vercel/cervel@0.0.23
+130 silly placeDep ROOT @vercel/fastify@0.1.42 OK for: vercel@50.22.1 want: 0.1.42
+131 silly placeDep ROOT @vercel/fun@1.3.0 OK for: vercel@50.22.1 want: 1.3.0
+132 silly fetch manifest @tootallnate/once@2.0.0
+133 silly fetch manifest async-listen@1.2.0
+134 silly fetch manifest debug@4.3.4
+135 silly fetch manifest generic-pool@3.4.2
+136 silly fetch manifest micro@9.3.5-canary.3
+137 silly fetch manifest ms@2.1.1
+138 silly fetch manifest node-fetch@2.6.7
+139 silly fetch manifest path-to-regexp@8.2.0
+140 silly fetch manifest promisepipe@3.0.0
+141 silly fetch manifest semver@7.5.4
+142 silly fetch manifest stat-mode@0.3.0
+143 silly fetch manifest stream-to-promise@2.2.0
+144 silly fetch manifest tar@7.5.7
+145 silly fetch manifest tinyexec@0.3.2
+146 silly fetch manifest tree-kill@1.2.2
+147 silly fetch manifest uid-promise@1.0.0
+148 silly fetch manifest xdg-app-paths@5.1.0
+149 silly fetch manifest yauzl-promise@2.1.3
+150 silly placeDep ROOT @vercel/go@3.4.1 OK for: vercel@50.22.1 want: 3.4.1
+151 silly placeDep ROOT @vercel/h3@0.1.48 OK for: vercel@50.22.1 want: 0.1.48
+152 silly placeDep ROOT @vercel/hono@0.2.42 OK for: vercel@50.22.1 want: 0.2.42
+153 silly placeDep ROOT @vercel/hydrogen@1.3.5 OK for: vercel@50.22.1 want: 1.3.5
+154 silly placeDep ROOT @vercel/koa@0.1.22 OK for: vercel@50.22.1 want: 0.1.22
+155 silly placeDep ROOT @vercel/nestjs@0.2.43 OK for: vercel@50.22.1 want: 0.2.43
+156 silly placeDep ROOT @vercel/next@4.15.31 OK for: vercel@50.22.1 want: 4.15.31
+157 silly placeDep ROOT @vercel/node@5.6.6 OK for: vercel@50.22.1 want: 5.6.6
+158 silly fetch manifest etag@1.8.1
+159 silly fetch manifest undici@5.28.4
+160 silly fetch manifest mime-types@2.1.35
+161 silly fetch manifest node-fetch@2.6.9
+162 silly fetch manifest @types/node@20.11.0
+163 silly fetch manifest async-listen@3.0.0
+164 silly fetch manifest edge-runtime@2.5.9
+165 silly fetch manifest path-to-regexp@6.1.0
+166 silly fetch manifest es-module-lexer@1.4.1
+167 silly fetch manifest @edge-runtime/vm@3.2.0
+168 silly fetch manifest cjs-module-lexer@1.2.3
+169 silly fetch manifest @vercel/error-utils@2.0.3
+170 silly fetch manifest path-to-regexp-updated@npm:path-to-regexp@6.3.0
+171 silly fetch manifest @edge-runtime/node-utils@2.3.0
+172 silly fetch manifest @edge-runtime/primitives@4.1.0
+173 silly placeDep ROOT @vercel/python@6.15.1 OK for: vercel@50.22.1 want: 6.15.1
+174 silly placeDep ROOT @vercel/redwood@2.4.9 OK for: vercel@50.22.1 want: 2.4.9
+175 silly fetch manifest semver@6.3.1
+176 silly placeDep ROOT @vercel/remix-builder@5.5.10 OK for: vercel@50.22.1 want: 5.5.10
+177 silly placeDep ROOT @vercel/ruby@2.3.1 OK for: vercel@50.22.1 want: 2.3.1
+178 silly placeDep ROOT @vercel/rust@1.0.5 OK for: vercel@50.22.1 want: 1.0.5
+179 silly fetch manifest execa@5
+180 silly fetch manifest @iarna/toml@^2.2.5
+181 silly placeDep ROOT @vercel/static-build@2.8.40 OK for: vercel@50.22.1 want: 2.8.40
+182 silly fetch manifest @vercel/gatsby-plugin-vercel-builder@2.0.138
+183 silly fetch manifest @vercel/gatsby-plugin-vercel-analytics@1.0.11
+184 silly placeDep ROOT chokidar@4.0.0 OK for: vercel@50.22.1 want: 4.0.0
+185 silly fetch manifest readdirp@^4.0.1
+186 silly placeDep ROOT esbuild@0.27.0 OK for: vercel@50.22.1 want: 0.27.0
+187 silly fetch manifest @esbuild/aix-ppc64@0.27.0
+188 silly fetch manifest @esbuild/linux-arm@0.27.0
+189 silly fetch manifest @esbuild/linux-x64@0.27.0
+190 silly fetch manifest @esbuild/sunos-x64@0.27.0
+191 silly fetch manifest @esbuild/win32-x64@0.27.0
+192 silly fetch manifest @esbuild/darwin-x64@0.27.0
+193 silly fetch manifest @esbuild/linux-ia32@0.27.0
+194 silly fetch manifest @esbuild/netbsd-x64@0.27.0
+195 silly fetch manifest @esbuild/win32-ia32@0.27.0
+196 silly fetch manifest @esbuild/android-arm@0.27.0
+197 silly fetch manifest @esbuild/android-x64@0.27.0
+198 silly fetch manifest @esbuild/freebsd-x64@0.27.0
+199 silly fetch manifest @esbuild/linux-arm64@0.27.0
+200 silly fetch manifest @esbuild/linux-ppc64@0.27.0
+201 silly fetch manifest @esbuild/linux-s390x@0.27.0
+202 silly fetch manifest @esbuild/openbsd-x64@0.27.0
+203 silly fetch manifest @esbuild/win32-arm64@0.27.0
+204 silly fetch manifest @esbuild/darwin-arm64@0.27.0
+205 silly fetch manifest @esbuild/netbsd-arm64@0.27.0
+206 silly fetch manifest @esbuild/android-arm64@0.27.0
+207 silly fetch manifest @esbuild/freebsd-arm64@0.27.0
+208 silly fetch manifest @esbuild/linux-loong64@0.27.0
+209 silly fetch manifest @esbuild/linux-riscv64@0.27.0
+210 silly fetch manifest @esbuild/openbsd-arm64@0.27.0
+211 silly fetch manifest @esbuild/linux-mips64el@0.27.0
+212 silly fetch manifest @esbuild/openharmony-arm64@0.27.0
+213 silly placeDep ROOT form-data@4.0.5 OK for: vercel@50.22.1 want: ^4.0.0
+214 silly fetch manifest asynckit@^0.4.0
+215 silly fetch manifest combined-stream@^1.0.8
+216 silly fetch manifest es-set-tostringtag@^2.1.0
+217 silly fetch manifest hasown@^2.0.2
+218 silly fetch manifest mime-types@^2.1.12
+219 silly placeDep ROOT jose@5.9.6 OK for: vercel@50.22.1 want: 5.9.6
+220 silly placeDep ROOT luxon@3.7.2 OK for: vercel@50.22.1 want: ^3.4.0
+221 silly placeDep ROOT proxy-agent@6.4.0 OK for: vercel@50.22.1 want: 6.4.0
+222 silly fetch manifest debug@^4.3.4
+223 silly fetch manifest lru-cache@^7.14.1
+224 silly fetch manifest agent-base@^7.0.2
+225 silly fetch manifest proxy-from-env@^1.1.0
+226 silly fetch manifest pac-proxy-agent@^7.0.1
+227 silly fetch manifest http-proxy-agent@^7.0.1
+228 silly fetch manifest https-proxy-agent@^7.0.3
+229 silly fetch manifest socks-proxy-agent@^8.0.2
+230 http fetch GET 200 https://registry.npmjs.org/throttleit 231ms (cache miss)
+231 http fetch GET 200 https://registry.npmjs.org/async-retry 267ms (cache miss)
+232 http fetch GET 200 https://registry.npmjs.org/resolve.exports 283ms (cache miss)
+233 http fetch GET 200 https://registry.npmjs.org/execa 285ms (cache miss)
+234 http fetch GET 200 https://registry.npmjs.org/fs-extra 304ms (cache miss)
+235 http fetch GET 200 https://registry.npmjs.org/srvx 345ms (cache miss)
+236 http fetch GET 200 https://registry.npmjs.org/undici 357ms (cache miss)
+237 http fetch GET 200 https://registry.npmjs.org/tsx 397ms (cache miss)
+238 http fetch GET 200 https://registry.npmjs.org/@vercel%2fnft 408ms (cache miss)
+239 http fetch GET 200 https://registry.npmjs.org/path-to-regexp 413ms (cache miss)
+240 http fetch GET 200 https://registry.npmjs.org/is-node-process 420ms (cache miss)
+241 http fetch GET 200 https://registry.npmjs.org/is-buffer 439ms (cache miss)
+242 http fetch GET 200 https://registry.npmjs.org/oxc-transform 456ms (cache miss)
+243 http fetch GET 200 https://registry.npmjs.org/@vercel%2fstatic-config 520ms (cache miss)
+244 http fetch GET 200 https://registry.npmjs.org/ts-morph 587ms (cache miss)
+245 http fetch GET 200 https://registry.npmjs.org/@vercel%2fcervel 590ms (cache miss)
+246 http fetch GET 200 https://registry.npmjs.org/@vercel%2fnft 599ms (cache miss)
+247 http fetch GET 200 https://registry.npmjs.org/async-listen 599ms (cache miss)
+248 http fetch GET 200 https://registry.npmjs.org/@vercel%2fpython-analysis 634ms (cache miss)
+249 http fetch GET 200 https://registry.npmjs.org/generic-pool 717ms (cache miss)
+250 http fetch GET 200 https://registry.npmjs.org/debug 720ms (cache miss)
+251 http fetch GET 200 https://registry.npmjs.org/micro 742ms (cache miss)
+252 http fetch GET 200 https://registry.npmjs.org/ms 763ms (cache miss)
+253 http fetch GET 200 https://registry.npmjs.org/node-fetch 823ms (cache miss)
+254 http fetch GET 200 https://registry.npmjs.org/path-to-regexp 841ms (cache miss)
+255 http fetch GET 200 https://registry.npmjs.org/@tootallnate%2fonce 845ms (cache miss)
+256 http fetch GET 200 https://registry.npmjs.org/promisepipe 849ms (cache miss)
+257 http fetch GET 200 https://registry.npmjs.org/rolldown 936ms (cache miss)
+258 http fetch GET 200 https://registry.npmjs.org/stream-to-promise 944ms (cache miss)
+259 http fetch GET 200 https://registry.npmjs.org/stat-mode 945ms (cache miss)
+260 http fetch GET 200 https://registry.npmjs.org/tar 974ms (cache miss)
+261 http fetch GET 200 https://registry.npmjs.org/tinyexec 977ms (cache miss)
+262 http fetch GET 200 https://registry.npmjs.org/tree-kill 1043ms (cache miss)
+263 http fetch GET 200 https://registry.npmjs.org/uid-promise 1062ms (cache miss)
+264 http fetch GET 200 https://registry.npmjs.org/yauzl-promise 1076ms (cache miss)
+265 http fetch GET 200 https://registry.npmjs.org/etag 1111ms (cache miss)
+266 http fetch GET 200 https://registry.npmjs.org/zod 1155ms (cache miss)
+267 http fetch GET 200 https://registry.npmjs.org/mime-types 1257ms (cache miss)
+268 http fetch GET 200 https://registry.npmjs.org/node-fetch 1270ms (cache miss)
+269 http fetch GET 200 https://registry.npmjs.org/xdg-app-paths 1317ms (cache miss)
+270 http fetch GET 200 https://registry.npmjs.org/undici 1351ms (cache miss)
+271 http fetch GET 200 https://registry.npmjs.org/async-listen 1366ms (cache miss)
+272 http fetch GET 200 https://registry.npmjs.org/edge-runtime 1440ms (cache miss)
+273 http fetch GET 200 https://registry.npmjs.org/es-module-lexer 1452ms (cache miss)
+274 http fetch GET 200 https://registry.npmjs.org/semver 1477ms (cache miss)
+275 http fetch GET 200 https://registry.npmjs.org/cjs-module-lexer 1514ms (cache miss)
+276 http fetch GET 200 https://registry.npmjs.org/@vercel%2ferror-utils 1525ms (cache miss)
+277 http fetch GET 200 https://registry.npmjs.org/path-to-regexp 1535ms (cache miss)
+278 http fetch GET 200 https://registry.npmjs.org/@edge-runtime%2fnode-utils 1538ms (cache miss)
+279 http fetch GET 200 https://registry.npmjs.org/semver 1560ms (cache miss)
+280 http fetch GET 200 https://registry.npmjs.org/execa 1617ms (cache miss)
+281 http fetch GET 200 https://registry.npmjs.org/@iarna%2ftoml 1644ms (cache miss)
+282 http fetch GET 200 https://registry.npmjs.org/path-to-regexp 1666ms (cache miss)
+283 http fetch GET 200 https://registry.npmjs.org/readdirp 1681ms (cache miss)
+284 http fetch GET 200 https://registry.npmjs.org/@edge-runtime%2fvm 1689ms (cache miss)
+285 http fetch GET 200 https://registry.npmjs.org/@esbuild%2faix-ppc64 1706ms (cache miss)
+286 http fetch GET 200 https://registry.npmjs.org/@edge-runtime%2fprimitives 1749ms (cache miss)
+287 http fetch GET 200 https://registry.npmjs.org/@esbuild%2flinux-arm 1753ms (cache miss)
+288 http fetch GET 200 https://registry.npmjs.org/@esbuild%2flinux-x64 1791ms (cache miss)
+289 http fetch GET 200 https://registry.npmjs.org/@esbuild%2fsunos-x64 1791ms (cache miss)
+290 http fetch GET 200 https://registry.npmjs.org/@esbuild%2fwin32-x64 1821ms (cache miss)
+291 http fetch GET 200 https://registry.npmjs.org/@esbuild%2fdarwin-x64 1831ms (cache miss)
+292 http fetch GET 200 https://registry.npmjs.org/@vercel%2fgatsby-plugin-vercel-analytics 1866ms (cache miss)
+293 http fetch GET 200 https://registry.npmjs.org/@esbuild%2flinux-ia32 1888ms (cache miss)
+294 http fetch GET 200 https://registry.npmjs.org/@esbuild%2fnetbsd-x64 1963ms (cache miss)
+295 http fetch GET 200 https://registry.npmjs.org/@esbuild%2fwin32-ia32 1972ms (cache miss)
+296 http fetch GET 200 https://registry.npmjs.org/@esbuild%2fandroid-x64 2014ms (cache miss)
+297 http fetch GET 200 https://registry.npmjs.org/@esbuild%2fandroid-arm 2069ms (cache miss)
+298 http fetch GET 200 https://registry.npmjs.org/@esbuild%2ffreebsd-x64 2075ms (cache miss)
+299 http fetch GET 200 https://registry.npmjs.org/@esbuild%2flinux-ppc64 2146ms (cache miss)
+300 http fetch GET 200 https://registry.npmjs.org/@esbuild%2flinux-arm64 2232ms (cache miss)
+301 http fetch GET 200 https://registry.npmjs.org/@esbuild%2fopenbsd-x64 2257ms (cache miss)
+302 http fetch GET 200 https://registry.npmjs.org/@esbuild%2flinux-s390x 2269ms (cache miss)
+303 http fetch GET 200 https://registry.npmjs.org/@esbuild%2fwin32-arm64 2362ms (cache miss)
+304 http fetch GET 200 https://registry.npmjs.org/@esbuild%2fandroid-arm64 2377ms (cache miss)
+305 http fetch GET 200 https://registry.npmjs.org/@esbuild%2fdarwin-arm64 2393ms (cache miss)
+306 http fetch GET 200 https://registry.npmjs.org/@esbuild%2ffreebsd-arm64 2409ms (cache miss)
+307 http fetch GET 200 https://registry.npmjs.org/@esbuild%2flinux-riscv64 2446ms (cache miss)
+308 http fetch GET 200 https://registry.npmjs.org/@esbuild%2flinux-loong64 2454ms (cache miss)
+309 http fetch GET 200 https://registry.npmjs.org/@esbuild%2fopenbsd-arm64 2470ms (cache miss)
+310 http fetch GET 200 https://registry.npmjs.org/@esbuild%2flinux-mips64el 2481ms (cache miss)
+311 http fetch GET 200 https://registry.npmjs.org/@esbuild%2fopenharmony-arm64 2482ms (cache miss)
+312 http fetch GET 200 https://registry.npmjs.org/combined-stream 2499ms (cache miss)
+313 http fetch GET 200 https://registry.npmjs.org/asynckit 2506ms (cache miss)
+314 http fetch GET 200 https://registry.npmjs.org/es-set-tostringtag 2513ms (cache miss)
+315 http fetch GET 200 https://registry.npmjs.org/@vercel%2fgatsby-plugin-vercel-builder 2559ms (cache miss)
+316 http fetch GET 200 https://registry.npmjs.org/@esbuild%2fnetbsd-arm64 2554ms (cache miss)
+317 http fetch GET 200 https://registry.npmjs.org/hasown 2569ms (cache miss)
+318 http fetch GET 200 https://registry.npmjs.org/mime-types 2591ms (cache miss)
+319 http fetch GET 200 https://registry.npmjs.org/debug 2601ms (cache miss)
+320 http fetch GET 200 https://registry.npmjs.org/lru-cache 2671ms (cache miss)
+321 http fetch GET 200 https://registry.npmjs.org/agent-base 2684ms (cache miss)
+322 http fetch GET 200 https://registry.npmjs.org/proxy-from-env 2690ms (cache miss)
+323 http fetch GET 200 https://registry.npmjs.org/pac-proxy-agent 2716ms (cache miss)
+324 http fetch GET 200 https://registry.npmjs.org/http-proxy-agent 2740ms (cache miss)
+325 http fetch GET 200 https://registry.npmjs.org/socks-proxy-agent 2757ms (cache miss)
+326 http fetch GET 200 https://registry.npmjs.org/https-proxy-agent 2769ms (cache miss)
+327 http fetch GET 200 https://registry.npmjs.org/@types%2fnode 2882ms (cache miss)
+328 timing idealTree:node_modules/vercel Completed in 4373ms
+329 silly placeDep ROOT @vercel/nft@1.3.0 OK for: @vercel/backends@0.0.36 want: 1.3.0
+330 silly fetch manifest glob@^13.0.0
+331 silly fetch manifest acorn@^8.6.0
+332 silly fetch manifest bindings@^1.4.0
+333 silly fetch manifest picomatch@^4.0.2
+334 silly fetch manifest async-sema@^3.1.1
+335 silly fetch manifest graceful-fs@^4.2.9
+336 silly fetch manifest resolve-from@^5.0.0
+337 silly fetch manifest estree-walker@2.0.2
+338 silly fetch manifest node-gyp-build@^4.2.2
+339 silly fetch manifest @rollup/pluginutils@^5.1.3
+340 silly fetch manifest @mapbox/node-pre-gyp@^2.0.0
+341 silly fetch manifest acorn-import-attributes@^1.9.5
+342 silly placeDep ROOT execa@3.2.0 OK for: @vercel/backends@0.0.36 want: 3.2.0
+343 silly fetch manifest onetime@^5.1.0
+344 silly fetch manifest is-stream@^2.0.0
+345 silly fetch manifest p-finally@^2.0.0
+346 silly fetch manifest get-stream@^5.0.0
+347 silly fetch manifest cross-spawn@^7.0.0
+348 silly fetch manifest signal-exit@^3.0.2
+349 silly fetch manifest merge-stream@^2.0.0
+350 silly fetch manifest npm-run-path@^4.0.0
+351 silly fetch manifest human-signals@^1.1.1
+352 silly fetch manifest strip-final-newline@^2.0.0
+353 silly placeDep ROOT fs-extra@11.1.0 OK for: @vercel/backends@0.0.36 want: 11.1.0
+354 silly fetch manifest jsonfile@^6.0.1
+355 silly fetch manifest graceful-fs@^4.2.0
+356 silly fetch manifest universalify@^2.0.0
+357 silly placeDep ROOT oxc-transform@0.111.0 OK for: @vercel/backends@0.0.36 want: 0.111.0
+358 silly fetch manifest @oxc-transform/binding-darwin-x64@0.111.0
+359 silly fetch manifest @oxc-transform/binding-freebsd-x64@0.111.0
+360 silly fetch manifest @oxc-transform/binding-wasm32-wasi@0.111.0
+361 silly fetch manifest @oxc-transform/binding-darwin-arm64@0.111.0
+362 silly fetch manifest @oxc-transform/binding-android-arm64@0.111.0
+363 silly fetch manifest @oxc-transform/binding-linux-x64-gnu@0.111.0
+364 silly fetch manifest @oxc-transform/binding-linux-x64-musl@0.111.0
+365 silly fetch manifest @oxc-transform/binding-win32-x64-msvc@0.111.0
+366 silly fetch manifest @oxc-transform/binding-linux-arm64-gnu@0.111.0
+367 silly fetch manifest @oxc-transform/binding-linux-ppc64-gnu@0.111.0
+368 silly fetch manifest @oxc-transform/binding-linux-s390x-gnu@0.111.0
+369 silly fetch manifest @oxc-transform/binding-win32-ia32-msvc@0.111.0
+370 silly fetch manifest @oxc-transform/binding-android-arm-eabi@0.111.0
+371 silly fetch manifest @oxc-transform/binding-linux-arm64-musl@0.111.0
+372 silly fetch manifest @oxc-transform/binding-win32-arm64-msvc@0.111.0
+373 silly fetch manifest @oxc-transform/binding-linux-riscv64-gnu@0.111.0
+374 silly fetch manifest @oxc-transform/binding-openharmony-arm64@0.111.0
+375 silly fetch manifest @oxc-transform/binding-linux-riscv64-musl@0.111.0
+376 silly fetch manifest @oxc-transform/binding-linux-arm-gnueabihf@0.111.0
+377 silly fetch manifest @oxc-transform/binding-linux-arm-musleabihf@0.111.0
+378 silly placeDep ROOT path-to-regexp@8.3.0 OK for: @vercel/backends@0.0.36 want: 8.3.0
+379 silly placeDep ROOT resolve.exports@2.0.3 OK for: @vercel/backends@0.0.36 want: 2.0.3
+380 silly placeDep ROOT rolldown@1.0.0-rc.1 OK for: @vercel/backends@0.0.36 want: 1.0.0-rc.1
+381 silly fetch manifest @oxc-project/types@=0.110.0
+382 silly fetch manifest @rolldown/pluginutils@1.0.0-rc.1
+383 silly fetch manifest @rolldown/binding-darwin-x64@1.0.0-rc.1
+384 silly fetch manifest @rolldown/binding-freebsd-x64@1.0.0-rc.1
+385 silly fetch manifest @rolldown/binding-wasm32-wasi@1.0.0-rc.1
+386 silly fetch manifest @rolldown/binding-darwin-arm64@1.0.0-rc.1
+387 silly fetch manifest @rolldown/binding-android-arm64@1.0.0-rc.1
+388 silly fetch manifest @rolldown/binding-linux-x64-gnu@1.0.0-rc.1
+389 silly fetch manifest @rolldown/binding-linux-x64-musl@1.0.0-rc.1
+390 silly fetch manifest @rolldown/binding-win32-x64-msvc@1.0.0-rc.1
+391 silly fetch manifest @rolldown/binding-linux-arm64-gnu@1.0.0-rc.1
+392 silly fetch manifest @rolldown/binding-linux-arm64-musl@1.0.0-rc.1
+393 silly fetch manifest @rolldown/binding-win32-arm64-msvc@1.0.0-rc.1
+394 silly fetch manifest @rolldown/binding-openharmony-arm64@1.0.0-rc.1
+395 silly fetch manifest @rolldown/binding-linux-arm-gnueabihf@1.0.0-rc.1
+396 silly placeDep ROOT srvx@0.8.9 OK for: @vercel/backends@0.0.36 want: 0.8.9
+397 silly fetch manifest cookie-es@^2.0.0
+398 silly placeDep ROOT tsx@4.21.0 OK for: @vercel/backends@0.0.36 want: 4.21.0
+399 silly fetch manifest get-tsconfig@^4.7.5
+400 silly fetch manifest fsevents@~2.3.3
+401 silly placeDep ROOT zod@3.22.4 OK for: @vercel/backends@0.0.36 want: 3.22.4
+402 http fetch GET 200 https://registry.npmjs.org/acorn-import-attributes 209ms (cache miss)
+403 http fetch GET 200 https://registry.npmjs.org/onetime 218ms (cache miss)
+404 http fetch GET 200 https://registry.npmjs.org/bindings 224ms (cache miss)
+405 http fetch GET 200 https://registry.npmjs.org/is-stream 224ms (cache miss)
+406 http fetch GET 200 https://registry.npmjs.org/node-gyp-build 232ms (cache miss)
+407 http fetch GET 200 https://registry.npmjs.org/estree-walker 233ms (cache miss)
+408 http fetch GET 200 https://registry.npmjs.org/picomatch 239ms (cache miss)
+409 http fetch GET 200 https://registry.npmjs.org/p-finally 235ms (cache miss)
+410 http fetch GET 200 https://registry.npmjs.org/graceful-fs 247ms (cache miss)
+411 http fetch GET 200 https://registry.npmjs.org/resolve-from 248ms (cache miss)
+412 http fetch GET 200 https://registry.npmjs.org/@mapbox%2fnode-pre-gyp 246ms (cache miss)
+413 http fetch GET 200 https://registry.npmjs.org/@rollup%2fpluginutils 271ms (cache miss)
+414 http fetch GET 200 https://registry.npmjs.org/glob 300ms (cache miss)
+415 http fetch GET 200 https://registry.npmjs.org/acorn 302ms (cache miss)
+416 http fetch GET 200 https://registry.npmjs.org/async-sema 361ms (cache miss)
+417 http fetch GET 200 https://registry.npmjs.org/signal-exit 381ms (cache miss)
+418 http fetch GET 200 https://registry.npmjs.org/get-stream 382ms (cache miss)
+419 http fetch GET 200 https://registry.npmjs.org/cross-spawn 395ms (cache miss)
+420 http fetch GET 200 https://registry.npmjs.org/merge-stream 395ms (cache miss)
+421 http fetch GET 200 https://registry.npmjs.org/npm-run-path 396ms (cache miss)
+422 http fetch GET 200 https://registry.npmjs.org/strip-final-newline 395ms (cache miss)
+423 http fetch GET 200 https://registry.npmjs.org/universalify 416ms (cache miss)
+424 http fetch GET 200 https://registry.npmjs.org/human-signals 418ms (cache miss)
+425 http fetch GET 200 https://registry.npmjs.org/graceful-fs 424ms (cache miss)
+426 http fetch GET 200 https://registry.npmjs.org/jsonfile 430ms (cache miss)
+427 http fetch GET 200 https://registry.npmjs.org/@oxc-transform%2fbinding-freebsd-x64 475ms (cache miss)
+428 http fetch GET 200 https://registry.npmjs.org/@oxc-transform%2fbinding-wasm32-wasi 522ms (cache miss)
+429 http fetch GET 200 https://registry.npmjs.org/@oxc-transform%2fbinding-android-arm64 547ms (cache miss)
+430 http fetch GET 200 https://registry.npmjs.org/@oxc-transform%2fbinding-linux-x64-musl 566ms (cache miss)
+431 http fetch GET 200 https://registry.npmjs.org/@oxc-transform%2fbinding-darwin-x64 605ms (cache miss)
+432 http fetch GET 200 https://registry.npmjs.org/@oxc-transform%2fbinding-darwin-arm64 718ms (cache miss)
+433 http fetch GET 200 https://registry.npmjs.org/@oxc-transform%2fbinding-linux-riscv64-gnu 718ms (cache miss)
+434 http fetch GET 200 https://registry.npmjs.org/@oxc-transform%2fbinding-linux-x64-gnu 762ms (cache miss)
+435 http fetch GET 200 https://registry.npmjs.org/@oxc-transform%2fbinding-win32-x64-msvc 796ms (cache miss)
+436 http fetch GET 200 https://registry.npmjs.org/@oxc-transform%2fbinding-linux-arm64-gnu 797ms (cache miss)
+437 http fetch GET 200 https://registry.npmjs.org/@oxc-transform%2fbinding-linux-s390x-gnu 808ms (cache miss)
+438 http fetch GET 200 https://registry.npmjs.org/@oxc-transform%2fbinding-linux-arm-gnueabihf 822ms (cache miss)
+439 http fetch GET 200 https://registry.npmjs.org/@oxc-transform%2fbinding-win32-arm64-msvc 838ms (cache miss)
+440 http fetch GET 200 https://registry.npmjs.org/@oxc-transform%2fbinding-linux-ppc64-gnu 867ms (cache miss)
+441 http fetch GET 200 https://registry.npmjs.org/@oxc-transform%2fbinding-openharmony-arm64 876ms (cache miss)
+442 http fetch GET 200 https://registry.npmjs.org/@oxc-transform%2fbinding-android-arm-eabi 882ms (cache miss)
+443 http fetch GET 200 https://registry.npmjs.org/@rolldown%2fpluginutils 912ms (cache miss)
+444 http fetch GET 200 https://registry.npmjs.org/@oxc-project%2ftypes 913ms (cache miss)
+445 http fetch GET 200 https://registry.npmjs.org/@oxc-transform%2fbinding-win32-ia32-msvc 930ms (cache miss)
+446 http fetch GET 200 https://registry.npmjs.org/@oxc-transform%2fbinding-linux-arm64-musl 930ms (cache miss)
+447 http fetch GET 200 https://registry.npmjs.org/@oxc-transform%2fbinding-linux-arm-musleabihf 978ms (cache miss)
+448 http fetch GET 200 https://registry.npmjs.org/@rolldown%2fbinding-android-arm64 1190ms (cache miss)
+449 http fetch GET 200 https://registry.npmjs.org/@rolldown%2fbinding-freebsd-x64 1357ms (cache miss)
+450 http fetch GET 200 https://registry.npmjs.org/@oxc-transform%2fbinding-linux-riscv64-musl 1368ms (cache miss)
+451 http fetch GET 200 https://registry.npmjs.org/@rolldown%2fbinding-linux-x64-musl 1518ms (cache miss)
+452 http fetch GET 200 https://registry.npmjs.org/@rolldown%2fbinding-darwin-x64 1560ms (cache miss)
+453 http fetch GET 200 https://registry.npmjs.org/@rolldown%2fbinding-linux-x64-gnu 1623ms (cache miss)
+454 http fetch GET 200 https://registry.npmjs.org/@rolldown%2fbinding-openharmony-arm64 1626ms (cache miss)
+455 http fetch GET 200 https://registry.npmjs.org/@rolldown%2fbinding-wasm32-wasi 1806ms (cache miss)
+456 http fetch GET 200 https://registry.npmjs.org/cookie-es 1807ms (cache miss)
+457 http fetch GET 200 https://registry.npmjs.org/@rolldown%2fbinding-linux-arm64-musl 1809ms (cache miss)
+458 http fetch GET 200 https://registry.npmjs.org/@rolldown%2fbinding-darwin-arm64 1883ms (cache miss)
+459 http fetch GET 200 https://registry.npmjs.org/get-tsconfig 1885ms (cache miss)
+460 http fetch GET 200 https://registry.npmjs.org/fsevents 1966ms (cache miss)
+461 http fetch GET 200 https://registry.npmjs.org/@rolldown%2fbinding-linux-arm64-gnu 2029ms (cache miss)
+462 http fetch GET 200 https://registry.npmjs.org/@rolldown%2fbinding-linux-arm-gnueabihf 2062ms (cache miss)
+463 http fetch GET 200 https://registry.npmjs.org/@rolldown%2fbinding-win32-arm64-msvc 2068ms (cache miss)
+464 http fetch GET 200 https://registry.npmjs.org/@rolldown%2fbinding-win32-x64-msvc 2111ms (cache miss)
+465 timing idealTree:node_modules/@vercel/backends Completed in 2148ms
+466 silly placeDep ROOT async-retry@1.3.3 OK for: @vercel/blob@2.3.0 want: ^1.3.3
+467 silly fetch manifest retry@0.13.1
+468 silly placeDep ROOT is-buffer@2.0.5 OK for: @vercel/blob@2.3.0 want: ^2.0.5
+469 silly placeDep ROOT is-node-process@1.2.0 OK for: @vercel/blob@2.3.0 want: ^1.2.0
+470 silly placeDep ROOT throttleit@2.1.0 OK for: @vercel/blob@2.3.0 want: ^2.1.0
+471 silly placeDep ROOT undici@6.23.0 OK for: @vercel/blob@2.3.0 want: ^6.23.0
+472 http fetch GET 200 https://registry.npmjs.org/retry 269ms (cache miss)
+473 timing idealTree:node_modules/@vercel/blob Completed in 271ms
+474 silly placeDep ROOT @vercel/python-analysis@0.6.0 OK for: @vercel/build-utils@13.4.3 want: 0.6.0
+475 silly fetch manifest js-yaml@4.1.1
+476 silly fetch manifest fs-extra@11.1.1
+477 silly fetch manifest minimatch@10.1.1
+478 silly fetch manifest smol-toml@1.5.2
+479 silly fetch manifest @renovatebot/pep440@4.2.1
+480 silly fetch manifest pip-requirements-js@1.0.2
+481 silly fetch manifest @bytecodealliance/preview2-shim@0.17.6
+482 http fetch GET 200 https://registry.npmjs.org/pip-requirements-js 167ms (cache miss)
+483 http fetch GET 200 https://registry.npmjs.org/smol-toml 281ms (cache miss)
+484 http fetch GET 200 https://registry.npmjs.org/js-yaml 283ms (cache miss)
+485 http fetch GET 200 https://registry.npmjs.org/minimatch 283ms (cache miss)
+486 http fetch GET 200 https://registry.npmjs.org/@bytecodealliance%2fpreview2-shim 471ms (cache miss)
+487 http fetch GET 200 https://registry.npmjs.org/@renovatebot%2fpep440 471ms (cache miss)
+488 timing idealTree:node_modules/@vercel/build-utils Completed in 476ms
+489 timing idealTree:node_modules/@vercel/detect-agent Completed in 0ms
+490 silly placeDep ROOT @vercel/static-config@3.1.2 OK for: @vercel/elysia@0.1.39 want: 3.1.2
+491 silly fetch manifest ajv@8.6.3
+492 silly fetch manifest json-schema-to-ts@1.6.4
+493 http fetch GET 200 https://registry.npmjs.org/ajv 393ms (cache miss)
+494 http fetch GET 200 https://registry.npmjs.org/json-schema-to-ts 529ms (cache miss)
+495 timing idealTree:node_modules/@vercel/elysia Completed in 535ms
+496 silly placeDep ROOT @vercel/cervel@0.0.23 OK for: @vercel/express@0.1.48 want: 0.0.23
+497 silly placeDep node_modules/@vercel/express @vercel/nft@1.1.1 OK for: @vercel/express@0.1.48 want: 1.1.1
+498 silly placeDep ROOT ts-morph@12.0.0 OK for: @vercel/express@0.1.48 want: 12.0.0
+499 silly fetch manifest @ts-morph/common@~0.11.0
+500 silly fetch manifest code-block-writer@^10.1.1
+501 http fetch GET 200 https://registry.npmjs.org/code-block-writer 186ms (cache miss)
+502 http fetch GET 200 https://registry.npmjs.org/@ts-morph%2fcommon 202ms (cache miss)
+503 timing idealTree:node_modules/@vercel/express Completed in 212ms
+504 timing idealTree:node_modules/@vercel/cervel Completed in 0ms
+505 timing idealTree:node_modules/@vercel/fastify Completed in 0ms
+506 silly fetch manifest encoding@^0.1.0
+507 http fetch GET 200 https://registry.npmjs.org/encoding 180ms (cache miss)
+508 silly placeDep ROOT @tootallnate/once@2.0.0 OK for: @vercel/fun@1.3.0 want: 2.0.0
+509 silly placeDep ROOT async-listen@1.2.0 OK for: @vercel/fun@1.3.0 want: 1.2.0
+510 silly placeDep ROOT debug@4.3.4 OK for: @vercel/fun@1.3.0 want: 4.3.4
+511 silly fetch manifest ms@2.1.2
+512 silly placeDep ROOT generic-pool@3.4.2 OK for: @vercel/fun@1.3.0 want: 3.4.2
+513 silly placeDep ROOT micro@9.3.5-canary.3 OK for: @vercel/fun@1.3.0 want: 9.3.5-canary.3
+514 silly fetch manifest arg@4.1.0
+515 silly fetch manifest raw-body@2.4.1
+516 silly fetch manifest content-type@1.0.4
+517 silly placeDep ROOT ms@2.1.1 OK for: @vercel/fun@1.3.0 want: 2.1.1
+518 silly placeDep ROOT node-fetch@2.6.7 OK for: @vercel/fun@1.3.0 want: 2.6.7
+519 silly fetch manifest whatwg-url@^5.0.0
+520 silly placeDep node_modules/@vercel/fun path-to-regexp@8.2.0 OK for: @vercel/fun@1.3.0 want: 8.2.0
+521 silly placeDep ROOT promisepipe@3.0.0 OK for: @vercel/fun@1.3.0 want: 3.0.0
+522 silly placeDep ROOT semver@7.5.4 OK for: @vercel/fun@1.3.0 want: 7.5.4
+523 silly fetch manifest lru-cache@^6.0.0
+524 silly placeDep ROOT stat-mode@0.3.0 OK for: @vercel/fun@1.3.0 want: 0.3.0
+525 silly placeDep ROOT stream-to-promise@2.2.0 OK for: @vercel/fun@1.3.0 want: 2.2.0
+526 silly fetch manifest any-promise@~1.3.0
+527 silly fetch manifest end-of-stream@~1.1.0
+528 silly fetch manifest stream-to-array@~2.3.0
+529 silly placeDep ROOT tar@7.5.7 OK for: @vercel/fun@1.3.0 want: 7.5.7
+530 silly fetch manifest chownr@^3.0.0
+531 silly fetch manifest yallist@^5.0.0
+532 silly fetch manifest minipass@^7.1.2
+533 silly fetch manifest minizlib@^3.1.0
+534 silly fetch manifest @isaacs/fs-minipass@^4.0.0
+535 silly placeDep ROOT tinyexec@0.3.2 OK for: @vercel/fun@1.3.0 want: 0.3.2
+536 silly placeDep ROOT tree-kill@1.2.2 OK for: @vercel/fun@1.3.0 want: 1.2.2
+537 silly placeDep ROOT uid-promise@1.0.0 OK for: @vercel/fun@1.3.0 want: 1.0.0
+538 silly placeDep ROOT xdg-app-paths@5.1.0 OK for: @vercel/fun@1.3.0 want: 5.1.0
+539 silly fetch manifest xdg-portable@^7.0.0
+540 silly placeDep ROOT yauzl-promise@2.1.3 OK for: @vercel/fun@1.3.0 want: 2.1.3
+541 silly fetch manifest yauzl@^2.9.1
+542 silly fetch manifest yauzl-clone@^1.0.4
+543 http fetch GET 200 https://registry.npmjs.org/arg 203ms (cache miss)
+544 http fetch GET 200 https://registry.npmjs.org/stream-to-array 203ms (cache miss)
+545 http fetch GET 200 https://registry.npmjs.org/content-type 228ms (cache miss)
+546 http fetch GET 200 https://registry.npmjs.org/any-promise 223ms (cache miss)
+547 http fetch GET 200 https://registry.npmjs.org/raw-body 244ms (cache miss)
+548 http fetch GET 200 https://registry.npmjs.org/end-of-stream 238ms (cache miss)
+549 http fetch GET 200 https://registry.npmjs.org/yauzl 231ms (cache miss)
+550 http fetch GET 200 https://registry.npmjs.org/whatwg-url 243ms (cache miss)
+551 http fetch GET 200 https://registry.npmjs.org/xdg-portable 245ms (cache miss)
+552 http fetch GET 200 https://registry.npmjs.org/yallist 282ms (cache miss)
+553 http fetch GET 200 https://registry.npmjs.org/chownr 284ms (cache miss)
+554 http fetch GET 200 https://registry.npmjs.org/minizlib 283ms (cache miss)
+555 http fetch GET 200 https://registry.npmjs.org/yauzl-clone 279ms (cache miss)
+556 http fetch GET 200 https://registry.npmjs.org/minipass 285ms (cache miss)
+557 http fetch GET 200 https://registry.npmjs.org/@isaacs%2ffs-minipass 285ms (cache miss)
+558 timing idealTree:node_modules/@vercel/fun Completed in 487ms
+559 timing idealTree:node_modules/@tootallnate/once Completed in 0ms
+560 timing idealTree:node_modules/@vercel/go Completed in 0ms
+561 timing idealTree:node_modules/@vercel/h3 Completed in 0ms
+562 silly placeDep node_modules/@vercel/hono @vercel/nft@1.1.1 OK for: @vercel/hono@0.2.42 want: 1.1.1
+563 timing idealTree:node_modules/@vercel/hono Completed in 2ms
+564 timing idealTree:node_modules/@vercel/hydrogen Completed in 0ms
+565 timing idealTree:node_modules/@vercel/koa Completed in 0ms
+566 timing idealTree:node_modules/@vercel/nestjs Completed in 0ms
+567 silly placeDep node_modules/@vercel/next @vercel/nft@1.1.1 OK for: @vercel/next@4.15.31 want: 1.1.1
+568 timing idealTree:node_modules/@vercel/next Completed in 2ms
+569 silly fetch manifest rollup@^1.20.0||^2.0.0||^3.0.0||^4.0.0
+570 http fetch GET 200 https://registry.npmjs.org/rollup 714ms (cache miss)
+571 silly placeDep ROOT @mapbox/node-pre-gyp@2.0.3 OK for: @vercel/nft@1.3.0 want: ^2.0.0
+572 silly fetch manifest nopt@^8.0.0
+573 silly fetch manifest consola@^3.2.3
+574 silly fetch manifest detect-libc@^2.0.0
+575 silly fetch manifest https-proxy-agent@^7.0.5
+576 silly placeDep ROOT @rollup/pluginutils@5.3.0 OK for: @vercel/nft@1.3.0 want: ^5.1.3
+577 silly fetch manifest @types/estree@^1.0.0
+578 silly fetch manifest estree-walker@^2.0.2
+579 silly placeDep ROOT acorn@8.16.0 OK for: @vercel/nft@1.3.0 want: ^8.6.0
+580 silly placeDep ROOT acorn-import-attributes@1.9.5 OK for: @vercel/nft@1.3.0 want: ^1.9.5
+581 silly placeDep ROOT async-sema@3.1.1 OK for: @vercel/nft@1.3.0 want: ^3.1.1
+582 silly placeDep ROOT bindings@1.5.0 OK for: @vercel/nft@1.3.0 want: ^1.4.0
+583 silly fetch manifest file-uri-to-path@1.0.0
+584 silly placeDep ROOT estree-walker@2.0.2 OK for: @vercel/nft@1.3.0 want: 2.0.2
+585 silly placeDep ROOT glob@13.0.6 OK for: @vercel/nft@1.3.0 want: ^13.0.0
+586 silly fetch manifest minimatch@^10.2.2
+587 silly fetch manifest minipass@^7.1.3
+588 silly fetch manifest path-scurry@^2.0.2
+589 silly placeDep ROOT graceful-fs@4.2.11 OK for: @vercel/nft@1.3.0 want: ^4.2.9
+590 silly placeDep ROOT node-gyp-build@4.8.4 OK for: @vercel/nft@1.3.0 want: ^4.2.2
+591 silly placeDep ROOT picomatch@4.0.3 OK for: @vercel/nft@1.3.0 want: ^4.0.2
+592 silly placeDep ROOT resolve-from@5.0.0 OK for: @vercel/nft@1.3.0 want: ^5.0.0
+593 http fetch GET 200 https://registry.npmjs.org/file-uri-to-path 187ms (cache miss)
+594 http fetch GET 200 https://registry.npmjs.org/nopt 198ms (cache miss)
+595 http fetch GET 200 https://registry.npmjs.org/path-scurry 204ms (cache miss)
+596 http fetch GET 200 https://registry.npmjs.org/detect-libc 218ms (cache miss)
+597 http fetch GET 200 https://registry.npmjs.org/@types%2festree 217ms (cache miss)
+598 http fetch GET 200 https://registry.npmjs.org/consola 349ms (cache miss)
+599 timing idealTree:node_modules/@vercel/nft Completed in 1095ms
+600 silly placeDep ROOT consola@3.4.2 OK for: @mapbox/node-pre-gyp@2.0.3 want: ^3.2.3
+601 silly placeDep ROOT detect-libc@2.1.2 OK for: @mapbox/node-pre-gyp@2.0.3 want: ^2.0.0
+602 silly placeDep ROOT https-proxy-agent@7.0.6 OK for: @mapbox/node-pre-gyp@2.0.3 want: ^7.0.5
+603 silly fetch manifest agent-base@^7.1.2
+604 silly placeDep ROOT nopt@8.1.0 OK for: @mapbox/node-pre-gyp@2.0.3 want: ^8.0.0
+605 silly fetch manifest abbrev@^3.0.0
+606 http fetch GET 200 https://registry.npmjs.org/abbrev 165ms (cache miss)
+607 timing idealTree:node_modules/@mapbox/node-pre-gyp Completed in 170ms
+608 silly placeDep ROOT @types/estree@1.0.8 OK for: @rollup/pluginutils@5.3.0 want: ^1.0.0
+609 timing idealTree:node_modules/@rollup/pluginutils Completed in 1ms
+610 timing idealTree:node_modules/@types/estree Completed in 0ms
+611 silly placeDep ROOT @edge-runtime/node-utils@2.3.0 OK for: @vercel/node@5.6.6 want: 2.3.0
+612 silly placeDep ROOT @edge-runtime/primitives@4.1.0 OK for: @vercel/node@5.6.6 want: 4.1.0
+613 silly placeDep ROOT @edge-runtime/vm@3.2.0 OK for: @vercel/node@5.6.6 want: 3.2.0
+614 silly placeDep ROOT @types/node@20.11.0 OK for: @vercel/node@5.6.6 want: 20.11.0
+615 silly fetch manifest undici-types@~5.26.4
+616 silly placeDep ROOT @vercel/error-utils@2.0.3 OK for: @vercel/node@5.6.6 want: 2.0.3
+617 silly placeDep node_modules/@vercel/node @vercel/nft@1.1.1 OK for: @vercel/node@5.6.6 want: 1.1.1
+618 silly placeDep node_modules/@vercel/node async-listen@3.0.0 OK for: @vercel/node@5.6.6 want: 3.0.0
+619 silly placeDep ROOT cjs-module-lexer@1.2.3 OK for: @vercel/node@5.6.6 want: 1.2.3
+620 silly placeDep ROOT edge-runtime@2.5.9 OK for: @vercel/node@5.6.6 want: 2.5.9
+621 silly fetch manifest mri@1.2.0
+622 silly fetch manifest pretty-ms@7.0.1
+623 silly fetch manifest time-span@4.0.0
+624 silly fetch manifest picocolors@1.0.0
+625 silly fetch manifest signal-exit@4.0.2
+626 silly fetch manifest async-listen@3.0.1
+627 silly fetch manifest @edge-runtime/format@2.2.1
+628 silly fetch manifest @edge-runtime/ponyfill@2.4.2
+629 silly placeDep ROOT es-module-lexer@1.4.1 OK for: @vercel/node@5.6.6 want: 1.4.1
+630 silly placeDep ROOT etag@1.8.1 OK for: @vercel/node@5.6.6 want: 1.8.1
+631 silly placeDep ROOT mime-types@2.1.35 OK for: @vercel/node@5.6.6 want: 2.1.35
+632 silly fetch manifest mime-db@1.52.0
+633 silly placeDep node_modules/@vercel/node node-fetch@2.6.9 OK for: @vercel/node@5.6.6 want: 2.6.9
+634 silly placeDep node_modules/@vercel/node path-to-regexp@6.1.0 OK for: @vercel/node@5.6.6 want: 6.1.0
+635 silly placeDep ROOT path-to-regexp-updated@6.3.0 OK for: @vercel/node@5.6.6 want: npm:path-to-regexp@6.3.0
+636 silly placeDep node_modules/@vercel/node undici@5.28.4 OK for: @vercel/node@5.6.6 want: 5.28.4
+637 silly fetch manifest @fastify/busboy@^2.0.0
+638 http fetch GET 200 https://registry.npmjs.org/mime-db 199ms (cache miss)
+639 http fetch GET 200 https://registry.npmjs.org/time-span 207ms (cache miss)
+640 http fetch GET 200 https://registry.npmjs.org/mri 211ms (cache miss)
+641 http fetch GET 200 https://registry.npmjs.org/undici-types 216ms (cache miss)
+642 http fetch GET 200 https://registry.npmjs.org/picocolors 211ms (cache miss)
+643 http fetch GET 200 https://registry.npmjs.org/@fastify%2fbusboy 204ms (cache miss)
+644 http fetch GET 200 https://registry.npmjs.org/pretty-ms 215ms (cache miss)
+645 http fetch GET 200 https://registry.npmjs.org/@edge-runtime%2fponyfill 390ms (cache miss)
+646 http fetch GET 200 https://registry.npmjs.org/@edge-runtime%2fformat 392ms (cache miss)
+647 timing idealTree:node_modules/@vercel/node Completed in 405ms
+648 timing idealTree:node_modules/@edge-runtime/node-utils Completed in 0ms
+649 timing idealTree:node_modules/@edge-runtime/primitives Completed in 0ms
+650 timing idealTree:node_modules/@edge-runtime/vm Completed in 0ms
+651 silly placeDep ROOT undici-types@5.26.5 OK for: @types/node@20.11.0 want: ~5.26.4
+652 timing idealTree:node_modules/@types/node Completed in 1ms
+653 timing idealTree:node_modules/@vercel/error-utils Completed in 0ms
+654 timing idealTree:node_modules/@vercel/python Completed in 0ms
+655 silly placeDep ROOT @bytecodealliance/preview2-shim@0.17.6 OK for: @vercel/python-analysis@0.6.0 want: 0.17.6
+656 silly placeDep ROOT @renovatebot/pep440@4.2.1 OK for: @vercel/python-analysis@0.6.0 want: 4.2.1
+657 silly placeDep node_modules/@vercel/python-analysis fs-extra@11.1.1 OK for: @vercel/python-analysis@0.6.0 want: 11.1.1
+658 silly placeDep ROOT js-yaml@4.1.1 OK for: @vercel/python-analysis@0.6.0 want: 4.1.1
+659 silly fetch manifest argparse@^2.0.1
+660 silly placeDep ROOT minimatch@10.1.1 OK for: @vercel/python-analysis@0.6.0 want: 10.1.1
+661 silly fetch manifest @isaacs/brace-expansion@^5.0.0
+662 silly placeDep ROOT pip-requirements-js@1.0.2 OK for: @vercel/python-analysis@0.6.0 want: 1.0.2
+663 silly fetch manifest ohm-js@^17.1.0
+664 silly placeDep ROOT smol-toml@1.5.2 OK for: @vercel/python-analysis@0.6.0 want: 1.5.2
+665 http fetch GET 200 https://registry.npmjs.org/argparse 198ms (cache miss)
+666 http fetch GET 200 https://registry.npmjs.org/@isaacs%2fbrace-expansion 199ms (cache miss)
+667 http fetch GET 200 https://registry.npmjs.org/ohm-js 198ms (cache miss)
+668 timing idealTree:node_modules/@vercel/python-analysis Completed in 208ms
+669 timing idealTree:node_modules/@bytecodealliance/preview2-shim Completed in 0ms
+670 timing idealTree:node_modules/@renovatebot/pep440 Completed in 0ms
+671 silly placeDep node_modules/@vercel/redwood @vercel/nft@1.1.1 OK for: @vercel/redwood@2.4.9 want: 1.1.1
+672 silly placeDep node_modules/@vercel/redwood semver@6.3.1 OK for: @vercel/redwood@2.4.9 want: 6.3.1
+673 timing idealTree:node_modules/@vercel/redwood Completed in 4ms
+674 silly placeDep node_modules/@vercel/remix-builder @vercel/nft@1.1.1 OK for: @vercel/remix-builder@5.5.10 want: 1.1.1
+675 silly placeDep node_modules/@vercel/remix-builder path-to-regexp@6.1.0 OK for: @vercel/remix-builder@5.5.10 want: 6.1.0
+676 timing idealTree:node_modules/@vercel/remix-builder Completed in 2ms
+677 timing idealTree:node_modules/@vercel/ruby Completed in 0ms
+678 silly placeDep ROOT @iarna/toml@2.2.5 OK for: @vercel/rust@1.0.5 want: ^2.2.5
+679 silly placeDep node_modules/@vercel/rust execa@5.1.1 OK for: @vercel/rust@1.0.5 want: 5
+680 silly fetch manifest onetime@^5.1.2
+681 silly fetch manifest get-stream@^6.0.0
+682 silly fetch manifest cross-spawn@^7.0.3
+683 silly fetch manifest signal-exit@^3.0.3
+684 silly fetch manifest npm-run-path@^4.0.1
+685 silly fetch manifest human-signals@^2.1.0
+686 timing idealTree:node_modules/@vercel/rust Completed in 4ms
+687 timing idealTree:node_modules/@iarna/toml Completed in 0ms
+688 silly placeDep ROOT @vercel/gatsby-plugin-vercel-analytics@1.0.11 OK for: @vercel/static-build@2.8.40 want: 1.0.11
+689 silly fetch manifest web-vitals@0.2.4
+690 silly placeDep ROOT @vercel/gatsby-plugin-vercel-builder@2.0.138 OK for: @vercel/static-build@2.8.40 want: 2.0.138
+691 silly fetch manifest @sinclair/typebox@0.25.24
+692 http fetch GET 200 https://registry.npmjs.org/web-vitals 233ms (cache miss)
+693 http fetch GET 200 https://registry.npmjs.org/@sinclair%2ftypebox 384ms (cache miss)
+694 timing idealTree:node_modules/@vercel/static-build Completed in 391ms
+695 silly placeDep ROOT web-vitals@0.2.4 OK for: @vercel/gatsby-plugin-vercel-analytics@1.0.11 want: 0.2.4
+696 timing idealTree:node_modules/@vercel/gatsby-plugin-vercel-analytics Completed in 2ms
+697 silly placeDep ROOT @sinclair/typebox@0.25.24 OK for: @vercel/gatsby-plugin-vercel-builder@2.0.138 want: 0.25.24
+698 timing idealTree:node_modules/@vercel/gatsby-plugin-vercel-builder Completed in 2ms
+699 timing idealTree:node_modules/@sinclair/typebox Completed in 0ms
+700 silly placeDep ROOT ajv@8.6.3 OK for: @vercel/static-config@3.1.2 want: 8.6.3
+701 silly fetch manifest uri-js@^4.2.2
+702 silly fetch manifest fast-deep-equal@^3.1.1
+703 silly fetch manifest require-from-string@^2.0.2
+704 silly fetch manifest json-schema-traverse@^1.0.0
+705 silly placeDep ROOT json-schema-to-ts@1.6.4 OK for: @vercel/static-config@3.1.2 want: 1.6.4
+706 silly fetch manifest ts-toolbelt@^6.15.5
+707 silly fetch manifest @types/json-schema@^7.0.6
+708 http fetch GET 200 https://registry.npmjs.org/require-from-string 185ms (cache miss)
+709 http fetch GET 200 https://registry.npmjs.org/fast-deep-equal 187ms (cache miss)
+710 http fetch GET 200 https://registry.npmjs.org/json-schema-traverse 190ms (cache miss)
+711 http fetch GET 200 https://registry.npmjs.org/uri-js 200ms (cache miss)
+712 http fetch GET 200 https://registry.npmjs.org/@types%2fjson-schema 245ms (cache miss)
+713 http fetch GET 200 https://registry.npmjs.org/ts-toolbelt 792ms (cache miss)
+714 timing idealTree:node_modules/@vercel/static-config Completed in 814ms
+715 timing idealTree:node_modules/acorn Completed in 0ms
+716 timing idealTree:node_modules/acorn-import-attributes Completed in 0ms
+717 silly placeDep ROOT fast-deep-equal@3.1.3 OK for: ajv@8.6.3 want: ^3.1.1
+718 silly placeDep ROOT json-schema-traverse@1.0.0 OK for: ajv@8.6.3 want: ^1.0.0
+719 silly placeDep ROOT require-from-string@2.0.2 OK for: ajv@8.6.3 want: ^2.0.2
+720 silly placeDep ROOT uri-js@4.4.1 OK for: ajv@8.6.3 want: ^4.2.2
+721 silly fetch manifest punycode@^2.1.0
+722 http fetch GET 200 https://registry.npmjs.org/punycode 169ms (cache miss)
+723 timing idealTree:node_modules/ajv Completed in 174ms
+724 timing idealTree:node_modules/async-listen Completed in 0ms
+725 silly placeDep ROOT retry@0.13.1 OK for: async-retry@1.3.3 want: 0.13.1
+726 timing idealTree:node_modules/async-retry Completed in 1ms
+727 timing idealTree:node_modules/async-sema Completed in 0ms
+728 silly placeDep ROOT file-uri-to-path@1.0.0 OK for: bindings@1.5.0 want: 1.0.0
+729 timing idealTree:node_modules/bindings Completed in 1ms
+730 silly placeDep ROOT readdirp@4.1.2 OK for: chokidar@4.0.0 want: ^4.0.1
+731 timing idealTree:node_modules/chokidar Completed in 1ms
+732 timing idealTree:node_modules/cjs-module-lexer Completed in 0ms
+733 timing idealTree:node_modules/consola Completed in 0ms
+734 silly placeDep node_modules/debug ms@2.1.2 OK for: debug@4.3.4 want: 2.1.2
+735 timing idealTree:node_modules/debug Completed in 1ms
+736 timing idealTree:node_modules/detect-libc Completed in 0ms
+737 silly placeDep ROOT @edge-runtime/format@2.2.1 OK for: edge-runtime@2.5.9 want: 2.2.1
+738 silly placeDep ROOT @edge-runtime/ponyfill@2.4.2 OK for: edge-runtime@2.5.9 want: 2.4.2
+739 silly placeDep node_modules/edge-runtime async-listen@3.0.1 OK for: edge-runtime@2.5.9 want: 3.0.1
+740 silly placeDep ROOT mri@1.2.0 OK for: edge-runtime@2.5.9 want: 1.2.0
+741 silly placeDep ROOT picocolors@1.0.0 OK for: edge-runtime@2.5.9 want: 1.0.0
+742 silly placeDep ROOT pretty-ms@7.0.1 OK for: edge-runtime@2.5.9 want: 7.0.1
+743 silly fetch manifest parse-ms@^2.1.0
+744 silly placeDep ROOT signal-exit@4.0.2 OK for: edge-runtime@2.5.9 want: 4.0.2
+745 silly placeDep ROOT time-span@4.0.0 OK for: edge-runtime@2.5.9 want: 4.0.0
+746 silly fetch manifest convert-hrtime@^3.0.0
+747 http fetch GET 200 https://registry.npmjs.org/parse-ms 162ms (cache miss)
+748 http fetch GET 200 https://registry.npmjs.org/convert-hrtime 164ms (cache miss)
+749 timing idealTree:node_modules/edge-runtime Completed in 172ms
+750 timing idealTree:node_modules/@edge-runtime/format Completed in 0ms
+751 timing idealTree:node_modules/@edge-runtime/ponyfill Completed in 0ms
+752 timing idealTree:node_modules/es-module-lexer Completed in 0ms
+753 silly placeDep ROOT @esbuild/aix-ppc64@0.27.0 OK for: esbuild@0.27.0 want: 0.27.0
+754 silly placeDep ROOT @esbuild/android-arm@0.27.0 OK for: esbuild@0.27.0 want: 0.27.0
+755 silly placeDep ROOT @esbuild/android-arm64@0.27.0 OK for: esbuild@0.27.0 want: 0.27.0
+756 silly placeDep ROOT @esbuild/android-x64@0.27.0 OK for: esbuild@0.27.0 want: 0.27.0
+757 silly placeDep ROOT @esbuild/darwin-arm64@0.27.0 OK for: esbuild@0.27.0 want: 0.27.0
+758 silly placeDep ROOT @esbuild/darwin-x64@0.27.0 OK for: esbuild@0.27.0 want: 0.27.0
+759 silly placeDep ROOT @esbuild/freebsd-arm64@0.27.0 OK for: esbuild@0.27.0 want: 0.27.0
+760 silly placeDep ROOT @esbuild/freebsd-x64@0.27.0 OK for: esbuild@0.27.0 want: 0.27.0
+761 silly placeDep ROOT @esbuild/linux-arm@0.27.0 OK for: esbuild@0.27.0 want: 0.27.0
+762 silly placeDep ROOT @esbuild/linux-arm64@0.27.0 OK for: esbuild@0.27.0 want: 0.27.0
+763 silly placeDep ROOT @esbuild/linux-ia32@0.27.0 OK for: esbuild@0.27.0 want: 0.27.0
+764 silly placeDep ROOT @esbuild/linux-loong64@0.27.0 OK for: esbuild@0.27.0 want: 0.27.0
+765 silly placeDep ROOT @esbuild/linux-mips64el@0.27.0 OK for: esbuild@0.27.0 want: 0.27.0
+766 silly placeDep ROOT @esbuild/linux-ppc64@0.27.0 OK for: esbuild@0.27.0 want: 0.27.0
+767 silly placeDep ROOT @esbuild/linux-riscv64@0.27.0 OK for: esbuild@0.27.0 want: 0.27.0
+768 silly placeDep ROOT @esbuild/linux-s390x@0.27.0 OK for: esbuild@0.27.0 want: 0.27.0
+769 silly placeDep ROOT @esbuild/linux-x64@0.27.0 OK for: esbuild@0.27.0 want: 0.27.0
+770 silly placeDep ROOT @esbuild/netbsd-arm64@0.27.0 OK for: esbuild@0.27.0 want: 0.27.0
+771 silly placeDep ROOT @esbuild/netbsd-x64@0.27.0 OK for: esbuild@0.27.0 want: 0.27.0
+772 silly placeDep ROOT @esbuild/openbsd-arm64@0.27.0 OK for: esbuild@0.27.0 want: 0.27.0
+773 silly placeDep ROOT @esbuild/openbsd-x64@0.27.0 OK for: esbuild@0.27.0 want: 0.27.0
+774 silly placeDep ROOT @esbuild/openharmony-arm64@0.27.0 OK for: esbuild@0.27.0 want: 0.27.0
+775 silly placeDep ROOT @esbuild/sunos-x64@0.27.0 OK for: esbuild@0.27.0 want: 0.27.0
+776 silly placeDep ROOT @esbuild/win32-arm64@0.27.0 OK for: esbuild@0.27.0 want: 0.27.0
+777 silly placeDep ROOT @esbuild/win32-ia32@0.27.0 OK for: esbuild@0.27.0 want: 0.27.0
+778 silly placeDep ROOT @esbuild/win32-x64@0.27.0 OK for: esbuild@0.27.0 want: 0.27.0
+779 timing idealTree:node_modules/esbuild Completed in 17ms
+780 timing idealTree:node_modules/@esbuild/aix-ppc64 Completed in 0ms
+781 timing idealTree:node_modules/@esbuild/android-arm Completed in 0ms
+782 timing idealTree:node_modules/@esbuild/android-arm64 Completed in 0ms
+783 timing idealTree:node_modules/@esbuild/android-x64 Completed in 0ms
+784 timing idealTree:node_modules/@esbuild/darwin-arm64 Completed in 0ms
+785 timing idealTree:node_modules/@esbuild/darwin-x64 Completed in 0ms
+786 timing idealTree:node_modules/@esbuild/freebsd-arm64 Completed in 0ms
+787 timing idealTree:node_modules/@esbuild/freebsd-x64 Completed in 0ms
+788 timing idealTree:node_modules/@esbuild/linux-arm Completed in 0ms
+789 timing idealTree:node_modules/@esbuild/linux-arm64 Completed in 0ms
+790 timing idealTree:node_modules/@esbuild/linux-ia32 Completed in 0ms
+791 timing idealTree:node_modules/@esbuild/linux-loong64 Completed in 0ms
+792 timing idealTree:node_modules/@esbuild/linux-mips64el Completed in 0ms
+793 timing idealTree:node_modules/@esbuild/linux-ppc64 Completed in 0ms
+794 timing idealTree:node_modules/@esbuild/linux-riscv64 Completed in 0ms
+795 timing idealTree:node_modules/@esbuild/linux-s390x Completed in 0ms
+796 timing idealTree:node_modules/@esbuild/linux-x64 Completed in 0ms
+797 timing idealTree:node_modules/@esbuild/netbsd-arm64 Completed in 0ms
+798 timing idealTree:node_modules/@esbuild/netbsd-x64 Completed in 0ms
+799 timing idealTree:node_modules/@esbuild/openbsd-arm64 Completed in 0ms
+800 timing idealTree:node_modules/@esbuild/openbsd-x64 Completed in 0ms
+801 timing idealTree:node_modules/@esbuild/openharmony-arm64 Completed in 0ms
+802 timing idealTree:node_modules/@esbuild/sunos-x64 Completed in 0ms
+803 timing idealTree:node_modules/@esbuild/win32-arm64 Completed in 0ms
+804 timing idealTree:node_modules/@esbuild/win32-ia32 Completed in 0ms
+805 timing idealTree:node_modules/@esbuild/win32-x64 Completed in 0ms
+806 timing idealTree:node_modules/estree-walker Completed in 0ms
+807 timing idealTree:node_modules/etag Completed in 0ms
+808 silly placeDep ROOT cross-spawn@7.0.6 OK for: execa@3.2.0 want: ^7.0.0
+809 silly fetch manifest which@^2.0.1
+810 silly fetch manifest path-key@^3.1.0
+811 silly fetch manifest shebang-command@^2.0.0
+812 silly placeDep ROOT get-stream@5.2.0 OK for: execa@3.2.0 want: ^5.0.0
+813 silly fetch manifest pump@^3.0.0
+814 silly placeDep ROOT human-signals@1.1.1 OK for: execa@3.2.0 want: ^1.1.1
+815 silly placeDep ROOT is-stream@2.0.1 OK for: execa@3.2.0 want: ^2.0.0
+816 silly placeDep ROOT merge-stream@2.0.0 OK for: execa@3.2.0 want: ^2.0.0
+817 silly placeDep ROOT npm-run-path@4.0.1 OK for: execa@3.2.0 want: ^4.0.0
+818 silly fetch manifest path-key@^3.0.0
+819 silly placeDep ROOT onetime@5.1.2 OK for: execa@3.2.0 want: ^5.1.0
+820 silly fetch manifest mimic-fn@^2.1.0
+821 silly placeDep ROOT p-finally@2.0.1 OK for: execa@3.2.0 want: ^2.0.0
+822 silly placeDep node_modules/execa signal-exit@3.0.7 OK for: execa@3.2.0 want: ^3.0.2
+823 silly placeDep ROOT strip-final-newline@2.0.0 OK for: execa@3.2.0 want: ^2.0.0
+824 http fetch GET 200 https://registry.npmjs.org/path-key 194ms (cache miss)
+825 http fetch GET 200 https://registry.npmjs.org/shebang-command 194ms (cache miss)
+826 http fetch GET 200 https://registry.npmjs.org/pump 193ms (cache miss)
+827 http fetch GET 200 https://registry.npmjs.org/mimic-fn 191ms (cache miss)
+828 http fetch GET 200 https://registry.npmjs.org/which 196ms (cache miss)
+829 http fetch GET 200 https://registry.npmjs.org/path-key 193ms (cache miss)
+830 timing idealTree:node_modules/execa Completed in 200ms
+831 silly placeDep ROOT path-key@3.1.1 OK for: cross-spawn@7.0.6 want: ^3.1.0
+832 silly placeDep ROOT shebang-command@2.0.0 OK for: cross-spawn@7.0.6 want: ^2.0.0
+833 silly fetch manifest shebang-regex@^3.0.0
+834 silly placeDep ROOT which@2.0.2 OK for: cross-spawn@7.0.6 want: ^2.0.1
+835 silly fetch manifest isexe@^2.0.0
+836 http fetch GET 200 https://registry.npmjs.org/shebang-regex 172ms (cache miss)
+837 http fetch GET 200 https://registry.npmjs.org/isexe 172ms (cache miss)
+838 timing idealTree:node_modules/cross-spawn Completed in 176ms
+839 timing idealTree:node_modules/fast-deep-equal Completed in 0ms
+840 timing idealTree:node_modules/file-uri-to-path Completed in 0ms
+841 silly placeDep ROOT asynckit@0.4.0 OK for: form-data@4.0.5 want: ^0.4.0
+842 silly placeDep ROOT combined-stream@1.0.8 OK for: form-data@4.0.5 want: ^1.0.8
+843 silly fetch manifest delayed-stream@~1.0.0
+844 silly placeDep ROOT es-set-tostringtag@2.1.0 OK for: form-data@4.0.5 want: ^2.1.0
+845 silly fetch manifest es-errors@^1.3.0
+846 silly fetch manifest get-intrinsic@^1.2.6
+847 silly fetch manifest has-tostringtag@^1.0.2
+848 silly placeDep ROOT hasown@2.0.2 OK for: form-data@4.0.5 want: ^2.0.2
+849 silly fetch manifest function-bind@^1.1.2
+850 http fetch GET 200 https://registry.npmjs.org/delayed-stream 182ms (cache miss)
+851 http fetch GET 200 https://registry.npmjs.org/has-tostringtag 182ms (cache miss)
+852 http fetch GET 200 https://registry.npmjs.org/get-intrinsic 184ms (cache miss)
+853 http fetch GET 200 https://registry.npmjs.org/function-bind 183ms (cache miss)
+854 http fetch GET 200 https://registry.npmjs.org/es-errors 186ms (cache miss)
+855 timing idealTree:node_modules/form-data Completed in 191ms
+856 timing idealTree:node_modules/asynckit Completed in 0ms
+857 silly placeDep ROOT delayed-stream@1.0.0 OK for: combined-stream@1.0.8 want: ~1.0.0
+858 timing idealTree:node_modules/combined-stream Completed in 1ms
+859 timing idealTree:node_modules/delayed-stream Completed in 0ms
+860 silly placeDep ROOT es-errors@1.3.0 OK for: es-set-tostringtag@2.1.0 want: ^1.3.0
+861 silly placeDep ROOT get-intrinsic@1.3.0 OK for: es-set-tostringtag@2.1.0 want: ^1.2.6
+862 silly fetch manifest gopd@^1.2.0
+863 silly fetch manifest get-proto@^1.0.1
+864 silly fetch manifest has-symbols@^1.1.0
+865 silly fetch manifest es-object-atoms@^1.1.1
+866 silly fetch manifest math-intrinsics@^1.1.0
+867 silly fetch manifest es-define-property@^1.0.1
+868 silly fetch manifest call-bind-apply-helpers@^1.0.2
+869 silly placeDep ROOT has-tostringtag@1.0.2 OK for: es-set-tostringtag@2.1.0 want: ^1.0.2
+870 silly fetch manifest has-symbols@^1.0.3
+871 http fetch GET 200 https://registry.npmjs.org/has-symbols 352ms (cache miss)
+872 http fetch GET 200 https://registry.npmjs.org/es-object-atoms 371ms (cache miss)
+873 http fetch GET 200 https://registry.npmjs.org/math-intrinsics 370ms (cache miss)
+874 http fetch GET 200 https://registry.npmjs.org/gopd 373ms (cache miss)
+875 http fetch GET 200 https://registry.npmjs.org/get-proto 373ms (cache miss)
+876 http fetch GET 200 https://registry.npmjs.org/call-bind-apply-helpers 370ms (cache miss)
+877 http fetch GET 200 https://registry.npmjs.org/has-symbols 380ms (cache miss)
+878 http fetch GET 200 https://registry.npmjs.org/es-define-property 383ms (cache miss)
+879 timing idealTree:node_modules/es-set-tostringtag Completed in 388ms
+880 timing idealTree:node_modules/es-errors Completed in 0ms
+881 silly placeDep ROOT jsonfile@6.2.0 OK for: fs-extra@11.1.0 want: ^6.0.1
+882 silly placeDep ROOT universalify@2.0.1 OK for: fs-extra@11.1.0 want: ^2.0.0
+883 timing idealTree:node_modules/fs-extra Completed in 2ms
+884 timing idealTree:node_modules/generic-pool Completed in 0ms
+885 silly placeDep ROOT call-bind-apply-helpers@1.0.2 OK for: get-intrinsic@1.3.0 want: ^1.0.2
+886 silly placeDep ROOT es-define-property@1.0.1 OK for: get-intrinsic@1.3.0 want: ^1.0.1
+887 silly placeDep ROOT es-object-atoms@1.1.1 OK for: get-intrinsic@1.3.0 want: ^1.1.1
+888 silly placeDep ROOT function-bind@1.1.2 OK for: get-intrinsic@1.3.0 want: ^1.1.2
+889 silly placeDep ROOT get-proto@1.0.1 OK for: get-intrinsic@1.3.0 want: ^1.0.1
+890 silly fetch manifest dunder-proto@^1.0.1
+891 silly placeDep ROOT gopd@1.2.0 OK for: get-intrinsic@1.3.0 want: ^1.2.0
+892 silly placeDep ROOT has-symbols@1.1.0 OK for: get-intrinsic@1.3.0 want: ^1.1.0
+893 silly placeDep ROOT math-intrinsics@1.1.0 OK for: get-intrinsic@1.3.0 want: ^1.1.0
+894 http fetch GET 200 https://registry.npmjs.org/dunder-proto 187ms (cache miss)
+895 timing idealTree:node_modules/get-intrinsic Completed in 191ms
+896 timing idealTree:node_modules/call-bind-apply-helpers Completed in 0ms
+897 timing idealTree:node_modules/es-define-property Completed in 0ms
+898 timing idealTree:node_modules/es-object-atoms Completed in 0ms
+899 timing idealTree:node_modules/function-bind Completed in 0ms
+900 silly placeDep ROOT dunder-proto@1.0.1 OK for: get-proto@1.0.1 want: ^1.0.1
+901 timing idealTree:node_modules/get-proto Completed in 2ms
+902 timing idealTree:node_modules/dunder-proto Completed in 0ms
+903 silly placeDep ROOT pump@3.0.3 OK for: get-stream@5.2.0 want: ^3.0.0
+904 silly fetch manifest end-of-stream@^1.1.0
+905 silly fetch manifest once@^1.3.1
+906 http fetch GET 200 https://registry.npmjs.org/once 158ms (cache miss)
+907 timing idealTree:node_modules/get-stream Completed in 161ms
+908 silly placeDep node_modules/glob minimatch@10.2.2 OK for: glob@13.0.6 want: ^10.2.2
+909 silly fetch manifest brace-expansion@^5.0.2
+910 silly placeDep ROOT minipass@7.1.3 OK for: glob@13.0.6 want: ^7.1.3
+911 silly placeDep ROOT path-scurry@2.0.2 OK for: glob@13.0.6 want: ^2.0.2
+912 silly fetch manifest lru-cache@^11.0.0

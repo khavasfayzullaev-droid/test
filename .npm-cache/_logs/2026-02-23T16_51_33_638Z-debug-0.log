@@ -1,0 +1,141 @@
+0 verbose cli /usr/local/bin/node /usr/local/lib/node_modules/npm/bin/npm-cli.js
+1 info using npm@10.2.4
+2 info using node@v20.11.0
+3 timing npm:load:whichnode Completed in 1ms
+4 timing config:load:defaults Completed in 2ms
+5 timing config:load:file:/usr/local/lib/node_modules/npm/npmrc Completed in 0ms
+6 timing config:load:builtin Completed in 0ms
+7 timing config:load:cli Completed in 2ms
+8 timing config:load:env Completed in 0ms
+9 timing config:load:file:/Users/khavasfayzullaevgmail.com/Documents/test-platform-deploy/.npmrc Completed in 0ms
+10 timing config:load:project Completed in 1ms
+11 timing config:load:file:/Users/khavasfayzullaevgmail.com/.npmrc Completed in 0ms
+12 timing config:load:user Completed in 0ms
+13 timing config:load:file:/usr/local/etc/npmrc Completed in 0ms
+14 timing config:load:global Completed in 0ms
+15 timing config:load:setEnvs Completed in 1ms
+16 timing config:load Completed in 6ms
+17 timing npm:load:configload Completed in 6ms
+18 timing config:load:flatten Completed in 1ms
+19 timing npm:load:mkdirpcache Completed in 0ms
+20 timing npm:load:mkdirplogs Completed in 0ms
+21 verbose title npm exec netlify-cli deploy --dir=/Users/khavasfayzullaevgmail.com/Documents/test-platform-deploy/dist --prod --site=ustoz-test-platform
+22 verbose argv "exec" "--yes" "--" "netlify-cli" "deploy" "--dir=/Users/khavasfayzullaevgmail.com/Documents/test-platform-deploy/dist" "--prod" "--site=ustoz-test-platform"
+23 timing npm:load:setTitle Completed in 10ms
+24 timing npm:load:display Completed in 0ms
+25 verbose logfile logs-max:10 dir:/Users/khavasfayzullaevgmail.com/Documents/test-platform-deploy/.npm-cache/_logs/2026-02-23T16_51_33_638Z-
+26 verbose logfile /Users/khavasfayzullaevgmail.com/Documents/test-platform-deploy/.npm-cache/_logs/2026-02-23T16_51_33_638Z-debug-0.log
+27 timing npm:load:logFile Completed in 8ms
+28 timing npm:load:timers Completed in 0ms
+29 timing npm:load:configScope Completed in 0ms
+30 timing npm:load Completed in 40ms
+31 silly logfile done cleaning log files
+32 timing arborist:ctor Completed in 0ms
+33 timing arborist:ctor Completed in 0ms
+34 http fetch GET 200 https://registry.npmjs.org/netlify-cli 7400ms (cache miss)
+35 timing arborist:ctor Completed in 0ms
+36 timing arborist:ctor Completed in 1ms
+37 timing arborist:ctor Completed in 0ms
+38 timing idealTree:init Completed in 3ms
+39 timing idealTree:userRequests Completed in 0ms
+40 silly idealTree buildDeps
+41 silly fetch manifest netlify-cli@23.15.1
+42 http fetch GET 200 https://registry.npmjs.org/netlify-cli 13ms (cache hit)
+43 silly placeDep ROOT netlify-cli@23.15.1 OK for:  want: 23.15.1
+44 silly fetch manifest @fastify/static@9.0.0
+45 silly fetch manifest @netlify/ai@0.3.4
+46 silly fetch manifest @netlify/api@14.0.13
+47 silly fetch manifest @netlify/blobs@10.1.0
+48 silly fetch manifest @netlify/build@35.5.14
+49 silly fetch manifest @netlify/build-info@10.3.0
+50 silly fetch manifest @netlify/config@24.3.0
+51 silly fetch manifest @netlify/dev-utils@4.3.2
+52 silly fetch manifest @netlify/edge-bundler@14.9.5
+53 silly fetch manifest @netlify/edge-functions@3.0.3
+54 silly fetch manifest @netlify/edge-functions-bootstrap@2.17.1
+55 silly fetch manifest @netlify/headers-parser@9.0.2
+56 silly fetch manifest @netlify/images@1.2.5
+57 silly fetch manifest @netlify/local-functions-proxy@2.0.3
+58 silly fetch manifest @netlify/redirect-parser@15.0.3
+59 silly fetch manifest @netlify/zip-it-and-ship-it@14.3.1
+60 silly fetch manifest @octokit/rest@22.0.0
+61 silly fetch manifest @opentelemetry/api@1.8.0
+62 silly fetch manifest @pnpm/tabtab@0.5.4
+63 silly fetch manifest ansi-escapes@7.2.0
+64 silly fetch manifest ansi-to-html@0.7.2
+65 silly fetch manifest ascii-table@0.0.9
+66 silly fetch manifest backoff@2.5.0
+67 silly fetch manifest boxen@8.0.1
+68 silly fetch manifest chalk@5.6.2
+69 silly fetch manifest chokidar@4.0.3
+70 silly fetch manifest ci-info@4.4.0
+71 silly fetch manifest clean-deep@3.4.0
+72 silly fetch manifest commander@12.1.0
+73 silly fetch manifest comment-json@4.3.0
+74 silly fetch manifest content-type@1.0.5
+75 silly fetch manifest cookie@1.0.2
+76 silly fetch manifest cron-parser@4.9.0
+77 silly fetch manifest debug@4.4.3
+78 silly fetch manifest decache@4.6.2
+79 silly fetch manifest dot-prop@10.1.0
+80 silly fetch manifest dotenv@17.2.3
+81 silly fetch manifest env-paths@4.0.0
+82 silly fetch manifest envinfo@7.15.0
+83 silly fetch manifest etag@1.8.1
+84 silly fetch manifest execa@5.1.1
+85 silly fetch manifest express@5.2.1
+86 silly fetch manifest express-logging@1.1.1
+87 silly fetch manifest extract-zip@2.0.1
+88 silly fetch manifest fastest-levenshtein@1.0.16
+89 silly fetch manifest fastify@5.7.3
+90 silly fetch manifest find-up@8.0.0
+91 silly fetch manifest folder-walker@3.2.0
+92 silly fetch manifest fuzzy@0.1.3
+93 silly fetch manifest get-port@5.1.1
+94 silly fetch manifest gh-release-fetch@4.0.3
+95 silly fetch manifest git-repo-info@2.1.1
+96 silly fetch manifest gitconfiglocal@2.1.0
+97 silly fetch manifest http-proxy@1.18.1
+98 silly fetch manifest http-proxy-middleware@3.0.5
+99 silly fetch manifest https-proxy-agent@7.0.6
+100 silly fetch manifest inquirer@8.2.7
+101 silly fetch manifest inquirer-autocomplete-prompt@1.4.0
+102 silly fetch manifest is-docker@3.0.0
+103 silly fetch manifest is-stream@4.0.1
+104 silly fetch manifest is-wsl@3.1.0
+105 silly fetch manifest isexe@3.1.1
+106 silly fetch manifest jsonwebtoken@9.0.3
+107 silly fetch manifest jwt-decode@4.0.0
+108 silly fetch manifest lambda-local@2.2.0
+109 silly fetch manifest locate-path@7.2.0
+110 silly fetch manifest lodash@4.17.23
+111 silly fetch manifest log-update@6.1.0
+112 silly fetch manifest maxstache@1.0.7
+113 silly fetch manifest maxstache-stream@1.0.4
+114 silly fetch manifest multiparty@4.2.3
+115 silly fetch manifest nanospinner@1.2.2
+116 silly fetch manifest netlify-redirector@0.5.0
+117 silly fetch manifest node-fetch@3.3.2
+118 silly fetch manifest normalize-package-data@7.0.1
+119 silly fetch manifest open@11.0.0
+120 silly fetch manifest p-filter@4.1.0
+121 silly fetch manifest p-map@7.0.3
+122 silly fetch manifest p-wait-for@6.0.0
+123 silly fetch manifest parallel-transform@1.2.0
+124 silly fetch manifest parse-github-url@1.0.3
+125 silly fetch manifest prettyjson@1.2.5
+126 silly fetch manifest raw-body@3.0.1
+127 silly fetch manifest read-package-up@12.0.0
+128 silly fetch manifest readdirp@4.1.2
+129 silly fetch manifest semver@7.7.2
+130 silly fetch manifest source-map-support@0.5.21
+131 silly fetch manifest terminal-link@5.0.0
+132 silly fetch manifest toml@3.0.0
+133 silly fetch manifest tomlify-j0.4@3.0.0
+134 silly fetch manifest ulid@3.0.1
+135 silly fetch manifest update-notifier@7.3.1
+136 silly fetch manifest uuid@13.0.0
+137 silly fetch manifest write-file-atomic@5.0.1
+138 silly fetch manifest ws@8.18.3
+139 http fetch GET 200 https://registry.npmjs.org/@netlify%2fai 918ms (cache miss)
+140 http fetch GET 200 https://registry.npmjs.org/@fastify%2fstatic 3750ms (cache miss)

@@ -1,0 +1,273 @@
+0 verbose cli /usr/local/bin/node /usr/local/lib/node_modules/npm/bin/npm-cli.js
+1 info using npm@10.2.4
+2 info using node@v20.11.0
+3 timing npm:load:whichnode Completed in 0ms
+4 timing config:load:defaults Completed in 2ms
+5 timing config:load:file:/usr/local/lib/node_modules/npm/npmrc Completed in 0ms
+6 timing config:load:builtin Completed in 0ms
+7 timing config:load:cli Completed in 2ms
+8 timing config:load:env Completed in 0ms
+9 timing config:load:file:/Users/khavasfayzullaevgmail.com/Documents/test-platform-deploy/.npmrc Completed in 1ms
+10 timing config:load:project Completed in 1ms
+11 timing config:load:file:/Users/khavasfayzullaevgmail.com/.npmrc Completed in 0ms
+12 timing config:load:user Completed in 0ms
+13 timing config:load:file:/usr/local/etc/npmrc Completed in 0ms
+14 timing config:load:global Completed in 0ms
+15 timing config:load:setEnvs Completed in 0ms
+16 timing config:load Completed in 5ms
+17 timing npm:load:configload Completed in 5ms
+18 timing config:load:flatten Completed in 2ms
+19 timing npm:load:mkdirpcache Completed in 0ms
+20 timing npm:load:mkdirplogs Completed in 0ms
+21 verbose title npm exec localtunnel --port 4173
+22 verbose argv "exec" "--yes" "--" "localtunnel" "--port" "4173"
+23 timing npm:load:setTitle Completed in 10ms
+24 timing npm:load:display Completed in 1ms
+25 verbose logfile logs-max:10 dir:/Users/khavasfayzullaevgmail.com/Documents/test-platform-deploy/.npm-cache/_logs/2026-02-23T16_51_46_390Z-
+26 verbose logfile /Users/khavasfayzullaevgmail.com/Documents/test-platform-deploy/.npm-cache/_logs/2026-02-23T16_51_46_390Z-debug-0.log
+27 timing npm:load:logFile Completed in 6ms
+28 timing npm:load:timers Completed in 0ms
+29 timing npm:load:configScope Completed in 1ms
+30 timing npm:load Completed in 34ms
+31 silly logfile done cleaning log files
+32 timing arborist:ctor Completed in 1ms
+33 timing arborist:ctor Completed in 0ms
+34 http fetch GET 200 https://registry.npmjs.org/localtunnel 3478ms (cache miss)
+35 timing arborist:ctor Completed in 0ms
+36 timing arborist:ctor Completed in 0ms
+37 timing arborist:ctor Completed in 0ms
+38 timing idealTree:init Completed in 1ms
+39 timing idealTree:userRequests Completed in 0ms
+40 silly idealTree buildDeps
+41 silly fetch manifest localtunnel@2.0.2
+42 http fetch GET 200 https://registry.npmjs.org/localtunnel 5ms (cache hit)
+43 silly placeDep ROOT localtunnel@2.0.2 OK for:  want: 2.0.2
+44 silly fetch manifest axios@0.21.4
+45 silly fetch manifest debug@4.3.2
+46 silly fetch manifest openurl@1.1.1
+47 silly fetch manifest yargs@17.1.1
+48 http fetch GET 200 https://registry.npmjs.org/openurl 386ms (cache miss)
+49 http fetch GET 200 https://registry.npmjs.org/axios 2839ms (cache revalidated)
+50 http fetch GET 200 https://registry.npmjs.org/debug 2841ms (cache revalidated)
+51 http fetch GET 200 https://registry.npmjs.org/yargs 4025ms (cache miss)
+52 timing idealTree:#root Completed in 4038ms
+53 silly placeDep ROOT axios@0.21.4 OK for: localtunnel@2.0.2 want: 0.21.4
+54 silly fetch manifest follow-redirects@^1.14.0
+55 silly placeDep ROOT debug@4.3.2 OK for: localtunnel@2.0.2 want: 4.3.2
+56 silly fetch manifest ms@2.1.2
+57 silly placeDep ROOT openurl@1.1.1 OK for: localtunnel@2.0.2 want: 1.1.1
+58 silly placeDep ROOT yargs@17.1.1 OK for: localtunnel@2.0.2 want: 17.1.1
+59 silly fetch manifest y18n@^5.0.5
+60 silly fetch manifest cliui@^7.0.2
+61 silly fetch manifest escalade@^3.1.1
+62 silly fetch manifest string-width@^4.2.0
+63 silly fetch manifest yargs-parser@^20.2.2
+64 silly fetch manifest get-caller-file@^2.0.5
+65 silly fetch manifest require-directory@^2.1.1
+66 http fetch GET 200 https://registry.npmjs.org/get-caller-file 674ms (cache miss)
+67 http fetch GET 200 https://registry.npmjs.org/y18n 710ms (cache miss)
+68 http fetch GET 200 https://registry.npmjs.org/cliui 772ms (cache miss)
+69 http fetch GET 200 https://registry.npmjs.org/yargs-parser 953ms (cache miss)
+70 http fetch GET 200 https://registry.npmjs.org/escalade 6373ms (cache revalidated)
+71 http fetch GET 200 https://registry.npmjs.org/require-directory 6374ms (cache miss)
+72 http fetch GET 200 https://registry.npmjs.org/ms 6427ms (cache revalidated)
+73 http fetch GET 200 https://registry.npmjs.org/follow-redirects 6430ms (cache revalidated)
+74 http fetch GET 200 https://registry.npmjs.org/string-width 6436ms (cache revalidated)
+75 timing idealTree:node_modules/localtunnel Completed in 6448ms
+76 silly placeDep ROOT follow-redirects@1.15.11 OK for: axios@0.21.4 want: ^1.14.0
+77 timing idealTree:node_modules/axios Completed in 3ms
+78 silly placeDep ROOT ms@2.1.2 OK for: debug@4.3.2 want: 2.1.2
+79 timing idealTree:node_modules/debug Completed in 3ms
+80 timing idealTree:node_modules/follow-redirects Completed in 0ms
+81 timing idealTree:node_modules/ms Completed in 0ms
+82 timing idealTree:node_modules/openurl Completed in 0ms
+83 silly placeDep ROOT cliui@7.0.4 OK for: yargs@17.1.1 want: ^7.0.2
+84 silly fetch manifest wrap-ansi@^7.0.0
+85 silly fetch manifest strip-ansi@^6.0.0
+86 silly placeDep ROOT escalade@3.2.0 OK for: yargs@17.1.1 want: ^3.1.1
+87 silly placeDep ROOT get-caller-file@2.0.5 OK for: yargs@17.1.1 want: ^2.0.5
+88 silly placeDep ROOT require-directory@2.1.1 OK for: yargs@17.1.1 want: ^2.1.1
+89 silly placeDep ROOT string-width@4.2.3 OK for: yargs@17.1.1 want: ^4.2.0
+90 silly fetch manifest strip-ansi@^6.0.1
+91 silly fetch manifest emoji-regex@^8.0.0
+92 silly fetch manifest is-fullwidth-code-point@^3.0.0
+93 silly placeDep ROOT y18n@5.0.8 OK for: yargs@17.1.1 want: ^5.0.5
+94 silly placeDep ROOT yargs-parser@20.2.9 OK for: yargs@17.1.1 want: ^20.2.2
+95 http fetch GET 200 https://registry.npmjs.org/strip-ansi 553ms (cache revalidated)
+96 http fetch GET 200 https://registry.npmjs.org/strip-ansi 561ms (cache revalidated)
+97 http fetch GET 200 https://registry.npmjs.org/emoji-regex 558ms (cache revalidated)
+98 http fetch GET 200 https://registry.npmjs.org/is-fullwidth-code-point 573ms (cache revalidated)
+99 http fetch GET 200 https://registry.npmjs.org/wrap-ansi 580ms (cache miss)
+100 timing idealTree:node_modules/yargs Completed in 583ms
+101 silly placeDep ROOT strip-ansi@6.0.1 OK for: cliui@7.0.4 want: ^6.0.0
+102 silly fetch manifest ansi-regex@^5.0.1
+103 silly placeDep ROOT wrap-ansi@7.0.0 OK for: cliui@7.0.4 want: ^7.0.0
+104 silly fetch manifest ansi-styles@^4.0.0
+105 http fetch GET 200 https://registry.npmjs.org/ansi-styles 327ms (cache revalidated)
+106 http fetch GET 200 https://registry.npmjs.org/ansi-regex 329ms (cache revalidated)
+107 timing idealTree:node_modules/cliui Completed in 331ms
+108 timing idealTree:node_modules/escalade Completed in 0ms
+109 timing idealTree:node_modules/get-caller-file Completed in 0ms
+110 timing idealTree:node_modules/require-directory Completed in 0ms
+111 silly placeDep ROOT emoji-regex@8.0.0 OK for: string-width@4.2.3 want: ^8.0.0
+112 silly placeDep ROOT is-fullwidth-code-point@3.0.0 OK for: string-width@4.2.3 want: ^3.0.0
+113 timing idealTree:node_modules/string-width Completed in 1ms
+114 timing idealTree:node_modules/emoji-regex Completed in 0ms
+115 timing idealTree:node_modules/is-fullwidth-code-point Completed in 0ms
+116 silly placeDep ROOT ansi-regex@5.0.1 OK for: strip-ansi@6.0.1 want: ^5.0.1
+117 timing idealTree:node_modules/strip-ansi Completed in 0ms
+118 timing idealTree:node_modules/ansi-regex Completed in 0ms
+119 silly placeDep ROOT ansi-styles@4.3.0 OK for: wrap-ansi@7.0.0 want: ^4.0.0
+120 silly fetch manifest color-convert@^2.0.1
+121 http fetch GET 200 https://registry.npmjs.org/color-convert 298ms (cache revalidated)
+122 timing idealTree:node_modules/wrap-ansi Completed in 300ms
+123 silly placeDep ROOT color-convert@2.0.1 OK for: ansi-styles@4.3.0 want: ^2.0.1
+124 silly fetch manifest color-name@~1.1.4
+125 http fetch GET 200 https://registry.npmjs.org/color-name 434ms (cache revalidated)
+126 timing idealTree:node_modules/ansi-styles Completed in 438ms
+127 silly placeDep ROOT color-name@1.1.4 OK for: color-convert@2.0.1 want: ~1.1.4
+128 timing idealTree:node_modules/color-convert Completed in 2ms
+129 timing idealTree:node_modules/color-name Completed in 0ms
+130 timing idealTree:node_modules/y18n Completed in 0ms
+131 timing idealTree:node_modules/yargs-parser Completed in 0ms
+132 timing idealTree:buildDeps Completed in 12153ms
+133 timing idealTree:fixDepFlags Completed in 0ms
+134 timing idealTree Completed in 12158ms
+135 timing reify:loadTrees Completed in 12158ms
+136 timing reify:diffTrees Completed in 3ms
+137 silly reify moves {}
+138 timing reify:retireShallow Completed in 2ms
+139 timing reify:createSparse Completed in 3ms
+140 timing reify:loadBundles Completed in 0ms
+141 silly audit bulk request {
+141 silly audit   localtunnel: [ '2.0.2' ],
+141 silly audit   axios: [ '0.21.4' ],
+141 silly audit   debug: [ '4.3.2' ],
+141 silly audit   openurl: [ '1.1.1' ],
+141 silly audit   yargs: [ '17.1.1' ],
+141 silly audit   'follow-redirects': [ '1.15.11' ],
+141 silly audit   ms: [ '2.1.2' ],
+141 silly audit   cliui: [ '7.0.4' ],
+141 silly audit   escalade: [ '3.2.0' ],
+141 silly audit   'get-caller-file': [ '2.0.5' ],
+141 silly audit   'require-directory': [ '2.1.1' ],
+141 silly audit   'string-width': [ '4.2.3' ],
+141 silly audit   y18n: [ '5.0.8' ],
+141 silly audit   'yargs-parser': [ '20.2.9' ],
+141 silly audit   'strip-ansi': [ '6.0.1' ],
+141 silly audit   'wrap-ansi': [ '7.0.0' ],
+141 silly audit   'emoji-regex': [ '8.0.0' ],
+141 silly audit   'is-fullwidth-code-point': [ '3.0.0' ],
+141 silly audit   'ansi-regex': [ '5.0.1' ],
+141 silly audit   'ansi-styles': [ '4.3.0' ],
+141 silly audit   'color-convert': [ '2.0.1' ],
+141 silly audit   'color-name': [ '1.1.4' ]
+141 silly audit }
+142 silly tarball no local data for wrap-ansi@https://registry.npmjs.org/wrap-ansi/-/wrap-ansi-7.0.0.tgz. Extracting by manifest.
+143 silly tarball no local data for y18n@https://registry.npmjs.org/y18n/-/y18n-5.0.8.tgz. Extracting by manifest.
+144 silly tarball no local data for yargs-parser@https://registry.npmjs.org/yargs-parser/-/yargs-parser-20.2.9.tgz. Extracting by manifest.
+145 silly tarball no local data for get-caller-file@https://registry.npmjs.org/get-caller-file/-/get-caller-file-2.0.5.tgz. Extracting by manifest.
+146 silly tarball no local data for require-directory@https://registry.npmjs.org/require-directory/-/require-directory-2.1.1.tgz. Extracting by manifest.
+147 silly tarball no local data for cliui@https://registry.npmjs.org/cliui/-/cliui-7.0.4.tgz. Extracting by manifest.
+148 silly tarball no local data for openurl@https://registry.npmjs.org/openurl/-/openurl-1.1.1.tgz. Extracting by manifest.
+149 silly tarball no local data for axios@https://registry.npmjs.org/axios/-/axios-0.21.4.tgz. Extracting by manifest.
+150 silly tarball no local data for debug@https://registry.npmjs.org/debug/-/debug-4.3.2.tgz. Extracting by manifest.
+151 silly tarball no local data for localtunnel@https://registry.npmjs.org/localtunnel/-/localtunnel-2.0.2.tgz. Extracting by manifest.
+152 silly tarball no local data for yargs@https://registry.npmjs.org/yargs/-/yargs-17.1.1.tgz. Extracting by manifest.
+153 timing reifyNode:node_modules/ms Completed in 52ms
+154 timing reifyNode:node_modules/color-name Completed in 54ms
+155 timing reifyNode:node_modules/strip-ansi Completed in 53ms
+156 timing reifyNode:node_modules/is-fullwidth-code-point Completed in 54ms
+157 timing reifyNode:node_modules/string-width Completed in 53ms
+158 timing reifyNode:node_modules/ansi-regex Completed in 55ms
+159 timing reifyNode:node_modules/ansi-styles Completed in 55ms
+160 timing reifyNode:node_modules/color-convert Completed in 56ms
+161 timing reifyNode:node_modules/follow-redirects Completed in 55ms
+162 timing reifyNode:node_modules/emoji-regex Completed in 55ms
+163 timing reifyNode:node_modules/escalade Completed in 56ms
+164 http fetch GET 200 https://registry.npmjs.org/wrap-ansi/-/wrap-ansi-7.0.0.tgz 1017ms (cache miss)
+165 timing reifyNode:node_modules/wrap-ansi Completed in 1031ms
+166 http fetch GET 200 https://registry.npmjs.org/cliui/-/cliui-7.0.4.tgz 1021ms (cache miss)
+167 timing reifyNode:node_modules/cliui Completed in 1038ms
+168 http fetch GET 200 https://registry.npmjs.org/y18n/-/y18n-5.0.8.tgz 1024ms (cache miss)
+169 timing reifyNode:node_modules/y18n Completed in 1039ms
+170 http fetch GET 200 https://registry.npmjs.org/require-directory/-/require-directory-2.1.1.tgz 1035ms (cache miss)
+171 timing reifyNode:node_modules/require-directory Completed in 1051ms
+172 http fetch GET 200 https://registry.npmjs.org/openurl/-/openurl-1.1.1.tgz 1054ms (cache miss)
+173 timing reifyNode:node_modules/openurl Completed in 1072ms
+174 http fetch GET 200 https://registry.npmjs.org/yargs-parser/-/yargs-parser-20.2.9.tgz 1141ms (cache miss)
+175 timing reifyNode:node_modules/yargs-parser Completed in 1156ms
+176 http fetch POST 200 https://registry.npmjs.org/-/npm/v1/security/advisories/bulk 1199ms
+177 timing auditReport:getReport Completed in 1202ms
+178 silly audit report {
+178 silly audit report   axios: [
+178 silly audit report     {
+178 silly audit report       id: 1111034,
+178 silly audit report       url: 'https://github.com/advisories/GHSA-jr5f-v2jv-69x6',
+178 silly audit report       title: 'axios Requests Vulnerable To Possible SSRF and Credential Leakage via Absolute URL',
+178 silly audit report       severity: 'high',
+178 silly audit report       vulnerable_versions: '<0.30.0',
+178 silly audit report       cwe: [Array],
+178 silly audit report       cvss: [Object]
+178 silly audit report     },
+178 silly audit report     {
+178 silly audit report       id: 1113274,
+178 silly audit report       url: 'https://github.com/advisories/GHSA-43fc-jf86-j433',
+178 silly audit report       title: 'Axios is Vulnerable to Denial of Service via __proto__ Key in mergeConfig',
+178 silly audit report       severity: 'high',
+178 silly audit report       vulnerable_versions: '<=0.30.2',
+178 silly audit report       cwe: [Array],
+178 silly audit report       cvss: [Object]
+178 silly audit report     },
+178 silly audit report     {
+178 silly audit report       id: 1097679,
+178 silly audit report       url: 'https://github.com/advisories/GHSA-wf5p-g6vw-rhxx',
+178 silly audit report       title: 'Axios Cross-Site Request Forgery Vulnerability',
+178 silly audit report       severity: 'moderate',
+178 silly audit report       vulnerable_versions: '>=0.8.1 <0.28.0',
+178 silly audit report       cwe: [Array],
+178 silly audit report       cvss: [Object]
+178 silly audit report     }
+178 silly audit report   ]
+178 silly audit report }
+179 timing metavuln:packument:axios Completed in 0ms
+180 timing metavuln:cache:get:security-advisory:axios:We3wxcPk9kkn0xwhYIVh3tbSPV88qcTDaObr31jY6FxiY7XBPfg0F6J9WCgTA+9XIQ528JIUG23csmksMa5djw== Completed in 1ms
+181 timing metavuln:load:security-advisory:axios:1111034 Completed in 3ms
+182 timing metavuln:cache:get:security-advisory:axios:k68l1m/x4uE75IxsyHnCSC9O/DKUl2GFQMaprZ5FkXhB3IsJbazttvsV0bzqFZK4QFoaxJHDXajqpN+StSYvug== Completed in 4ms
+183 timing metavuln:load:security-advisory:axios:1113274 Completed in 2ms
+184 timing metavuln:cache:get:security-advisory:axios:Oi6B9AucyObhJnAMQYb3eyigkQbiqrclLJ09eDn16DgUHYfFa+9WQjxUGArwnF1cWOy0gbdKMrAbkp8xW8Fwkg== Completed in 6ms
+185 timing metavuln:load:security-advisory:axios:1097679 Completed in 2ms
+186 timing metavuln:cache:put:security-advisory:axios:k68l1m/x4uE75IxsyHnCSC9O/DKUl2GFQMaprZ5FkXhB3IsJbazttvsV0bzqFZK4QFoaxJHDXajqpN+StSYvug== Completed in 5ms
+187 timing metavuln:calculate:security-advisory:axios:1113274 Completed in 11ms
+188 timing metavuln:cache:put:security-advisory:axios:We3wxcPk9kkn0xwhYIVh3tbSPV88qcTDaObr31jY6FxiY7XBPfg0F6J9WCgTA+9XIQ528JIUG23csmksMa5djw== Completed in 9ms
+189 timing metavuln:calculate:security-advisory:axios:1111034 Completed in 13ms
+190 timing metavuln:cache:put:security-advisory:axios:Oi6B9AucyObhJnAMQYb3eyigkQbiqrclLJ09eDn16DgUHYfFa+9WQjxUGArwnF1cWOy0gbdKMrAbkp8xW8Fwkg== Completed in 3ms
+191 timing metavuln:calculate:security-advisory:axios:1097679 Completed in 12ms
+192 timing metavuln:packument:localtunnel Completed in 0ms
+193 timing metavuln:cache:get:security-advisory:localtunnel:qnHg0kOXBzHk3moH5p+wiqSKP+qHHrmUCLZLYwsnp93NmKcYVsPjbcWHSL+5YRSlC7+SYGpukALjpTZUf9BTJQ== Completed in 0ms
+194 timing metavuln:load:security-advisory:localtunnel:We3wxcPk9kkn0xwhYIVh3tbSPV88qcTDaObr31jY6FxiY7XBPfg0F6J9WCgTA+9XIQ528JIUG23csmksMa5djw== Completed in 3ms
+195 timing metavuln:cache:put:security-advisory:localtunnel:qnHg0kOXBzHk3moH5p+wiqSKP+qHHrmUCLZLYwsnp93NmKcYVsPjbcWHSL+5YRSlC7+SYGpukALjpTZUf9BTJQ== Completed in 1ms
+196 timing metavuln:calculate:security-advisory:localtunnel:We3wxcPk9kkn0xwhYIVh3tbSPV88qcTDaObr31jY6FxiY7XBPfg0F6J9WCgTA+9XIQ528JIUG23csmksMa5djw== Completed in 5ms
+197 timing auditReport:init Completed in 20ms
+198 timing reify:audit Completed in 1223ms
+199 http fetch GET 200 https://registry.npmjs.org/axios/-/axios-0.21.4.tgz 1882ms (cache miss)
+200 timing reifyNode:node_modules/axios Completed in 1900ms
+201 http fetch GET 200 https://registry.npmjs.org/get-caller-file/-/get-caller-file-2.0.5.tgz 2570ms (cache miss)
+202 timing reifyNode:node_modules/get-caller-file Completed in 2587ms
+203 http fetch GET 200 https://registry.npmjs.org/yargs/-/yargs-17.1.1.tgz 6819ms (cache miss)
+204 timing reifyNode:node_modules/yargs Completed in 6841ms
+205 http fetch GET 200 https://registry.npmjs.org/localtunnel/-/localtunnel-2.0.2.tgz 7541ms (cache miss)
+206 timing reifyNode:node_modules/localtunnel Completed in 7560ms
+207 http fetch GET 200 https://registry.npmjs.org/debug/-/debug-4.3.2.tgz 7550ms (cache miss)
+208 timing reifyNode:node_modules/debug Completed in 7569ms
+209 timing reify:unpack Completed in 7571ms
+210 timing reify:unretire Completed in 0ms
+211 timing build:queue Completed in 1ms
+212 timing build:link:node_modules/localtunnel Completed in 2ms
+213 timing build:link Completed in 2ms
+214 timing build:deps Completed in 3ms
+215 timing build Completed in 3ms
+216 timing reify:build Completed in 3ms
+217 timing reify:trash Completed in 0ms
+218 timing reify:save Completed in 8ms
+219 timing reify Completed in 19758ms
