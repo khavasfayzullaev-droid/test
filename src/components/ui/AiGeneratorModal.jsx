@@ -26,16 +26,18 @@ export const AiGeneratorModal = ({ isOpen, onClose, onGenerated }) => {
 
             const text = rawText;
             const answerMap = {};
-            const answerRegex = /(\d+)\s*[-:=.]\s*([A-Da-d])/gi;
+            // Allows formats like "1-A", "1: A", "1A", or "1 A"
+            const answerRegex = /(?:^|\s)(\d+)\s*[-:=.]?\s*([A-Da-d])(?=$|\s|,|<br>)/gi;
             let match;
 
-            // Extract answers (like "1-A, 2-B" or "1.C")
+            // Extract answers (like "1-A, 2-B" or "1.C" or "1 B")
             while ((match = answerRegex.exec(text)) !== null) {
                 answerMap[parseInt(match[1])] = match[2].toUpperCase();
             }
 
             // Remove purely answer blocks at the bottom to avoid false logic
-            const cleanedText = text.replace(/(?:javoblar|kalitlar|javoblar kaliti)\s*:?[\s\S]*/i, '');
+            // Added Arabic "مفتاح الإجابة" and general English patterns
+            const cleanedText = text.replace(/(?:javoblar|kalitlar|javoblar kaliti|مفتاح الإجابة|answers|keys)\s*:?[\s\S]*/i, '');
 
             // Match questions like "1. Question text..." or "1) Question text..."
             const questionRegex = /(?:^|\n)\s*(\d+)[\.\)]\s+([\s\S]*?)(?=(?:(?:^|\n)\s*\d+[\.\)]\s+)|$)/g;
