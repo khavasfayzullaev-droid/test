@@ -7,7 +7,7 @@ import { CheckCircle, Clock, AlertTriangle } from 'lucide-react';
 
 const TakeTest = () => {
     const { id } = useParams();
-    const { tests, submitTest } = useTests();
+    const { tests, submitTest, loading } = useTests();
     const navigate = useNavigate();
 
     const [test, setTest] = useState(null);
@@ -45,6 +45,8 @@ const TakeTest = () => {
     }, [test, studentName, answers, calculateScore, submitTest]);
 
     useEffect(() => {
+        if (loading) return; // Wait for data to fetch
+
         const foundTest = tests.find(t => t.id.toUpperCase() === id.toUpperCase());
         const name = sessionStorage.getItem('currentStudentName');
 
@@ -65,7 +67,7 @@ const TakeTest = () => {
         if (foundTest.timeLimit && foundTest.timeLimit > 0) {
             setTimeLeft(foundTest.timeLimit * 60); // convert minutes to seconds
         }
-    }, [id, tests, navigate]);
+    }, [id, tests, navigate, loading]);
 
     // Countdown timer effect
     useEffect(() => {

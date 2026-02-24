@@ -6,8 +6,12 @@ import { Card, CardHeader, CardContent, CardFooter } from '../components/ui/Card
 import { PlusCircle, Copy, Trash2, Users, Edit3, Clock } from 'lucide-react';
 
 const TeacherDashboard = () => {
-    const { tests, deleteTest } = useTests();
+    const { tests, deleteTest, loading } = useTests();
     const navigate = useNavigate();
+
+    if (loading) {
+        return <div style={{ textAlign: 'center', padding: '4rem' }}>Ma'lumotlar yuklanmoqda...</div>;
+    }
 
     const handleCopyCode = (id) => {
         navigator.clipboard.writeText(`${window.location.origin}/take/${id}`);

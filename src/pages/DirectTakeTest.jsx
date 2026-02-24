@@ -8,7 +8,7 @@ import { Clock, AlertTriangle } from 'lucide-react';
 
 const DirectTakeTest = () => {
     const { id } = useParams();
-    const { tests, hasStudentTaken } = useTests();
+    const { tests, hasStudentTaken, loading } = useTests();
     const navigate = useNavigate();
 
     const [test, setTest] = useState(null);
@@ -16,6 +16,8 @@ const DirectTakeTest = () => {
     const [alreadyTaken, setAlreadyTaken] = useState(false);
 
     useEffect(() => {
+        if (loading) return; // Wait for data to fetch
+
         const foundTest = tests.find(t => t.id.toUpperCase() === id.toUpperCase());
         if (!foundTest) {
             alert('Bunday test topilmadi!');
@@ -23,7 +25,7 @@ const DirectTakeTest = () => {
             return;
         }
         setTest(foundTest);
-    }, [id, tests, navigate]);
+    }, [id, tests, navigate, loading]);
 
     const handleStart = (e) => {
         e.preventDefault();

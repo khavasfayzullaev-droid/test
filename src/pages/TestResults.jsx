@@ -7,13 +7,15 @@ import { ArrowLeft, Download, Trophy, Target, AlertTriangle } from 'lucide-react
 
 const TestResults = () => {
     const { id } = useParams();
-    const { tests, getSubmissionsForTest } = useTests();
+    const { tests, getSubmissionsForTest, loading } = useTests();
     const navigate = useNavigate();
 
     const [test, setTest] = useState(null);
     const [submissions, setSubmissions] = useState([]);
 
     useEffect(() => {
+        if (loading) return; // Wait for data to fetch
+
         const foundTest = tests.find(t => t.id === id);
         if (!foundTest) {
             navigate('/teacher');
@@ -25,7 +27,7 @@ const TestResults = () => {
         // Sort by score descending
         subs.sort((a, b) => b.score - a.score);
         setSubmissions(subs);
-    }, [id, tests, getSubmissionsForTest, navigate]);
+    }, [id, tests, getSubmissionsForTest, navigate, loading]);
 
     if (!test) return <div>Yuklanmoqda...</div>;
 
