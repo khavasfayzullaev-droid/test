@@ -35,7 +35,7 @@ const TeacherDashboard = () => {
                     </h2>
                     <p className="text-muted">Testlaringizni shu yerda tayyorlab o'zgartirish kiritishingiz mumkin.</p>
                 </div>
-                <Button variant="primary" size="lg" onClick={() => navigate('/create')}>
+                <Button variant="primary" size="lg" onClick={() => navigate('/teacher/create')}>
                     <PlusCircle size={18} style={{ marginRight: '0.5rem' }} /> Test tayyorlash
                 </Button>
             </div>
@@ -46,7 +46,7 @@ const TeacherDashboard = () => {
                         <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📝</div>
                         <h3 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>Hali testlar yo'q</h3>
                         <p className="text-muted" style={{ marginBottom: '1.5rem' }}>Yangi test yarating va o'quvchilarga yuboring.</p>
-                        <Button variant="primary" onClick={() => navigate('/create')}>
+                        <Button variant="primary" onClick={() => navigate('/teacher/create')}>
                             Birinchi testni tayyorlash
                         </Button>
                     </CardContent>
