@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import { Button } from './Button';
 import { Card, CardHeader, CardContent } from './Card';
 import { Input } from './Input';
-import { Sparkles, X, Loader2 } from 'lucide-react';
+import { Sparkles, X, Settings2 } from 'lucide-react';
 
 export const AiGeneratorModal = ({ isOpen, onClose, onGenerated }) => {
-    const [apiKey, setApiKey] = useState(import.meta.env.VITE_GEMINI_API_KEY || '');
     const [rawText, setRawText] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -13,12 +12,7 @@ export const AiGeneratorModal = ({ isOpen, onClose, onGenerated }) => {
     if (!isOpen) return null;
 
     const handleGenerate = async () => {
-        const activeKey = apiKey || import.meta.env.VITE_GEMINI_API_KEY;
-        if (!activeKey) {
-            setError("Iltimos, Google Gemini API kalitini kiritng!");
-            return;
-        }
-        if (!rawText.trim() || rawText.length < 50) {
+        if (!rawText.trim() || rawText.length < 20) {
             setError("Matn juda qisqa. Sifatli test chiqishi uchun to'liqroq matn kiriting.");
             return;
         }
@@ -26,72 +20,81 @@ export const AiGeneratorModal = ({ isOpen, onClose, onGenerated }) => {
         setError('');
         setLoading(true);
 
-        const prompt = `
-      Sen professional dastursan. Senga testlar to'plami beriladi. Odatda oldin barcha test savollari va ularning (A, B, C, D) variantlari yozilgan bo'ladi, matnning eng oxirida esa kalitlar (javoblar ro'yxati, masalan: "1-B, 2-A" yoki "1. B \\n 2. D") beriladi.
-      Sening vazifang - shu matn va oxiridagi javoblar kalitini birlashtirib o'qish, testlarni to'liq ajratib olish va ularni faqatgina quyidagi JSON formatida qaytarishdir.
-      
-      Qoida: Hech qanday qo'shimcha izoh yozma, faqat JSON qaytar.
-      Diqqat: "correctOption" bu javoblar kaliti asosida to'g'ri variantning indexi (A=0, B=1, C=2, D=3). Ya'ni agar kalitda ushbu savolning javobi B bo'lsa, correctOption ni 1 qilib belgilaysan.
-      Agar umuman kalit berilmagan bo'lsa, o'zing matnga qarab mantiqan eng to'g'ri deb bilgan javobni belgilab qo'y.
-      
-      Kutilayotgan JSON format:
-      [
-        {
-          "text": "Savol matni",
-          "options": ["A varianti", "B varianti", "C varianti", "D varianti"],
-          "correctOption": 1 
-        }
-      ]
-      
-      Matn: ${rawText}
-    `;
-
         try {
-            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${activeKey}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    contents: [{ parts: [{ text: prompt }] }],
-                    generationConfig: {
-                        temperature: 0.1,
+            // Simulate a tiny delay for UX
+            await new Promise(r => setTimeout(r, 500));
+
+            const text = rawText;
+            const answerMap = {};
+            const answerRegex = /(\d+)\s*[-:=.]\s*([A-Da-d])/gi;
+            let match;
+
+            // Extract answers (like "1-A, 2-B" or "1.C")
+            while ((match = answerRegex.exec(text)) !== null) {
+                answerMap[parseInt(match[1])] = match[2].toUpperCase();
+            }
+
+            // Remove purely answer blocks at the bottom to avoid false logic
+            const cleanedText = text.replace(/(?:javoblar|kalitlar|javoblar kaliti)\s*:?[\s\S]*/i, '');
+
+            // Match questions like "1. Question text..." or "1) Question text..."
+            const questionRegex = /(?:^|\n)\s*(\d+)[\.\)]\s+([\s\S]*?)(?=(?:(?:^|\n)\s*\d+[\.\)]\s+)|$)/g;
+            const questions = [];
+
+            while ((match = questionRegex.exec(cleanedText)) !== null) {
+                let qNum = parseInt(match[1]);
+                let block = match[2].trim();
+
+                // Match A), B), C), D) options inside the block
+                const optRegex = /(?:^|\s)([A-Da-d])[\.\)]\s*([\s\S]*?)(?=(?:(?:^|\s)[A-Da-d][\.\)]\s*)|$)/g;
+                let optMatch;
+                let optionsMap = {};
+                let questionText = block;
+                let hasOptions = false;
+
+                while ((optMatch = optRegex.exec(block)) !== null) {
+                    if (!hasOptions) {
+                        questionText = block.substring(0, optMatch.index).trim();
                     }
-                })
-            });
+                    hasOptions = true;
+                    optionsMap[optMatch[1].toUpperCase()] = optMatch[2].trim();
+                }
 
-            if (!response.ok) {
-                const errorData = await response.json().catch(() => ({}));
-                const apiMessage = errorData.error?.message || response.statusText || "Noma'lum xatolik";
-                throw new Error(`API xatosi (${response.status}): ${apiMessage}`);
+                // Default options array (fallback)
+                let optionsArr = [
+                    optionsMap['A'] || 'A varianti',
+                    optionsMap['B'] || 'B varianti',
+                    optionsMap['C'] || 'C varianti',
+                    optionsMap['D'] || 'D varianti',
+                ];
+
+                let correctOption = 0; // Default matches A index 0
+                if (answerMap[qNum]) {
+                    const idx = ['A', 'B', 'C', 'D'].indexOf(answerMap[qNum]);
+                    if (idx !== -1) correctOption = idx;
+                }
+
+                if (questionText && questionText.length > 2) {
+                    questions.push({
+                        id: Date.now() + qNum,
+                        text: questionText,
+                        options: optionsArr,
+                        correctOption: correctOption
+                    });
+                }
             }
 
-            const data = await response.json();
-            if (!data.candidates || !data.candidates[0].content || !data.candidates[0].content.parts[0].text) {
-                throw new Error("AI kutilgan formatda javob qaytarmadi.");
+            if (questions.length === 0) {
+                throw new Error("Matndan topilmadi! Iltimos savollarni aniq raqamlangan holda ('1.', '2.') va variantlarni harf bilan ('A)', 'B)') kiriting.");
             }
 
-            const rawOutput = data.candidates[0].content.parts[0].text;
-            // Try to extract JSON from markdown if Gemini surrounds it with ```json
-            let jsonString = rawOutput;
-            const jsonMatch = rawOutput.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
-            if (jsonMatch) {
-                jsonString = jsonMatch[1];
-            }
-
-            const parsedQuestions = JSON.parse(jsonString);
-
-            // Ensure all questions have unique IDs before returning
-            const formattedQs = parsedQuestions.map((q, idx) => ({
-                ...q,
-                id: Date.now() + idx
-            }));
-
-            onGenerated(formattedQs);
+            onGenerated(questions);
             setRawText('');
             onClose();
 
         } catch (err) {
             console.error(err);
-            setError(err.message || "Kutilmagan xatolik yuz berdi");
+            setError(err.message || "Tahlil qilishda xatolik yuz berdi");
         } finally {
             setLoading(false);
         }
@@ -108,7 +111,7 @@ export const AiGeneratorModal = ({ isOpen, onClose, onGenerated }) => {
                 <CardHeader
                     title={
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--primary)' }}>
-                            <Sparkles size={20} /> AI yordamida Testlarni Formatlash
+                            <Settings2 size={20} /> Avtomatik Test Ajratgich
                         </div>
                     }
                     action={<Button variant="ghost" onClick={onClose}><X size={20} /></Button>}
@@ -116,25 +119,25 @@ export const AiGeneratorModal = ({ isOpen, onClose, onGenerated }) => {
                 <CardContent>
                     <div style={{ marginBottom: '1.5rem' }}>
                         <p className="text-muted" style={{ fontSize: '0.875rem', marginBottom: '1rem' }}>
-                            Google AI yordamida chalkash testlarni o'qib, platformaga moslab formatlash.
+                            Aralash matnni kiriting. Dastur avtomatik ravishda savol, variant va kalitlarni onlaynsiz formatlab oladi (AI API talab qilinmaydi va bepul).
                         </p>
-                        {!import.meta.env.VITE_GEMINI_API_KEY && (
-                            <Input
-                                type="password"
-                                label="Gemini API Key"
-                                placeholder="AIzaSy..."
-                                value={apiKey}
-                                onChange={e => setApiKey(e.target.value)}
-                            />
-                        )}
                     </div>
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1.5rem' }}>
                         <label className="input-label">Aralash test matnini kiriting</label>
                         <textarea
                             className="input-field"
-                            rows={8}
-                            placeholder="Namuna: 1. Savol... A) variant B) variant..."
+                            rows={12}
+                            placeholder="Namuna: 
+1. O'zbekiston poytaxti qayer?
+A) Toshkent
+B) Samarqand
+C) Buxoro
+D) Xiva
+
+Javoblar:
+1-A
+2-C"
                             value={rawText}
                             onChange={e => setRawText(e.target.value)}
                             style={{ resize: 'vertical' }}
@@ -162,7 +165,7 @@ export const AiGeneratorModal = ({ isOpen, onClose, onGenerated }) => {
                         <Button variant="primary" onClick={handleGenerate} disabled={loading} style={{ minWidth: '150px' }} type="button">
                             {loading ? (
                                 <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                    <Loader2 size={18} className="spin" style={{ animation: 'spin 1s linear infinite' }} /> Tahlil...
+                                    <Settings2 size={18} className="spin" style={{ animation: 'spin 1s linear infinite' }} /> Tahlil qilinmoqda...
                                 </span>
                             ) : (
                                 <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
