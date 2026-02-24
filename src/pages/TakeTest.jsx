@@ -3,7 +3,7 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useTests } from '../context/TestContext';
 import { Button } from '../components/ui/Button';
 import { Card, CardHeader, CardContent } from '../components/ui/Card';
-import { CheckCircle, Clock, AlertTriangle, XCircle } from 'lucide-react';
+import { CheckCircle, Clock, AlertTriangle, XCircle, EyeOff } from 'lucide-react';
 
 const TakeTest = () => {
     const { id } = useParams();
@@ -23,6 +23,9 @@ const TakeTest = () => {
     // One-by-one mode states
     const [currentQIndex, setCurrentQIndex] = useState(0);
     const [isCurrentRevealed, setIsCurrentRevealed] = useState(false);
+
+    // Anti-cheat flag
+    const [cheatingDetected, setCheatingDetected] = useState(false);
 
     const calculateScore = useCallback(() => {
         if (!test) return 0;
@@ -126,6 +129,27 @@ const TakeTest = () => {
         }
     }, [timeLeft, isSubmitted, test, doSubmit]);
 
+    // ANTI-CHEAT: Page Visibility API
+    useEffect(() => {
+        const handleVisibilityChange = () => {
+            if (document.hidden && !isSubmitted && test) {
+                // The student switched tabs or minimized the browser!
+                setCheatingDetected(true);
+                doSubmit();
+            }
+        };
+
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+
+        // Also listen to blur events (losing window focus) as an extra measure
+        window.addEventListener('blur', handleVisibilityChange);
+
+        return () => {
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+            window.removeEventListener('blur', handleVisibilityChange);
+        };
+    }, [isSubmitted, test, doSubmit]);
+
     if (loadingTest || !test) return <div style={{ textAlign: 'center', padding: '4rem' }}><div className="loading-spinner" style={{ margin: '0 auto' }}></div><p style={{ marginTop: '1rem', color: 'var(--text-muted)' }}>Yuklanmoqda...</p></div>;
 
     const handleSelectAnswer = (questionId, optionIndex) => {
@@ -166,9 +190,19 @@ const TakeTest = () => {
             <div className="fade-in" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '60vh', padding: '2rem 1rem 4rem' }}>
                 <Card glass style={{ maxWidth: '500px', width: '100%', textAlign: 'center', marginBottom: '2rem' }}>
                     <CardContent style={{ padding: '3rem 2rem' }}>
-                        <CheckCircle size={64} color="var(--success)" style={{ margin: '0 auto 1.5rem' }} />
-                        <h2 style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>Test Yakunlandi!</h2>
-                        <p className="text-muted" style={{ marginBottom: '2rem' }}>Natijangiz ustozingizga yuborildi.</p>
+                        {cheatingDetected ? (
+                            <>
+                                <EyeOff size={64} color="var(--danger)" style={{ margin: '0 auto 1.5rem' }} />
+                                <h2 style={{ fontSize: '2rem', marginBottom: '0.5rem', color: 'var(--danger)' }}>Qoidabuzarlik aniqlandi!</h2>
+                                <p className="text-muted" style={{ marginBottom: '2rem' }}>Siz test sahifasidan chiqib ketdingiz yoki boshqa oynaga o'tdingiz. Test jarayoni avtomatik tarzda yakunlandi.</p>
+                            </>
+                        ) : (
+                            <>
+                                <CheckCircle size={64} color="var(--success)" style={{ margin: '0 auto 1.5rem' }} />
+                                <h2 style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>Test Yakunlandi!</h2>
+                                <p className="text-muted" style={{ marginBottom: '2rem' }}>Natijangiz ustozingizga yuborildi.</p>
+                            </>
+                        )}
 
                         <div style={{ background: 'var(--bg-main)', padding: '2rem', borderRadius: 'var(--radius-lg)', marginBottom: '2rem' }}>
                             <div style={{ fontSize: '4rem', fontWeight: 'bold', color: 'var(--primary)', lineHeight: 1 }}>{percentage}%</div>
