@@ -75,15 +75,16 @@ export const TestProvider = ({ children }) => {
     // Add a specialized function for targeted fetching
     const fetchTestById = async (id) => {
         try {
+            const safeId = id ? id.toUpperCase() : '';
             // First check if it's already in state
-            const existing = tests.find(t => t.id === id);
+            const existing = tests.find(t => t.id === safeId);
             if (existing) return existing;
 
             setLoading(true);
             const { data, error } = await supabase
                 .from('tests')
                 .select('*')
-                .eq('id', id)
+                .eq('id', safeId)
                 .single();
 
             if (error) {
