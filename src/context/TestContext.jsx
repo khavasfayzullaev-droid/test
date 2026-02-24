@@ -22,6 +22,8 @@ export const TestProvider = ({ children }) => {
                         let desc = t.description || '';
                         let showAnswers = false;
                         let oneByOne = false;
+                        let startTime = null;
+                        let endTime = null;
 
                         if (desc.includes(':::SHOW_ANSWERS=true:::')) {
                             showAnswers = true;
@@ -39,7 +41,19 @@ export const TestProvider = ({ children }) => {
                             desc = desc.replace(':::ONE_BY_ONE=false:::', '');
                         }
 
-                        return { ...t, description: desc, showAnswers, oneByOne };
+                        const startMatch = desc.match(/:::START_TIME=([^:]+):::/);
+                        if (startMatch) {
+                            startTime = startMatch[1];
+                            desc = desc.replace(startMatch[0], '');
+                        }
+
+                        const endMatch = desc.match(/:::END_TIME=([^:]+):::/);
+                        if (endMatch) {
+                            endTime = endMatch[1];
+                            desc = desc.replace(endMatch[0], '');
+                        }
+
+                        return { ...t, description: desc, showAnswers, oneByOne, startTime, endTime };
                     });
                 }
                 setTests(parsedTests);
@@ -58,7 +72,10 @@ export const TestProvider = ({ children }) => {
     }, []);
 
     const addTest = async (test) => {
-        const encodedDesc = `${test.description || ''}:::SHOW_ANSWERS=${test.showAnswers === true}::::::ONE_BY_ONE=${test.oneByOne === true}:::`;
+        let encodedDesc = `${test.description || ''}:::SHOW_ANSWERS=${test.showAnswers === true}::::::ONE_BY_ONE=${test.oneByOne === true}:::`;
+        if (test.startTime) encodedDesc += `:::START_TIME=${test.startTime}:::`;
+        if (test.endTime) encodedDesc += `:::END_TIME=${test.endTime}:::`;
+
         const newTest = {
             id: Math.random().toString(36).substring(2, 9).toUpperCase(),
             title: test.title || '',
@@ -69,7 +86,14 @@ export const TestProvider = ({ children }) => {
             created_at: new Date().toISOString()
         };
 
-        const stateTest = { ...newTest, description: test.description || '', showAnswers: test.showAnswers === true, oneByOne: test.oneByOne === true };
+        const stateTest = {
+            ...newTest,
+            description: test.description || '',
+            showAnswers: test.showAnswers === true,
+            oneByOne: test.oneByOne === true,
+            startTime: test.startTime || null,
+            endTime: test.endTime || null
+        };
         setTests(prev => [...prev, stateTest]);
 
         const { error } = await supabase.from('tests').insert([newTest]);
@@ -109,18 +133,22 @@ export const TestProvider = ({ children }) => {
     const updateTest = async (id, updatedData) => {
         const currentTest = tests.find(t => t.id === id) || {};
         const mergedData = { ...currentTest, ...updatedData };
-        const encodedDesc = `${mergedData.description || ''}:::SHOW_ANSWERS=${mergedData.showAnswers === true}::::::ONE_BY_ONE=${mergedData.oneByOne === true}:::`;
+        let encodedDesc = `${mergedData.description || ''}:::SHOW_ANSWERS=${mergedData.showAnswers === true}::::::ONE_BY_ONE=${mergedData.oneByOne === true}:::`;
+        if (mergedData.startTime) encodedDesc += `:::START_TIME=${mergedData.startTime}:::`;
+        if (mergedData.endTime) encodedDesc += `:::END_TIME=${mergedData.endTime}:::`;
 
         // Update local React state with pure data (no encoding)
         setTests(prev => prev.map(t => t.id === id ? { ...t, ...updatedData } : t));
 
-        // Prepare payload for Supabase (with encoded description and without custom booleans)
+        // Prepare payload for Supabase (with encoded description and without custom booleans/times)
         const dbPayload = { ...updatedData };
-        if (updatedData.hasOwnProperty('description') || updatedData.hasOwnProperty('showAnswers') || updatedData.hasOwnProperty('oneByOne')) {
+        if (updatedData.hasOwnProperty('description') || updatedData.hasOwnProperty('showAnswers') || updatedData.hasOwnProperty('oneByOne') || updatedData.hasOwnProperty('startTime') || updatedData.hasOwnProperty('endTime')) {
             dbPayload.description = encodedDesc;
         }
         delete dbPayload.showAnswers;
         delete dbPayload.oneByOne;
+        delete dbPayload.startTime;
+        delete dbPayload.endTime;
 
         const { error } = await supabase.from('tests').update(dbPayload).eq('id', id);
         if (error) console.error("Error updating test:", error);

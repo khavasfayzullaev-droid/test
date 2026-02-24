@@ -30,11 +30,13 @@ const TeacherDashboard = () => {
         <div className="fade-in">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
                 <div>
-                    <h2 style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>Mening Testlarim</h2>
-                    <p className="text-muted">Barcha yaratgan testlaringiz va ularning natijalari shu yerda.</p>
+                    <h2 style={{ fontSize: '2.5rem', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                        Mening Testlarim
+                    </h2>
+                    <p className="text-muted">Testlaringizni shu yerda tayyorlab o'zgartirish kiritishingiz mumkin.</p>
                 </div>
-                <Button variant="primary" onClick={() => navigate('/teacher/create')}>
-                    <PlusCircle size={18} style={{ marginRight: '0.5rem' }} /> Test Yaratish
+                <Button variant="primary" size="lg" onClick={() => navigate('/create')}>
+                    <PlusCircle size={18} style={{ marginRight: '0.5rem' }} /> Test tayyorlash
                 </Button>
             </div>
 
@@ -44,8 +46,8 @@ const TeacherDashboard = () => {
                         <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📝</div>
                         <h3 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>Hali testlar yo'q</h3>
                         <p className="text-muted" style={{ marginBottom: '1.5rem' }}>Yangi test yarating va o'quvchilarga yuboring.</p>
-                        <Button variant="primary" onClick={() => navigate('/teacher/create')}>
-                            Birinchi testni yaratish
+                        <Button variant="primary" onClick={() => navigate('/create')}>
+                            Birinchi testni tayyorlash
                         </Button>
                     </CardContent>
                 </Card>

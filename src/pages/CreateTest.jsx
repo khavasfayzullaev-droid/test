@@ -18,6 +18,8 @@ const CreateTest = () => {
     const [timeLimit, setTimeLimit] = useState('');
     const [showAnswers, setShowAnswers] = useState(false);
     const [oneByOne, setOneByOne] = useState(false);
+    const [startTime, setStartTime] = useState('');
+    const [endTime, setEndTime] = useState('');
     const [isAiModalOpen, setIsAiModalOpen] = useState(false);
     const isEditing = !!editId;
 
@@ -37,6 +39,8 @@ const CreateTest = () => {
                 setTimeLimit(existing.timeLimit ? String(existing.timeLimit) : '');
                 setShowAnswers(existing.showAnswers === true);
                 setOneByOne(existing.oneByOne === true);
+                setStartTime(existing.startTime || '');
+                setEndTime(existing.endTime || '');
                 setQuestions(existing.questions);
             } else {
                 navigate('/teacher');
@@ -95,7 +99,7 @@ const CreateTest = () => {
             alert("Barcha savollar va variantlarni to'ldiring!"); return;
         }
 
-        const payload = { title, description, category: category || 'Umumiy', timeLimit: timeLimit ? parseInt(timeLimit) : 0, showAnswers, oneByOne, questions };
+        const payload = { title, description, category: category || 'Umumiy', timeLimit: timeLimit ? parseInt(timeLimit) : 0, showAnswers, oneByOne, startTime, endTime, questions };
 
         try {
             if (isEditing) {
@@ -119,7 +123,7 @@ const CreateTest = () => {
                     <ArrowLeft size={24} />
                 </Button>
                 <div>
-                    <h2 style={{ fontSize: '2rem', marginBottom: '0.25rem' }}>{isEditing ? 'Testni Tahrirlash' : 'Yangi Test Yaratish'}</h2>
+                    <h2 style={{ fontSize: '2rem', marginBottom: '0.25rem' }}>{isEditing ? 'Testni Tahrirlash' : 'Yangi Test Tayyorlash'}</h2>
                     <p className="text-muted">{isEditing ? 'O\'zgartirishlarni kiriting va saqlang' : 'Savollarni tuzing va saqlang'}</p>
                 </div>
             </div>
@@ -151,6 +155,20 @@ const CreateTest = () => {
                         value={timeLimit}
                         onChange={(e) => setTimeLimit(e.target.value)}
                     />
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                        <Input
+                            label="Boshlanish vaqti (ixtiyoriy)"
+                            type="datetime-local"
+                            value={startTime}
+                            onChange={(e) => setStartTime(e.target.value)}
+                        />
+                        <Input
+                            label="Tugash vaqti (ixtiyoriy)"
+                            type="datetime-local"
+                            value={endTime}
+                            onChange={(e) => setEndTime(e.target.value)}
+                        />
+                    </div>
 
                     <div style={{ marginTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '1rem', background: 'var(--bg-document)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-light)' }}>

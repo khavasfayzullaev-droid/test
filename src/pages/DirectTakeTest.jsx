@@ -14,6 +14,7 @@ const DirectTakeTest = () => {
     const [test, setTest] = useState(null);
     const [name, setName] = useState('');
     const [alreadyTaken, setAlreadyTaken] = useState(false);
+    const [timeStatus, setTimeStatus] = useState({ isValid: true, message: '' });
 
     useEffect(() => {
         if (loading) return; // Wait for data to fetch
@@ -26,6 +27,37 @@ const DirectTakeTest = () => {
         }
         setTest(foundTest);
     }, [id, tests, navigate, loading]);
+
+    // Check time constraints
+    useEffect(() => {
+        if (!test) return;
+
+        const checkTime = () => {
+            const now = new Date();
+
+            if (test.startTime) {
+                const start = new Date(test.startTime);
+                if (now < start) {
+                    setTimeStatus({ isValid: false, message: `Test hali boshlanmadi.\nBoshlanish vaqti: ${start.toLocaleString('uz-UZ', { dateStyle: 'long', timeStyle: 'short' })}` });
+                    return;
+                }
+            }
+
+            if (test.endTime) {
+                const end = new Date(test.endTime);
+                if (now > end) {
+                    setTimeStatus({ isValid: false, message: `Test yakunlangan.\nTugash vaqti: ${end.toLocaleString('uz-UZ', { dateStyle: 'long', timeStyle: 'short' })}` });
+                    return;
+                }
+            }
+
+            setTimeStatus({ isValid: true, message: '' });
+        };
+
+        checkTime();
+        const interval = setInterval(checkTime, 10000); // Re-check every 10 seconds
+        return () => clearInterval(interval);
+    }, [test]);
 
     const handleStart = (e) => {
         e.preventDefault();
@@ -66,6 +98,12 @@ const DirectTakeTest = () => {
                             <Button variant="outline" onClick={() => { setAlreadyTaken(false); setName(''); }}>
                                 Boshqa ism bilan urinib ko'rish
                             </Button>
+                        </div>
+                    ) : !timeStatus.isValid ? (
+                        <div style={{ textAlign: 'center', padding: '1.5rem 0' }}>
+                            <AlertTriangle size={48} color="var(--warning)" style={{ margin: '0 auto 1rem' }} />
+                            <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem', color: '#856404' }}>Kirish yopilgan!</h3>
+                            <p className="text-muted" style={{ whiteSpace: 'pre-line' }}>{timeStatus.message}</p>
                         </div>
                     ) : (
                         <form onSubmit={handleStart} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>

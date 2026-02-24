@@ -67,9 +67,24 @@ const TakeTest = () => {
         foundTest.questions.forEach(q => initialAnswers[q.id] = null);
         setAnswers(initialAnswers);
 
-        // Start timer if timeLimit is set
+        // Calculate timer based on individual time limit AND global end time
+        let calculatedTimeLeft = null;
         if (foundTest.timeLimit && foundTest.timeLimit > 0) {
-            setTimeLeft(foundTest.timeLimit * 60); // convert minutes to seconds
+            calculatedTimeLeft = foundTest.timeLimit * 60; // convert minutes to seconds
+        }
+
+        if (foundTest.endTime) {
+            const end = new Date(foundTest.endTime).getTime();
+            const now = Date.now();
+            const secondsUntilEnd = Math.max(0, Math.floor((end - now) / 1000));
+
+            if (calculatedTimeLeft === null || secondsUntilEnd < calculatedTimeLeft) {
+                calculatedTimeLeft = secondsUntilEnd;
+            }
+        }
+
+        if (calculatedTimeLeft !== null) {
+            setTimeLeft(calculatedTimeLeft);
         }
     }, [id, tests, navigate, loading]);
 
