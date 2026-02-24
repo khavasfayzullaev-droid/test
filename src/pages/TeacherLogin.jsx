@@ -15,7 +15,7 @@ const TeacherLogin = () => {
         e.preventDefault();
 
         // Hardcoded credentials for MVP
-        if (login === 'test123' && password === 'test123') {
+        if (login === 'AbdulmatinSirojov' && password === 'Zdrfv62924') {
             sessionStorage.setItem('isTeacherLoggedIn', 'true');
             navigate('/teacher');
         } else {
