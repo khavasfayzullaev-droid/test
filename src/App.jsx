@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { Brain } from 'lucide-react';
 import { TestProvider } from './context/TestContext';
 import TeacherDashboard from './pages/TeacherDashboard';
 import CreateTest from './pages/CreateTest';
@@ -19,7 +20,9 @@ const Layout = ({ children }) => {
         <header className="glass" style={{ padding: '1rem 0', borderBottom: '1px solid var(--border-light)', position: 'sticky', top: 0, zIndex: 50 }}>
           <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <h1 style={{ fontSize: '1.25rem', margin: 0, fontWeight: 700 }}>
-              <Link to="/">🎓 Tez Test Tuz</Link>
+              <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <Brain size={24} color="var(--primary)" /> Tez Test Tuz
+              </Link>
             </h1>
             <nav style={{ display: 'flex', gap: '1.5rem', fontWeight: 500 }}>
               <Link to="/teacher" style={{ padding: '0.5rem 1rem', borderRadius: 'var(--radius-sm)', background: 'var(--primary)', color: 'white' }}>O'qituvchi Bo'limi</Link>
@@ -38,7 +41,7 @@ const Layout = ({ children }) => {
 const Home = () => (
   <div style={{ textAlign: 'center', marginTop: '4rem' }} className="fade-in">
     <h1 style={{ fontSize: '3.5rem', marginBottom: '1rem', color: 'var(--text-main)', letterSpacing: '-0.03em', fontWeight: 800 }}>
-      Test ishlash va yaratish <br /> endi yanada oson.
+      Test tayyorlash <br /> endi yanada oson.
     </h1>
     <p style={{ fontSize: '1.25rem', color: 'var(--text-muted)', marginBottom: '3rem', maxWidth: '600px', margin: '0 auto 3rem' }}>
       Ustozlar uchun mukammal test platformasi. Mashg'ulotlarni testlar bilan boyiting,
