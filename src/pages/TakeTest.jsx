@@ -187,6 +187,11 @@ const TakeTest = () => {
                                         } />
                                         <CardContent>
                                             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                                {q.image && (
+                                                    <div style={{ marginBottom: '1rem', textAlign: 'center' }}>
+                                                        <img src={q.image} alt="Question figure" style={{ maxHeight: '250px', maxWidth: '100%', objectFit: 'contain', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-light)' }} />
+                                                    </div>
+                                                )}
                                                 {q.options.map((opt, optIndex) => {
                                                     let isStudentChoice = stAns === optIndex;
                                                     let isActualCorrect = q.correctOption === optIndex;
@@ -287,6 +292,11 @@ const TakeTest = () => {
                                 } />
                                 <CardContent>
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                                        {q.image && (
+                                            <div style={{ marginBottom: '1rem', textAlign: 'center' }}>
+                                                <img src={q.image} alt="Question figure" style={{ maxHeight: '300px', maxWidth: '100%', objectFit: 'contain', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-light)' }} />
+                                            </div>
+                                        )}
                                         {q.options.map((opt, optIndex) => {
                                             const isSelected = stAns === optIndex;
                                             let isActualCorrect = q.correctOption === optIndex;
@@ -364,6 +374,11 @@ const TakeTest = () => {
                             <CardHeader title={`${index + 1}. ${q.text}`} />
                             <CardContent>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                                    {q.image && (
+                                        <div style={{ marginBottom: '1rem', textAlign: 'center' }}>
+                                            <img src={q.image} alt="Question figure" style={{ maxHeight: '300px', maxWidth: '100%', objectFit: 'contain', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-light)' }} />
+                                        </div>
+                                    )}
                                     {q.options.map((opt, optIndex) => {
                                         const isSelected = answers[q.id] === optIndex;
                                         return (

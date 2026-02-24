@@ -4,7 +4,7 @@ import { useTests } from '../context/TestContext';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { Card, CardHeader, CardContent } from '../components/ui/Card';
-import { PlusCircle, Trash2, ArrowLeft, Save, Sparkles } from 'lucide-react';
+import { PlusCircle, Trash2, ArrowLeft, Save, Sparkles, Image as ImageIcon, X } from 'lucide-react';
 import { AiGeneratorModal } from '../components/ui/AiGeneratorModal';
 
 const CreateTest = () => {
@@ -25,7 +25,7 @@ const CreateTest = () => {
 
     // Start with 1 empty question
     const [questions, setQuestions] = useState([
-        { id: 1, text: '', options: ['', '', '', ''], correctOption: 0 }
+        { id: 1, text: '', options: ['', '', '', ''], correctOption: 0, image: null }
     ]);
 
     // Load existing test data when editing
@@ -51,7 +51,7 @@ const CreateTest = () => {
     const handleAddQuestion = () => {
         setQuestions([
             ...questions,
-            { id: Date.now(), text: '', options: ['', '', '', ''], correctOption: 0 }
+            { id: Date.now(), text: '', options: ['', '', '', ''], correctOption: 0, image: null }
         ]);
     };
 
@@ -78,6 +78,7 @@ const CreateTest = () => {
         setQuestions(questions.map(q => {
             if (q.id === id) {
                 if (field === 'text') return { ...q, text: value };
+                if (field === 'image') return { ...q, image: value };
                 if (field === 'correctOption') return { ...q, correctOption: value };
                 if (field === 'options') {
                     const newOptions = [...q.options];
@@ -87,6 +88,37 @@ const CreateTest = () => {
             }
             return q;
         }));
+    };
+
+    const handleImageUpload = (id, file) => {
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (event) => {
+            const img = new Image();
+            img.src = event.target.result;
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const MAX_WIDTH = 800;
+                let width = img.width;
+                let height = img.height;
+
+                if (width > MAX_WIDTH) {
+                    height = Math.round((height * MAX_WIDTH) / width);
+                    width = MAX_WIDTH;
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+
+                // Compress heavily to keep base64 string size small
+                const compressedBase64 = canvas.toDataURL('image/jpeg', 0.6);
+                handleQuestionChange(id, 'image', compressedBase64);
+            };
+        };
     };
 
     const handleSave = async () => {
@@ -230,8 +262,34 @@ const CreateTest = () => {
                                 placeholder="Savol matnini kiriting..."
                                 value={q.text}
                                 onChange={(e) => handleQuestionChange(q.id, 'text', e.target.value)}
-                                style={{ marginBottom: '1.5rem', fontWeight: 500 }}
+                                style={{ marginBottom: '1rem', fontWeight: 500 }}
                             />
+
+                            {q.image ? (
+                                <div style={{ position: 'relative', display: 'inline-block', marginBottom: '1.5rem', border: '1px solid var(--border-light)', borderRadius: 'var(--radius-md)', padding: '0.5rem', background: 'var(--bg-document)' }}>
+                                    <img src={q.image} alt="Question figure" style={{ maxHeight: '200px', maxWidth: '100%', objectFit: 'contain', borderRadius: 'var(--radius-sm)' }} />
+                                    <button
+                                        onClick={() => handleQuestionChange(q.id, 'image', null)}
+                                        style={{ position: 'absolute', top: '-10px', right: '-10px', background: 'var(--danger)', color: 'white', border: 'none', borderRadius: '50%', width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 2px 5px rgba(0,0,0,0.2)' }}
+                                        title="Rasmni o'chirish"
+                                    >
+                                        <X size={16} />
+                                    </button>
+                                </div>
+                            ) : (
+                                <div style={{ marginBottom: '1.5rem' }}>
+                                    <label style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', color: 'var(--primary)', cursor: 'pointer', fontSize: '0.9rem', fontWeight: 500, padding: '0.5rem 1rem', background: 'rgba(74, 144, 226, 0.1)', borderRadius: 'var(--radius-full)' }}>
+                                        <ImageIcon size={18} /> Rasm qo'shish
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            style={{ display: 'none' }}
+                                            onChange={(e) => handleImageUpload(q.id, e.target.files[0])}
+                                            onClick={(e) => { e.target.value = null; }}
+                                        />
+                                    </label>
+                                </div>
+                            )}
 
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
                                 {q.options.map((opt, optIndex) => (
