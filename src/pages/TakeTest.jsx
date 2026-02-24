@@ -50,6 +50,7 @@ const TakeTest = () => {
 
         setIsSubmitted(true);
         sessionStorage.removeItem('currentStudentName');
+        sessionStorage.removeItem(`test_answers_${test.id}`);
         if (timerRef.current) clearInterval(timerRef.current);
     }, [test, studentName, answers, calculateScore, submitTest]);
 
@@ -74,9 +75,18 @@ const TakeTest = () => {
             setTest(foundTest);
             setStudentName(name);
 
-            // Initialize answers
-            const initialAnswers = {};
-            foundTest.questions.forEach(q => initialAnswers[q.id] = null);
+            // Initialize answers from session storage if available
+            const savedAnswersStr = sessionStorage.getItem(`test_answers_${id}`);
+            let initialAnswers = {};
+            if (savedAnswersStr) {
+                try {
+                    initialAnswers = JSON.parse(savedAnswersStr);
+                } catch (e) {
+                    console.error("Failed to parse saved answers");
+                }
+            } else {
+                foundTest.questions.forEach(q => initialAnswers[q.id] = null);
+            }
             setAnswers(initialAnswers);
 
             // Calculate timer based on individual time limit AND global end time
@@ -154,7 +164,11 @@ const TakeTest = () => {
 
     const handleSelectAnswer = (questionId, optionIndex) => {
         if (test?.oneByOne && isCurrentRevealed) return; // Prevent changing after revealing
-        setAnswers({ ...answers, [questionId]: optionIndex });
+
+        const nextAnswers = { ...answers, [questionId]: optionIndex };
+        setAnswers(nextAnswers);
+        sessionStorage.setItem(`test_answers_${test.id}`, JSON.stringify(nextAnswers));
+
         if (test?.oneByOne) {
             setIsCurrentRevealed(true);
         }
