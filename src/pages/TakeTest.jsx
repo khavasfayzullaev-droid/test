@@ -177,9 +177,9 @@ const TakeTest = () => {
                             </div>
                         </div>
 
-                        <Button variant="primary" fullWidth onClick={() => navigate('/')}>
-                            Bosh sahifaga qaytish
-                        </Button>
+                        <div style={{ padding: '1rem', background: 'rgba(0,0,0,0.05)', color: 'var(--text-main)', borderRadius: 'var(--radius-sm)', fontWeight: 500 }}>
+                            Test yakunlandi. Agar natijalarni ko'rib bo'lgan bo'lsangiz, ushbu sahifani yopishingiz mumkin.
+                        </div>
                     </CardContent>
                 </Card>
 

@@ -52,6 +52,7 @@ const TeacherLogin = () => {
                             placeholder="Loginni kiriting"
                             value={login}
                             onChange={(e) => setLogin(e.target.value)}
+                            autoComplete="off"
                             required
                         />
                         <Input
@@ -60,6 +61,7 @@ const TeacherLogin = () => {
                             placeholder="Parolni kiriting"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
+                            autoComplete="new-password"
                             required
                         />
                         <Button variant="primary" type="submit" size="lg" style={{ marginTop: '0.5rem' }}>
