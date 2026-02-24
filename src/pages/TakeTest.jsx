@@ -27,11 +27,11 @@ const TakeTest = () => {
         return correct;
     }, [test, answers]);
 
-    const doSubmit = useCallback(() => {
+    const doSubmit = useCallback(async () => {
         const finalScore = calculateScore();
         setScore(finalScore);
 
-        submitTest({
+        await submitTest({
             testId: test.id,
             studentName,
             answers,

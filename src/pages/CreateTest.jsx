@@ -81,7 +81,7 @@ const CreateTest = () => {
         }));
     };
 
-    const handleSave = () => {
+    const handleSave = async () => {
         // Basic validation
         if (!title.trim()) {
             alert("Test nomini kiriting!"); return;
@@ -93,14 +93,19 @@ const CreateTest = () => {
 
         const payload = { title, description, category: category || 'Umumiy', timeLimit: timeLimit ? parseInt(timeLimit) : 0, questions };
 
-        if (isEditing) {
-            updateTest(editId, payload);
-            alert('Test muvaffaqiyatli yangilandi!');
-        } else {
-            const testId = addTest(payload);
-            alert(`Test yaratildi! Test kodi: ${testId.toUpperCase()}`);
+        try {
+            if (isEditing) {
+                await updateTest(editId, payload);
+                alert('Test muvaffaqiyatli yangilandi!');
+            } else {
+                const testId = await addTest(payload);
+                alert(`Test yaratildi! Test kodi: ${testId.toUpperCase()}`);
+            }
+            navigate('/teacher');
+        } catch (err) {
+            alert("Testni saqlashda xatolik yuz berdi. Iltimos qaytadan urunib ko'ring.");
+            console.error(err);
         }
-        navigate('/teacher');
     };
 
     return (

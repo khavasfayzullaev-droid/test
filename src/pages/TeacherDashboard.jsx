@@ -90,7 +90,7 @@ const TeacherDashboard = () => {
                                                     <Edit3 size={16} style={{ marginRight: '0.5rem' }} /> Tahrirlash
                                                 </Button>
                                             </div>
-                                            <Button variant="ghost" size="sm" style={{ color: 'var(--danger)' }} onClick={() => { if (window.confirm('Testni o\'chirishni xohlaysizmi?')) deleteTest(test.id); }}>
+                                            <Button variant="ghost" size="sm" style={{ color: 'var(--danger)' }} onClick={async () => { if (window.confirm('Testni o\'chirishni xohlaysizmi?')) await deleteTest(test.id); }}>
                                                 <Trash2 size={16} />
                                             </Button>
                                         </CardFooter>
