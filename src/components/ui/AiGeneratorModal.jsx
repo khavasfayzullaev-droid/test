@@ -5,7 +5,7 @@ import { Input } from './Input';
 import { Sparkles, X, Loader2 } from 'lucide-react';
 
 export const AiGeneratorModal = ({ isOpen, onClose, onGenerated }) => {
-    const [apiKey, setApiKey] = useState('');
+    const [apiKey, setApiKey] = useState(import.meta.env.VITE_GEMINI_API_KEY || '');
     const [rawText, setRawText] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -13,7 +13,8 @@ export const AiGeneratorModal = ({ isOpen, onClose, onGenerated }) => {
     if (!isOpen) return null;
 
     const handleGenerate = async () => {
-        if (!apiKey.trim()) {
+        const activeKey = apiKey || import.meta.env.VITE_GEMINI_API_KEY;
+        if (!activeKey) {
             setError("Iltimos, Google Gemini API kalitini kiritng!");
             return;
         }
@@ -46,7 +47,7 @@ export const AiGeneratorModal = ({ isOpen, onClose, onGenerated }) => {
     `;
 
         try {
-            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${activeKey}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -110,16 +111,17 @@ export const AiGeneratorModal = ({ isOpen, onClose, onGenerated }) => {
                 <CardContent>
                     <div style={{ marginBottom: '1.5rem' }}>
                         <p className="text-muted" style={{ fontSize: '0.875rem', marginBottom: '1rem' }}>
-                            Word yoki Telegramdan olingan chalkash testlarni shu yerga tashlang. Google Gemini ularni o'qib, o'zi platformaga moslab (savol, 4 variant va javobini aniqlab) joylashtirib beradi.
-                            (API kalitni olish: <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noreferrer" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>Google AI Studio</a>)
+                            Word yoki Telegramdan olingan chalkash testlarni shu yerga tashlang. Google Gemini ularni o'qib, o'zi platformaga moslab joylashtirib beradi.
                         </p>
-                        <Input
-                            type="password"
-                            label="Gemini API Key"
-                            placeholder="AIzaSy..."
-                            value={apiKey}
-                            onChange={e => setApiKey(e.target.value)}
-                        />
+                        {!import.meta.env.VITE_GEMINI_API_KEY && (
+                            <Input
+                                type="password"
+                                label="Gemini API Key"
+                                placeholder="AIzaSy..."
+                                value={apiKey}
+                                onChange={e => setApiKey(e.target.value)}
+                            />
+                        )}
                     </div>
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1.5rem' }}>
