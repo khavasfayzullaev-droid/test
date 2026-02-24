@@ -17,6 +17,7 @@ const CreateTest = () => {
     const [category, setCategory] = useState('');
     const [timeLimit, setTimeLimit] = useState('');
     const [showAnswers, setShowAnswers] = useState(false);
+    const [oneByOne, setOneByOne] = useState(false);
     const [isAiModalOpen, setIsAiModalOpen] = useState(false);
     const isEditing = !!editId;
 
@@ -35,6 +36,7 @@ const CreateTest = () => {
                 setCategory(existing.category || '');
                 setTimeLimit(existing.timeLimit ? String(existing.timeLimit) : '');
                 setShowAnswers(existing.showAnswers === true);
+                setOneByOne(existing.oneByOne === true);
                 setQuestions(existing.questions);
             } else {
                 navigate('/teacher');
@@ -93,7 +95,7 @@ const CreateTest = () => {
             alert("Barcha savollar va variantlarni to'ldiring!"); return;
         }
 
-        const payload = { title, description, category: category || 'Umumiy', timeLimit: timeLimit ? parseInt(timeLimit) : 0, showAnswers, questions };
+        const payload = { title, description, category: category || 'Umumiy', timeLimit: timeLimit ? parseInt(timeLimit) : 0, showAnswers, oneByOne, questions };
 
         try {
             if (isEditing) {
@@ -150,17 +152,34 @@ const CreateTest = () => {
                         onChange={(e) => setTimeLimit(e.target.value)}
                     />
 
-                    <div style={{ marginTop: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '1rem', background: 'var(--bg-document)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-light)' }}>
-                        <input
-                            type="checkbox"
-                            id="showAnswers"
-                            checked={showAnswers}
-                            onChange={(e) => setShowAnswers(e.target.checked)}
-                            style={{ width: '18px', height: '18px', accentColor: 'var(--primary)', cursor: 'pointer' }}
-                        />
-                        <label htmlFor="showAnswers" style={{ cursor: 'pointer', fontWeight: 500, userSelect: 'none' }}>
-                            O'quvchi testni yakunlaganida to'g'ri/xato javoblarni ko'rsatish
-                        </label>
+                    <div style={{ marginTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '1rem', background: 'var(--bg-document)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-light)' }}>
+                            <input
+                                type="checkbox"
+                                id="showAnswers"
+                                checked={showAnswers}
+                                onChange={(e) => setShowAnswers(e.target.checked)}
+                                style={{ width: '18px', height: '18px', accentColor: 'var(--primary)', cursor: 'pointer' }}
+                            />
+                            <label htmlFor="showAnswers" style={{ cursor: 'pointer', fontWeight: 500, userSelect: 'none' }}>
+                                O'quvchi testni yakunlaganida to'g'ri/xato javoblarni ko'rsatish
+                            </label>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '1rem', background: 'var(--bg-document)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-light)' }}>
+                            <input
+                                type="checkbox"
+                                id="oneByOne"
+                                checked={oneByOne}
+                                onChange={(e) => setOneByOne(e.target.checked)}
+                                style={{ width: '18px', height: '18px', accentColor: 'var(--primary)', cursor: 'pointer' }}
+                            />
+                            <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                <label htmlFor="oneByOne" style={{ cursor: 'pointer', fontWeight: 500, userSelect: 'none' }}>
+                                    Interaktiv rejim: Savollarni bittadan ko'rsatish va javobini darhol ochish
+                                </label>
+                                <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>O'quvchi javob izchil ravishda tahlil qilib, testni qadam-baqadam yechadi.</span>
+                            </div>
+                        </div>
                     </div>
                 </CardContent>
             </Card>

@@ -21,6 +21,8 @@ export const TestProvider = ({ children }) => {
                     parsedTests = testsData.map(t => {
                         let desc = t.description || '';
                         let showAnswers = false;
+                        let oneByOne = false;
+
                         if (desc.includes(':::SHOW_ANSWERS=true:::')) {
                             showAnswers = true;
                             desc = desc.replace(':::SHOW_ANSWERS=true:::', '');
@@ -28,7 +30,16 @@ export const TestProvider = ({ children }) => {
                             showAnswers = false;
                             desc = desc.replace(':::SHOW_ANSWERS=false:::', '');
                         }
-                        return { ...t, description: desc, showAnswers };
+
+                        if (desc.includes(':::ONE_BY_ONE=true:::')) {
+                            oneByOne = true;
+                            desc = desc.replace(':::ONE_BY_ONE=true:::', '');
+                        } else if (desc.includes(':::ONE_BY_ONE=false:::')) {
+                            oneByOne = false;
+                            desc = desc.replace(':::ONE_BY_ONE=false:::', '');
+                        }
+
+                        return { ...t, description: desc, showAnswers, oneByOne };
                     });
                 }
                 setTests(parsedTests);
@@ -47,7 +58,7 @@ export const TestProvider = ({ children }) => {
     }, []);
 
     const addTest = async (test) => {
-        const encodedDesc = `${test.description || ''}:::SHOW_ANSWERS=${test.showAnswers === true}:::`;
+        const encodedDesc = `${test.description || ''}:::SHOW_ANSWERS=${test.showAnswers === true}::::::ONE_BY_ONE=${test.oneByOne === true}:::`;
         const newTest = {
             id: Math.random().toString(36).substring(2, 9).toUpperCase(),
             title: test.title || '',
@@ -58,7 +69,7 @@ export const TestProvider = ({ children }) => {
             created_at: new Date().toISOString()
         };
 
-        const stateTest = { ...newTest, description: test.description || '', showAnswers: test.showAnswers === true };
+        const stateTest = { ...newTest, description: test.description || '', showAnswers: test.showAnswers === true, oneByOne: test.oneByOne === true };
         setTests(prev => [...prev, stateTest]);
 
         const { error } = await supabase.from('tests').insert([newTest]);
@@ -98,17 +109,18 @@ export const TestProvider = ({ children }) => {
     const updateTest = async (id, updatedData) => {
         const currentTest = tests.find(t => t.id === id) || {};
         const mergedData = { ...currentTest, ...updatedData };
-        const encodedDesc = `${mergedData.description || ''}:::SHOW_ANSWERS=${mergedData.showAnswers === true}:::`;
+        const encodedDesc = `${mergedData.description || ''}:::SHOW_ANSWERS=${mergedData.showAnswers === true}::::::ONE_BY_ONE=${mergedData.oneByOne === true}:::`;
 
         // Update local React state with pure data (no encoding)
         setTests(prev => prev.map(t => t.id === id ? { ...t, ...updatedData } : t));
 
-        // Prepare payload for Supabase (with encoded description and without showAnswers)
+        // Prepare payload for Supabase (with encoded description and without custom booleans)
         const dbPayload = { ...updatedData };
-        if (updatedData.hasOwnProperty('description') || updatedData.hasOwnProperty('showAnswers')) {
+        if (updatedData.hasOwnProperty('description') || updatedData.hasOwnProperty('showAnswers') || updatedData.hasOwnProperty('oneByOne')) {
             dbPayload.description = encodedDesc;
         }
         delete dbPayload.showAnswers;
+        delete dbPayload.oneByOne;
 
         const { error } = await supabase.from('tests').update(dbPayload).eq('id', id);
         if (error) console.error("Error updating test:", error);

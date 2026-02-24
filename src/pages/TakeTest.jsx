@@ -18,6 +18,10 @@ const TakeTest = () => {
     const [timeLeft, setTimeLeft] = useState(null); // in seconds
     const timerRef = useRef(null);
 
+    // One-by-one mode states
+    const [currentQIndex, setCurrentQIndex] = useState(0);
+    const [isCurrentRevealed, setIsCurrentRevealed] = useState(false);
+
     const calculateScore = useCallback(() => {
         if (!test) return 0;
         let correct = 0;
@@ -97,7 +101,20 @@ const TakeTest = () => {
     if (!test) return <div style={{ textAlign: 'center', padding: '4rem' }}>Yuklanmoqda...</div>;
 
     const handleSelectAnswer = (questionId, optionIndex) => {
+        if (test?.oneByOne && isCurrentRevealed) return; // Prevent changing after revealing
         setAnswers({ ...answers, [questionId]: optionIndex });
+        if (test?.oneByOne) {
+            setIsCurrentRevealed(true);
+        }
+    };
+
+    const handleNextQuestion = () => {
+        if (currentQIndex < test.questions.length - 1) {
+            setCurrentQIndex(prev => prev + 1);
+            setIsCurrentRevealed(false);
+        } else {
+            doSubmit();
+        }
     };
 
     const handleSubmit = () => {
@@ -240,61 +257,151 @@ const TakeTest = () => {
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                {test.questions.map((q, index) => (
-                    <Card key={q.id} glass>
-                        <CardHeader title={`${index + 1}. ${q.text}`} />
-                        <CardContent>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                                {q.options.map((opt, optIndex) => {
-                                    const isSelected = answers[q.id] === optIndex;
-                                    return (
-                                        <button
-                                            key={optIndex}
-                                            onClick={() => handleSelectAnswer(q.id, optIndex)}
-                                            style={{
-                                                padding: '1rem',
-                                                textAlign: 'left',
-                                                borderRadius: 'var(--radius-sm)',
-                                                border: `1px solid ${isSelected ? 'var(--primary)' : 'var(--border-strong)'}`,
-                                                background: isSelected ? 'rgba(74, 144, 226, 0.05)' : 'white',
-                                                transition: 'all var(--transition-fast)',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                gap: '1rem'
-                                            }}
-                                            className="hover:shadow-sm"
-                                        >
-                                            <div style={{
-                                                width: '24px', height: '24px', borderRadius: '50%',
-                                                border: `2px solid ${isSelected ? 'var(--primary)' : 'var(--border-strong)'}`,
-                                                background: isSelected ? 'var(--primary)' : 'transparent',
-                                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                                flexShrink: 0
-                                            }}>
-                                                {isSelected && <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: 'white' }} />}
-                                            </div>
-                                            <span style={{ fontSize: '1.05rem', color: isSelected ? 'var(--primary-dark)' : 'var(--text-main)' }}>
-                                                {opt}
-                                            </span>
-                                        </button>
-                                    );
-                                })}
-                            </div>
-                        </CardContent>
-                    </Card>
-                ))}
+                {test.oneByOne ? (
+                    (() => {
+                        const q = test.questions[currentQIndex];
+                        const index = currentQIndex;
+                        const stAns = answers[q.id];
+                        return (
+                            <Card key={q.id} glass style={{ borderLeft: isCurrentRevealed ? `4px solid ${stAns === q.correctOption ? 'var(--success)' : 'var(--danger)'}` : 'none' }}>
+                                <CardHeader title={
+                                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem' }}>
+                                        {isCurrentRevealed && (stAns === q.correctOption ? <CheckCircle size={20} color="var(--success)" style={{ marginTop: '2px' }} /> : <XCircle size={20} color="var(--danger)" style={{ marginTop: '2px' }} />)}
+                                        <span>{index + 1}. {q.text}</span>
+                                    </div>
+                                } />
+                                <CardContent>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                                        {q.options.map((opt, optIndex) => {
+                                            const isSelected = stAns === optIndex;
+                                            let isActualCorrect = q.correctOption === optIndex;
+
+                                            let bgColor = isSelected ? 'rgba(74, 144, 226, 0.05)' : 'white';
+                                            let borderColor = isSelected ? 'var(--primary)' : 'var(--border-strong)';
+                                            let textColor = isSelected ? 'var(--primary-dark)' : 'var(--text-main)';
+
+                                            if (isCurrentRevealed) {
+                                                if (isActualCorrect) {
+                                                    bgColor = 'rgba(0,184,148,0.1)';
+                                                    borderColor = 'var(--success)';
+                                                    textColor = 'var(--success)';
+                                                } else if (isSelected && !isActualCorrect) {
+                                                    bgColor = 'rgba(255,118,117,0.1)';
+                                                    borderColor = 'var(--danger)';
+                                                    textColor = 'var(--danger)';
+                                                }
+                                            }
+
+                                            return (
+                                                <button
+                                                    key={optIndex}
+                                                    onClick={() => handleSelectAnswer(q.id, optIndex)}
+                                                    disabled={isCurrentRevealed}
+                                                    style={{
+                                                        padding: '1rem',
+                                                        textAlign: 'left',
+                                                        borderRadius: 'var(--radius-sm)',
+                                                        border: `1px solid ${borderColor}`,
+                                                        background: bgColor,
+                                                        color: textColor,
+                                                        transition: 'all var(--transition-fast)',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        gap: '1rem',
+                                                        cursor: isCurrentRevealed ? 'default' : 'pointer',
+                                                        fontWeight: isCurrentRevealed && isActualCorrect ? 600 : 400
+                                                    }}
+                                                    className={!isCurrentRevealed ? "hover:shadow-sm" : ""}
+                                                >
+                                                    <div style={{
+                                                        width: '24px', height: '24px', borderRadius: '50%',
+                                                        border: `2px solid ${borderColor}`,
+                                                        background: isSelected && !isCurrentRevealed ? 'var(--primary)' : 'transparent',
+                                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                        flexShrink: 0
+                                                    }}>
+                                                        {isSelected && !isCurrentRevealed && <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: 'white' }} />}
+                                                        {isCurrentRevealed && isSelected && <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: borderColor }} />}
+                                                    </div>
+                                                    <span style={{ fontSize: '1.05rem', color: textColor }}>
+                                                        {opt}
+                                                    </span>
+                                                    {isCurrentRevealed && isActualCorrect && <span style={{ marginLeft: 'auto', fontSize: '0.85rem', background: 'var(--success)', color: 'white', padding: '0.1rem 0.5rem', borderRadius: '1rem' }}>To'g'ri javob</span>}
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+
+                                    {isCurrentRevealed && (
+                                        <div style={{ marginTop: '2rem', display: 'flex', justifyContent: 'flex-end' }}>
+                                            <Button variant="primary" size="lg" onClick={handleNextQuestion}>
+                                                {currentQIndex < test.questions.length - 1 ? 'Keyingi savol ➔' : 'Testni Yakunlash'}
+                                            </Button>
+                                        </div>
+                                    )}
+                                </CardContent>
+                            </Card>
+                        );
+                    })()
+                ) : (
+                    test.questions.map((q, index) => (
+                        <Card key={q.id} glass>
+                            <CardHeader title={`${index + 1}. ${q.text}`} />
+                            <CardContent>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                                    {q.options.map((opt, optIndex) => {
+                                        const isSelected = answers[q.id] === optIndex;
+                                        return (
+                                            <button
+                                                key={optIndex}
+                                                onClick={() => handleSelectAnswer(q.id, optIndex)}
+                                                style={{
+                                                    padding: '1rem',
+                                                    textAlign: 'left',
+                                                    borderRadius: 'var(--radius-sm)',
+                                                    border: `1px solid ${isSelected ? 'var(--primary)' : 'var(--border-strong)'}`,
+                                                    background: isSelected ? 'rgba(74, 144, 226, 0.05)' : 'white',
+                                                    transition: 'all var(--transition-fast)',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    gap: '1rem'
+                                                }}
+                                                className="hover:shadow-sm"
+                                            >
+                                                <div style={{
+                                                    width: '24px', height: '24px', borderRadius: '50%',
+                                                    border: `2px solid ${isSelected ? 'var(--primary)' : 'var(--border-strong)'}`,
+                                                    background: isSelected ? 'var(--primary)' : 'transparent',
+                                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                    flexShrink: 0
+                                                }}>
+                                                    {isSelected && <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: 'white' }} />}
+                                                </div>
+                                                <span style={{ fontSize: '1.05rem', color: isSelected ? 'var(--primary-dark)' : 'var(--text-main)' }}>
+                                                    {opt}
+                                                </span>
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </CardContent>
+                        </Card>
+                    ))
+                )}
             </div>
 
-            <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: 'var(--bg-glass)', backdropFilter: 'blur(16px)', padding: '1rem', borderTop: '1px solid var(--border-light)', display: 'flex', justifyContent: 'center', zIndex: 100 }}>
-                <div style={{ width: '100%', maxWidth: '800px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div style={{ fontWeight: 500 }}>
-                        Belgilangan: <span style={{ color: 'var(--primary)' }}>{Object.values(answers).filter(a => a !== null).length}</span> / {test.questions.length}
+            {!test.oneByOne && (
+                <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: 'var(--bg-glass)', backdropFilter: 'blur(16px)', padding: '1rem', borderTop: '1px solid var(--border-light)', display: 'flex', justifyContent: 'center', zIndex: 100 }}>
+                    <div style={{ width: '100%', maxWidth: '800px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div style={{ fontWeight: 500 }}>
+                            Belgilangan: <span style={{ color: 'var(--primary)' }}>{Object.values(answers).filter(a => a !== null).length}</span> / {test.questions.length}
+                        </div>
+                        <Button variant="primary" size="lg" onClick={handleSubmit}>
+                            Testni Yakunlash
+                        </Button>
                     </div>
-                    <Button variant="primary" size="lg" onClick={handleSubmit}>
-                        Testni Yakunlash
-                    </Button>
                 </div>
-            </div>
+            )}
         </div>
     );
 };
