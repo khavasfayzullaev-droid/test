@@ -63,13 +63,14 @@ const DirectTakeTest = () => {
         return () => clearInterval(interval);
     }, [test]);
 
-    const handleStart = (e) => {
+    const handleStart = async (e) => {
         e.preventDefault();
         if (!name.trim()) return;
 
         // Check if this student already took the test
-        if (hasStudentTaken(test.id, name.trim())) {
-            setAlreadyTaken(true);
+        const taken = await hasStudentTaken(test.id, name.trim());
+        if (taken) {
+            alert("⚠️ Ushbu ism bilan test allaqachon topshirilgan!\n\nIltimos, ismingiz yoniga familiyangizni ham qo'shing (Masalan: Ali Valiyev). Namunadagidek farqli ism kiritsangizgina tizim sizni qabul qiladi.");
             return;
         }
 

@@ -7,13 +7,15 @@ export const useTests = () => useContext(TestContext);
 
 export const TestProvider = ({ children }) => {
     const [tests, setTests] = useState([]);
-    const [submissions, setSubmissions] = useState([]);
     const [loading, setLoading] = useState(true);
 
     const fetchData = async () => {
         try {
             setLoading(true);
-            const { data: testsData, error: testsError } = await supabase.from('tests').select('*');
+            const { data: testsData, error: testsError } = await supabase.from('tests')
+                .select('*')
+                .order('created_at', { ascending: false })
+                .limit(500);
             if (testsError) console.error('Error fetching tests:', testsError);
             let parsedTests = [];
             if (testsData) {
@@ -57,9 +59,7 @@ export const TestProvider = ({ children }) => {
             }
             setTests(parsedTests);
 
-            const { data: subData, error: subError } = await supabase.from('submissions').select('*');
-            if (subError) console.error('Error fetching submissions:', subError);
-            else setSubmissions(subData || []);
+            // Submissions bulk fetching removed for scaling. Submissions are now queried exclusively on demand.
         } catch (err) {
             console.error("Fetch data error:", err);
         } finally {
@@ -172,7 +172,6 @@ export const TestProvider = ({ children }) => {
 
     const deleteTest = async (id) => {
         setTests(prev => prev.filter(t => t.id !== id));
-        setSubmissions(prev => prev.filter(s => s.testId !== id));
 
         const { error } = await supabase.from('tests').delete().eq('id', id);
         if (error) console.error("Error deleting test:", error);
@@ -188,14 +187,22 @@ export const TestProvider = ({ children }) => {
             submittedAt: new Date().toISOString()
         };
 
-        setSubmissions(prev => [...prev, newSub]);
-
         const { error } = await supabase.from('submissions').insert([newSub]);
         if (error) console.error("Error adding submission:", error);
     };
 
-    const getSubmissionsForTest = (testId) => {
-        return submissions.filter(s => s.testId === testId);
+    const getSubmissionsForTest = async (testId) => {
+        const { data, error } = await supabase
+            .from('submissions')
+            .select('*')
+            .eq('testId', testId)
+            .order('submittedAt', { ascending: false });
+
+        if (error) {
+            console.error("Error fetching submissions:", error);
+            return [];
+        }
+        return data || [];
     };
 
     const updateTest = async (id, updatedData) => {
@@ -222,14 +229,24 @@ export const TestProvider = ({ children }) => {
         if (error) console.error("Error updating test:", error);
     };
 
-    const hasStudentTaken = (testId, studentName) => {
-        return submissions.some(s => s.testId === testId && s.studentName.toLowerCase() === studentName.toLowerCase());
+    const hasStudentTaken = async (testId, studentName) => {
+        const { data, error } = await supabase
+            .from('submissions')
+            .select('id')
+            .eq('testId', testId)
+            .ilike('studentName', studentName)
+            .limit(1);
+
+        if (error) {
+            console.error("Error checking submission status:", error);
+            return false;
+        }
+        return data && data.length > 0;
     };
 
     return (
         <TestContext.Provider value={{
             tests,
-            submissions,
             loading,
             addTest,
             deleteTest,

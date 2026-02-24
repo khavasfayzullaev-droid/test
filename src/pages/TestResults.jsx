@@ -23,13 +23,16 @@ const TestResults = () => {
         }
         setTest(foundTest);
 
-        const subs = getSubmissionsForTest(id);
-        // Sort by score descending
-        subs.sort((a, b) => b.score - a.score);
-        setSubmissions(subs);
+        const fetchSubmissions = async () => {
+            const subs = await getSubmissionsForTest(id);
+            // Sort by score descending
+            subs.sort((a, b) => b.score - a.score);
+            setSubmissions(subs);
+        };
+        fetchSubmissions();
     }, [id, tests, getSubmissionsForTest, navigate, loading]);
 
-    if (!test) return <div>Yuklanmoqda...</div>;
+    if (!test) return <div style={{ textAlign: 'center', padding: '4rem' }}><div className="loading-spinner" style={{ margin: '0 auto' }}></div><p style={{ marginTop: '1rem', color: 'var(--text-muted)' }}>Yuklanmoqda...</p></div>;
 
     const averageScore = submissions.length > 0
         ? Math.round(submissions.reduce((acc, curr) => acc + curr.score, 0) / submissions.length)
