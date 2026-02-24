@@ -61,7 +61,7 @@ const TeacherDashboard = () => {
                                     <Card key={test.id} glass>
                                         <CardHeader
                                             title={test.title}
-                                            subtitle={`${new Date(test.createdAt).toLocaleDateString()} da yaratilgan • ${test.questions.length} ta savol`}
+                                            subtitle={`${new Date(test.created_at || test.createdAt || new Date()).toLocaleDateString()} da yaratilgan • ${test.questions?.length || 0} ta savol`}
                                         />
                                         <CardContent>
                                             {test.timeLimit > 0 && (

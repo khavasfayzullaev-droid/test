@@ -1,77 +1,88 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { supabase } from '../lib/supabase';
 
 const TestContext = createContext();
 
 export const useTests = () => useContext(TestContext);
 
-const demoTest = {
-    id: "DEMO123",
-    title: "Ingliz tili: Asosiy So'zlar",
-    description: "Beginner darajasidagi o'quvchilar uchun qisqa test",
-    category: "Ingliz tili (Beginner)",
-    createdAt: new Date().toISOString(),
-    questions: [
-        { id: 1, text: "Apple so'zining o'zbekcha tarjimasi nima?", options: ["Olma", "Nok", "Banan", "Uzum"], correctOption: 0 },
-        { id: 2, text: "Qizil rang inglizchada qanday yoziladi?", options: ["Blue", "Yellow", "Red", "Green"], correctOption: 2 },
-        { id: 3, text: "Ingliz tilida nechta harf bor?", options: ["24", "26", "28", "30"], correctOption: 1 }
-    ]
-};
-
-const demoSubmission = {
-    testId: "DEMO123",
-    studentName: "Durdona Aliyeva",
-    answers: { 1: 0, 2: 2, 3: 0 }, // 100% is 1:0, 2:2, 3:1 -> answered 3 wrong
-    score: 2,
-    totalQuestions: 3,
-    submittedAt: new Date().toISOString()
-};
-
 export const TestProvider = ({ children }) => {
-    const [tests, setTests] = useState(() => {
-        const saved = localStorage.getItem('tests');
-        const parsed = saved ? JSON.parse(saved) : null;
-        return (parsed && parsed.length > 0) ? parsed : [demoTest];
-    });
+    const [tests, setTests] = useState([]);
+    const [submissions, setSubmissions] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    const [submissions, setSubmissions] = useState(() => {
-        const saved = localStorage.getItem('submissions');
-        const parsed = saved ? JSON.parse(saved) : null;
-        return (parsed && parsed.length > 0) ? parsed : [demoSubmission];
-    });
-
+    // Initial load from Supabase
     useEffect(() => {
-        localStorage.setItem('tests', JSON.stringify(tests));
-    }, [tests]);
+        const fetchData = async () => {
+            try {
+                const { data: testsData, error: testsError } = await supabase.from('tests').select('*');
+                if (testsError) console.error('Error fetching tests:', testsError);
+                else setTests(testsData || []);
 
-    useEffect(() => {
-        localStorage.setItem('submissions', JSON.stringify(submissions));
-    }, [submissions]);
-
-    const addTest = (test) => {
-        const newTest = {
-            ...test,
-            id: Math.random().toString(36).substr(2, 9),
-            createdAt: new Date().toISOString(),
+                const { data: subData, error: subError } = await supabase.from('submissions').select('*');
+                if (subError) console.error('Error fetching submissions:', subError);
+                else setSubmissions(subData || []);
+            } catch (err) {
+                console.error("Fetch data error:", err);
+            } finally {
+                setLoading(false);
+            }
         };
+
+        fetchData();
+    }, []);
+
+    const addTest = async (test) => {
+        const newTest = {
+            id: Math.random().toString(36).substring(2, 9).toUpperCase(),
+            title: test.title || '',
+            description: test.description || '',
+            category: test.category || 'Umumiy',
+            questions: test.questions || [],
+            timeLimit: test.timeLimit || 0,
+            created_at: new Date().toISOString()
+        };
+
         setTests(prev => [...prev, newTest]);
+
+        const { error } = await supabase.from('tests').insert([newTest]);
+        if (error) console.error("Error adding test:", error);
+
         return newTest.id;
     };
 
-    const deleteTest = (id) => {
+    const deleteTest = async (id) => {
         setTests(prev => prev.filter(t => t.id !== id));
-        setSubmissions(prev => prev.filter(s => s.testId !== id)); // Delete related submissions
+        setSubmissions(prev => prev.filter(s => s.testId !== id));
+
+        const { error } = await supabase.from('tests').delete().eq('id', id);
+        if (error) console.error("Error deleting test:", error);
     };
 
-    const submitTest = (submission) => {
-        setSubmissions(prev => [...prev, { ...submission, submittedAt: new Date().toISOString() }]);
+    const submitTest = async (submission) => {
+        const newSub = {
+            testId: submission.testId,
+            studentName: submission.studentName,
+            answers: submission.answers,
+            score: submission.score,
+            totalQuestions: submission.totalQuestions,
+            submittedAt: new Date().toISOString()
+        };
+
+        setSubmissions(prev => [...prev, newSub]);
+
+        const { error } = await supabase.from('submissions').insert([newSub]);
+        if (error) console.error("Error adding submission:", error);
     };
 
     const getSubmissionsForTest = (testId) => {
         return submissions.filter(s => s.testId === testId);
     };
 
-    const updateTest = (id, updatedData) => {
+    const updateTest = async (id, updatedData) => {
         setTests(prev => prev.map(t => t.id === id ? { ...t, ...updatedData } : t));
+
+        const { error } = await supabase.from('tests').update(updatedData).eq('id', id);
+        if (error) console.error("Error updating test:", error);
     };
 
     const hasStudentTaken = (testId, studentName) => {
@@ -82,6 +93,7 @@ export const TestProvider = ({ children }) => {
         <TestContext.Provider value={{
             tests,
             submissions,
+            loading,
             addTest,
             deleteTest,
             submitTest,
