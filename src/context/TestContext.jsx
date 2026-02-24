@@ -71,6 +71,72 @@ export const TestProvider = ({ children }) => {
         fetchData();
     }, []);
 
+    // Add a specialized function for targeted fetching
+    const fetchTestById = async (id) => {
+        try {
+            // First check if it's already in state
+            const existing = tests.find(t => t.id === id);
+            if (existing) return existing;
+
+            setLoading(true);
+            const { data, error } = await supabase
+                .from('tests')
+                .select('*')
+                .eq('id', id)
+                .single();
+
+            if (error) {
+                console.error('Error fetching single test:', error);
+                return null;
+            }
+
+            if (data) {
+                let desc = data.description || '';
+                let showAnswers = false;
+                let oneByOne = false;
+                let startTime = null;
+                let endTime = null;
+
+                const ansMatch = desc.match(/:::SHOW_ANSWERS=(true|false):::/);
+                if (ansMatch) {
+                    showAnswers = ansMatch[1] === 'true';
+                    desc = desc.replace(ansMatch[0], '');
+                }
+
+                const oneByOneMatch = desc.match(/:::ONE_BY_ONE=(true|false):::/);
+                if (oneByOneMatch) {
+                    oneByOne = oneByOneMatch[1] === 'true';
+                    desc = desc.replace(oneByOneMatch[0], '');
+                }
+
+                const startMatch = desc.match(/:::START_TIME=([^:]+):::/);
+                if (startMatch) {
+                    startTime = startMatch[1];
+                    desc = desc.replace(startMatch[0], '');
+                }
+
+                const endMatch = desc.match(/:::END_TIME=([^:]+):::/);
+                if (endMatch) {
+                    endTime = endMatch[1];
+                    desc = desc.replace(endMatch[0], '');
+                }
+
+                // Add to temporary state (or just return it without polluting global state)
+                const mappedTest = { ...data, description: desc, showAnswers, oneByOne, startTime, endTime };
+
+                // Optional: Update global state or just return
+                // setTests(prev => [...prev.filter(t => t.id !== id), mappedTest]);
+
+                return mappedTest;
+            }
+        } catch (err) {
+            console.error('Unexpected error fetching single test:', err);
+        } finally {
+            setLoading(false);
+        }
+        return null;
+    };
+
     const addTest = async (test) => {
         let encodedDesc = `${test.description || ''}:::SHOW_ANSWERS=${test.showAnswers === true}::::::ONE_BY_ONE=${test.oneByOne === true}:::`;
         if (test.startTime) encodedDesc += `:::START_TIME=${test.startTime}:::`;
@@ -168,7 +234,9 @@ export const TestProvider = ({ children }) => {
             submitTest,
             getSubmissionsForTest,
             updateTest,
-            hasStudentTaken
+            hasStudentTaken,
+            fetchData,
+            fetchTestById
         }}>
             {children}
         </TestContext.Provider>

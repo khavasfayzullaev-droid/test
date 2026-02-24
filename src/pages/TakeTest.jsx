@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useTests } from '../context/TestContext';
 import { Button } from '../components/ui/Button';
 import { Card, CardHeader, CardContent } from '../components/ui/Card';
@@ -7,10 +7,12 @@ import { CheckCircle, Clock, AlertTriangle, XCircle } from 'lucide-react';
 
 const TakeTest = () => {
     const { id } = useParams();
-    const { tests, submitTest, loading } = useTests();
+    const { fetchTestById, submitTest } = useTests();
     const navigate = useNavigate();
+    const location = useLocation();
 
     const [test, setTest] = useState(null);
+    const [loadingTest, setLoadingTest] = useState(true);
     const [studentName, setStudentName] = useState('');
     const [answers, setAnswers] = useState({});
     const [isSubmitted, setIsSubmitted] = useState(false);
@@ -49,44 +51,55 @@ const TakeTest = () => {
     }, [test, studentName, answers, calculateScore, submitTest]);
 
     useEffect(() => {
-        if (loading) return; // Wait for data to fetch
+        const initTest = async () => {
+            const name = sessionStorage.getItem('currentStudentName');
 
-        const foundTest = tests.find(t => t.id.toUpperCase() === id.toUpperCase());
-        const name = sessionStorage.getItem('currentStudentName');
+            // Check if passed via React Router state (from DirectTakeTest)
+            let foundTest = location.state?.testData;
 
-        if (!foundTest || !name) {
-            navigate(`/take/${id}`);
-            return;
-        }
-
-        setTest(foundTest);
-        setStudentName(name);
-
-        // Initialize answers
-        const initialAnswers = {};
-        foundTest.questions.forEach(q => initialAnswers[q.id] = null);
-        setAnswers(initialAnswers);
-
-        // Calculate timer based on individual time limit AND global end time
-        let calculatedTimeLeft = null;
-        if (foundTest.timeLimit && foundTest.timeLimit > 0) {
-            calculatedTimeLeft = foundTest.timeLimit * 60; // convert minutes to seconds
-        }
-
-        if (foundTest.endTime) {
-            const end = new Date(foundTest.endTime).getTime();
-            const now = Date.now();
-            const secondsUntilEnd = Math.max(0, Math.floor((end - now) / 1000));
-
-            if (calculatedTimeLeft === null || secondsUntilEnd < calculatedTimeLeft) {
-                calculatedTimeLeft = secondsUntilEnd;
+            // If not in state, fetch it
+            if (!foundTest) {
+                setLoadingTest(true);
+                foundTest = await fetchTestById(id);
             }
-        }
 
-        if (calculatedTimeLeft !== null) {
-            setTimeLeft(calculatedTimeLeft);
-        }
-    }, [id, tests, navigate, loading]);
+            if (!foundTest || !name) {
+                navigate(`/take/${id}`);
+                return;
+            }
+
+            setTest(foundTest);
+            setStudentName(name);
+
+            // Initialize answers
+            const initialAnswers = {};
+            foundTest.questions.forEach(q => initialAnswers[q.id] = null);
+            setAnswers(initialAnswers);
+
+            // Calculate timer based on individual time limit AND global end time
+            let calculatedTimeLeft = null;
+            if (foundTest.timeLimit && foundTest.timeLimit > 0) {
+                calculatedTimeLeft = foundTest.timeLimit * 60; // convert minutes to seconds
+            }
+
+            if (foundTest.endTime) {
+                const end = new Date(foundTest.endTime).getTime();
+                const now = Date.now();
+                const secondsUntilEnd = Math.max(0, Math.floor((end - now) / 1000));
+
+                if (calculatedTimeLeft === null || secondsUntilEnd < calculatedTimeLeft) {
+                    calculatedTimeLeft = secondsUntilEnd;
+                }
+            }
+
+            if (calculatedTimeLeft !== null) {
+                setTimeLeft(calculatedTimeLeft);
+            }
+            setLoadingTest(false);
+        };
+
+        initTest();
+    }, [id, fetchTestById, navigate, location.state]);
 
     // Countdown timer effect
     useEffect(() => {
@@ -113,7 +126,7 @@ const TakeTest = () => {
         }
     }, [timeLeft, isSubmitted, test, doSubmit]);
 
-    if (!test) return <div style={{ textAlign: 'center', padding: '4rem' }}>Yuklanmoqda...</div>;
+    if (loadingTest || !test) return <div style={{ textAlign: 'center', padding: '4rem' }}><div className="loading-spinner" style={{ margin: '0 auto' }}></div><p style={{ marginTop: '1rem', color: 'var(--text-muted)' }}>Yuklanmoqda...</p></div>;
 
     const handleSelectAnswer = (questionId, optionIndex) => {
         if (test?.oneByOne && isCurrentRevealed) return; // Prevent changing after revealing

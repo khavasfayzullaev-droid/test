@@ -8,25 +8,29 @@ import { Clock, AlertTriangle } from 'lucide-react';
 
 const DirectTakeTest = () => {
     const { id } = useParams();
-    const { tests, hasStudentTaken, loading } = useTests();
+    const { fetchTestById, hasStudentTaken } = useTests();
     const navigate = useNavigate();
 
     const [test, setTest] = useState(null);
+    const [loadingTest, setLoadingTest] = useState(true);
     const [name, setName] = useState('');
     const [alreadyTaken, setAlreadyTaken] = useState(false);
     const [timeStatus, setTimeStatus] = useState({ isValid: true, message: '' });
 
     useEffect(() => {
-        if (loading) return; // Wait for data to fetch
-
-        const foundTest = tests.find(t => t.id.toUpperCase() === id.toUpperCase());
-        if (!foundTest) {
-            alert('Bunday test topilmadi!');
-            navigate('/');
-            return;
-        }
-        setTest(foundTest);
-    }, [id, tests, navigate, loading]);
+        const loadSingleTest = async () => {
+            setLoadingTest(true);
+            const foundTest = await fetchTestById(id);
+            if (!foundTest) {
+                alert('Bunday test topilmadi!');
+                navigate('/');
+                return;
+            }
+            setTest(foundTest);
+            setLoadingTest(false);
+        };
+        loadSingleTest();
+    }, [id, fetchTestById, navigate]);
 
     // Check time constraints
     useEffect(() => {
@@ -70,10 +74,12 @@ const DirectTakeTest = () => {
         }
 
         sessionStorage.setItem('currentStudentName', name.trim());
-        navigate(`/student/test/${id}`);
+        navigate(`/student/test/${test.id}`, { state: { testData: test, studentName: name.trim() } });
     };
 
-    if (!test) return null;
+    if (loadingTest || !test) {
+        return <div style={{ textAlign: 'center', padding: '4rem' }}><div className="loading-spinner" style={{ margin: '0 auto' }}></div><p style={{ marginTop: '1rem', color: 'var(--text-muted)' }}>Test qidirilmoqda...</p></div>;
+    }
 
     return (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }} className="fade-in">
