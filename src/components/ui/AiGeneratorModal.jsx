@@ -47,7 +47,7 @@ export const AiGeneratorModal = ({ isOpen, onClose, onGenerated }) => {
     `;
 
         try {
-            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${activeKey}`, {
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${activeKey}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -60,7 +60,7 @@ export const AiGeneratorModal = ({ isOpen, onClose, onGenerated }) => {
 
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({}));
-                const apiMessage = errorData.error?.message || response.statusText;
+                const apiMessage = errorData.error?.message || response.statusText || "Noma'lum xatolik";
                 throw new Error(`API xatosi (${response.status}): ${apiMessage}`);
             }
 
@@ -70,7 +70,6 @@ export const AiGeneratorModal = ({ isOpen, onClose, onGenerated }) => {
             }
 
             const rawOutput = data.candidates[0].content.parts[0].text;
-
             // Try to extract JSON from markdown if Gemini surrounds it with ```json
             let jsonString = rawOutput;
             const jsonMatch = rawOutput.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
@@ -92,7 +91,7 @@ export const AiGeneratorModal = ({ isOpen, onClose, onGenerated }) => {
 
         } catch (err) {
             console.error(err);
-            setError("Test tuzishda xatolik: " + err.message);
+            setError(err.message || "Kutilmagan xatolik yuz berdi");
         } finally {
             setLoading(false);
         }
@@ -135,25 +134,26 @@ export const AiGeneratorModal = ({ isOpen, onClose, onGenerated }) => {
                         <textarea
                             className="input-field"
                             rows={8}
-                            placeholder="1. O'zbekistonning poytaxti qayer?
-A) Samarqand B) Toshkent C) Buxoro D) Xiva
-
-2. Mustaqillik qachon e'lon qilingan?
-A) 1991 B) 1989 C) 1990 D) 1992
-
-... (va matn oxirida kalitlar) ...
-Javoblar:
-1-B
-2-A"
+                            placeholder="Namuna: 1. Savol... A) variant B) variant..."
                             value={rawText}
                             onChange={e => setRawText(e.target.value)}
                             style={{ resize: 'vertical' }}
                         />
                     </div>
 
-                    {error && <div style={{ color: 'var(--danger)', fontSize: '0.875rem', marginBottom: '1.5rem', padding: '0.75rem', background: 'rgba(255,118,117,0.1)', borderRadius: 'var(--radius-sm)' }}>
-                        {error}
-                    </div>}
+                    {error && (
+                        <div style={{
+                            color: 'var(--danger)',
+                            fontSize: '0.875rem',
+                            marginBottom: '1.5rem',
+                            padding: '0.75rem',
+                            background: 'rgba(255,118,117,0.1)',
+                            borderRadius: 'var(--radius-sm)',
+                            wordBreak: 'break-word'
+                        }}>
+                            {String(error)}
+                        </div>
+                    )}
 
                     <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
                         <Button variant="ghost" onClick={onClose}>Bekor qilish</Button>
