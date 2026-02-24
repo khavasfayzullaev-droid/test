@@ -16,6 +16,7 @@ const CreateTest = () => {
     const [description, setDescription] = useState('');
     const [category, setCategory] = useState('');
     const [timeLimit, setTimeLimit] = useState('');
+    const [showAnswers, setShowAnswers] = useState(false);
     const [isAiModalOpen, setIsAiModalOpen] = useState(false);
     const isEditing = !!editId;
 
@@ -33,6 +34,7 @@ const CreateTest = () => {
                 setDescription(existing.description || '');
                 setCategory(existing.category || '');
                 setTimeLimit(existing.timeLimit ? String(existing.timeLimit) : '');
+                setShowAnswers(existing.showAnswers === true);
                 setQuestions(existing.questions);
             } else {
                 navigate('/teacher');
@@ -91,7 +93,7 @@ const CreateTest = () => {
             alert("Barcha savollar va variantlarni to'ldiring!"); return;
         }
 
-        const payload = { title, description, category: category || 'Umumiy', timeLimit: timeLimit ? parseInt(timeLimit) : 0, questions };
+        const payload = { title, description, category: category || 'Umumiy', timeLimit: timeLimit ? parseInt(timeLimit) : 0, showAnswers, questions };
 
         try {
             if (isEditing) {
@@ -147,6 +149,19 @@ const CreateTest = () => {
                         value={timeLimit}
                         onChange={(e) => setTimeLimit(e.target.value)}
                     />
+
+                    <div style={{ marginTop: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '1rem', background: 'var(--bg-document)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-light)' }}>
+                        <input
+                            type="checkbox"
+                            id="showAnswers"
+                            checked={showAnswers}
+                            onChange={(e) => setShowAnswers(e.target.checked)}
+                            style={{ width: '18px', height: '18px', accentColor: 'var(--primary)', cursor: 'pointer' }}
+                        />
+                        <label htmlFor="showAnswers" style={{ cursor: 'pointer', fontWeight: 500, userSelect: 'none' }}>
+                            O'quvchi testni yakunlaganida to'g'ri/xato javoblarni ko'rsatish
+                        </label>
+                    </div>
                 </CardContent>
             </Card>
 

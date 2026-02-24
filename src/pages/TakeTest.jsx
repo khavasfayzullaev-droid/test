@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useTests } from '../context/TestContext';
 import { Button } from '../components/ui/Button';
 import { Card, CardHeader, CardContent } from '../components/ui/Card';
-import { CheckCircle, Clock, AlertTriangle } from 'lucide-react';
+import { CheckCircle, Clock, AlertTriangle, XCircle } from 'lucide-react';
 
 const TakeTest = () => {
     const { id } = useParams();
@@ -118,8 +118,8 @@ const TakeTest = () => {
     if (isSubmitted) {
         const percentage = Math.round((score / test.questions.length) * 100);
         return (
-            <div className="fade-in" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
-                <Card glass style={{ maxWidth: '500px', width: '100%', textAlign: 'center' }}>
+            <div className="fade-in" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '60vh', padding: '2rem 1rem 4rem' }}>
+                <Card glass style={{ maxWidth: '500px', width: '100%', textAlign: 'center', marginBottom: '2rem' }}>
                     <CardContent style={{ padding: '3rem 2rem' }}>
                         <CheckCircle size={64} color="var(--success)" style={{ margin: '0 auto 1.5rem' }} />
                         <h2 style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>Test Yakunlandi!</h2>
@@ -137,6 +137,76 @@ const TakeTest = () => {
                         </Button>
                     </CardContent>
                 </Card>
+
+                {test.showAnswers && (
+                    <div style={{ maxWidth: '800px', width: '100%' }}>
+                        <h3 style={{ fontSize: '1.5rem', marginBottom: '1.5rem', textAlign: 'center' }}>Javoblar Tahlili</h3>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                            {test.questions.map((q, index) => {
+                                const stAns = answers[q.id];
+                                const isCorrect = stAns === q.correctOption;
+                                return (
+                                    <Card key={q.id} style={{ borderLeft: `4px solid ${isCorrect ? 'var(--success)' : 'var(--danger)'}` }}>
+                                        <CardHeader title={
+                                            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem' }}>
+                                                {isCorrect ? <CheckCircle size={20} color="var(--success)" style={{ marginTop: '2px' }} /> : <XCircle size={20} color="var(--danger)" style={{ marginTop: '2px' }} />}
+                                                <span>{index + 1}. {q.text}</span>
+                                            </div>
+                                        } />
+                                        <CardContent>
+                                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                                {q.options.map((opt, optIndex) => {
+                                                    let isStudentChoice = stAns === optIndex;
+                                                    let isActualCorrect = q.correctOption === optIndex;
+
+                                                    let bgColor = 'white';
+                                                    let borderColor = 'var(--border-strong)';
+                                                    let textColor = 'var(--text-main)';
+
+                                                    if (isActualCorrect) {
+                                                        bgColor = 'rgba(0,184,148,0.1)';
+                                                        borderColor = 'var(--success)';
+                                                        textColor = 'var(--success)';
+                                                    } else if (isStudentChoice && !isActualCorrect) {
+                                                        bgColor = 'rgba(255,118,117,0.1)';
+                                                        borderColor = 'var(--danger)';
+                                                        textColor = 'var(--danger)';
+                                                    }
+
+                                                    return (
+                                                        <div key={optIndex} style={{
+                                                            padding: '1rem',
+                                                            borderRadius: 'var(--radius-sm)',
+                                                            border: `1px solid ${borderColor}`,
+                                                            background: bgColor,
+                                                            color: textColor,
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            gap: '0.75rem',
+                                                            fontWeight: isActualCorrect ? 600 : 400
+                                                        }}>
+                                                            <div style={{
+                                                                width: '20px', height: '20px', borderRadius: '50%',
+                                                                border: `2px solid ${borderColor}`,
+                                                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                                background: isStudentChoice ? borderColor : 'transparent'
+                                                            }}>
+                                                                {isStudentChoice && <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'white' }} />}
+                                                            </div>
+                                                            {opt}
+                                                            {isActualCorrect && <span style={{ marginLeft: 'auto', fontSize: '0.85rem', background: 'var(--success)', color: 'white', padding: '0.1rem 0.5rem', borderRadius: '1rem' }}>To'g'ri javob</span>}
+                                                            {isStudentChoice && !isActualCorrect && <span style={{ marginLeft: 'auto', fontSize: '0.85rem', background: 'var(--danger)', color: 'white', padding: '0.1rem 0.5rem', borderRadius: '1rem' }}>Sizning javobingiz</span>}
+                                                        </div>
+                                                    )
+                                                })}
+                                            </div>
+                                        </CardContent>
+                                    </Card>
+                                )
+                            })}
+                        </div>
+                    </div>
+                )}
             </div>
         );
     }
