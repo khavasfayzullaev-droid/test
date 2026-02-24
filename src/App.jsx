@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, useLocation, Navigate as RouterNavigate } from 'react-router-dom';
 import { Brain } from 'lucide-react';
 import { TestProvider } from './context/TestContext';
 import TeacherDashboard from './pages/TeacherDashboard';
@@ -7,6 +7,7 @@ import CreateTest from './pages/CreateTest';
 import TestResults from './pages/TestResults';
 import TakeTest from './pages/TakeTest';
 import DirectTakeTest from './pages/DirectTakeTest';
+import TeacherLogin from './pages/TeacherLogin';
 import './App.css';
 
 // Layout component
@@ -37,6 +38,18 @@ const Layout = ({ children }) => {
   );
 };
 
+// Protected Route Component
+const ProtectedRoute = ({ children }) => {
+  const isTeacherLoggedIn = sessionStorage.getItem('isTeacherLoggedIn') === 'true';
+  const location = useLocation();
+
+  if (!isTeacherLoggedIn) {
+    return <React.Fragment><RouterNavigate to="/login" replace state={{ from: location }} /></React.Fragment>;
+  }
+
+  return children;
+};
+
 // Home Page
 const Home = () => (
   <div style={{ textAlign: 'center', marginTop: '4rem' }} className="fade-in">
@@ -63,12 +76,29 @@ function App() {
         <Layout>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/login" element={<TeacherLogin />} />
 
-            {/* Teacher Routes */}
-            <Route path="/teacher" element={<TeacherDashboard />} />
-            <Route path="/teacher/create" element={<CreateTest />} />
-            <Route path="/teacher/edit/:editId" element={<CreateTest />} />
-            <Route path="/teacher/results/:id" element={<TestResults />} />
+            {/* Teacher Routes - Protected */}
+            <Route path="/teacher" element={
+              <ProtectedRoute>
+                <TeacherDashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/teacher/create" element={
+              <ProtectedRoute>
+                <CreateTest />
+              </ProtectedRoute>
+            } />
+            <Route path="/teacher/edit/:editId" element={
+              <ProtectedRoute>
+                <CreateTest />
+              </ProtectedRoute>
+            } />
+            <Route path="/teacher/results/:id" element={
+              <ProtectedRoute>
+                <TestResults />
+              </ProtectedRoute>
+            } />
 
             {/* Student Routes */}
             <Route path="/take/:id" element={<DirectTakeTest />} />
