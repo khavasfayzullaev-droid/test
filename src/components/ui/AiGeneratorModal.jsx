@@ -47,7 +47,7 @@ export const AiGeneratorModal = ({ isOpen, onClose, onGenerated }) => {
     `;
 
         try {
-            const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${activeKey}`, {
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${activeKey}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -116,7 +116,7 @@ export const AiGeneratorModal = ({ isOpen, onClose, onGenerated }) => {
                 <CardContent>
                     <div style={{ marginBottom: '1.5rem' }}>
                         <p className="text-muted" style={{ fontSize: '0.875rem', marginBottom: '1rem' }}>
-                            Word yoki Telegramdan olingan chalkash testlarni shu yerga tashlang. Google Gemini ularni o'qib, o'zi platformaga moslab joylashtirib beradi.
+                            Google AI yordamida chalkash testlarni o'qib, platformaga moslab formatlash.
                         </p>
                         {!import.meta.env.VITE_GEMINI_API_KEY && (
                             <Input
@@ -141,27 +141,33 @@ export const AiGeneratorModal = ({ isOpen, onClose, onGenerated }) => {
                         />
                     </div>
 
-                    {error && (
-                        <div style={{
-                            color: 'var(--danger)',
-                            fontSize: '0.875rem',
-                            marginBottom: '1.5rem',
-                            padding: '0.75rem',
-                            background: 'rgba(255,118,117,0.1)',
-                            borderRadius: 'var(--radius-sm)',
-                            wordBreak: 'break-word'
-                        }}>
-                            {String(error)}
-                        </div>
-                    )}
+                    <div style={{ minHeight: error ? 'auto' : '0' }}>
+                        {error && (
+                            <div style={{
+                                color: 'var(--danger)',
+                                fontSize: '0.875rem',
+                                marginBottom: '1.5rem',
+                                padding: '0.75rem',
+                                background: 'rgba(255,118,117,0.1)',
+                                borderRadius: 'var(--radius-sm)',
+                                wordBreak: 'break-word'
+                            }}>
+                                ⚠️ {String(error)}
+                            </div>
+                        )}
+                    </div>
 
                     <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
-                        <Button variant="ghost" onClick={onClose}>Bekor qilish</Button>
-                        <Button variant="primary" onClick={handleGenerate} disabled={loading} style={{ minWidth: '150px' }}>
+                        <Button variant="ghost" onClick={onClose} type="button">Bekor qilish</Button>
+                        <Button variant="primary" onClick={handleGenerate} disabled={loading} style={{ minWidth: '150px' }} type="button">
                             {loading ? (
-                                <> <Loader2 size={18} className="spin" style={{ marginRight: '0.5rem', animation: 'spin 1s linear infinite' }} /> Tahlil qilinmoqda... </>
+                                <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                    <Loader2 size={18} className="spin" style={{ animation: 'spin 1s linear infinite' }} /> Tahlil...
+                                </span>
                             ) : (
-                                <> <Sparkles size={18} style={{ marginRight: '0.5rem' }} /> Testlarni ajratish </>
+                                <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                    <Sparkles size={18} /> Testlarni ajratish
+                                </span>
                             )}
                         </Button>
                     </div>
