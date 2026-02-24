@@ -47,22 +47,28 @@ export const AiGeneratorModal = ({ isOpen, onClose, onGenerated }) => {
     `;
 
         try {
-            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${activeKey}`, {
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${activeKey}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     contents: [{ parts: [{ text: prompt }] }],
                     generationConfig: {
-                        temperature: 0.2, // Low temp for structured output
+                        temperature: 0.1,
                     }
                 })
             });
 
             if (!response.ok) {
-                throw new Error("API kaliti noto'g'ri yoki xato yuz berdi.");
+                const errorData = await response.json().catch(() => ({}));
+                const apiMessage = errorData.error?.message || response.statusText;
+                throw new Error(`API xatosi (${response.status}): ${apiMessage}`);
             }
 
             const data = await response.json();
+            if (!data.candidates || !data.candidates[0].content || !data.candidates[0].content.parts[0].text) {
+                throw new Error("AI kutilgan formatda javob qaytarmadi.");
+            }
+
             const rawOutput = data.candidates[0].content.parts[0].text;
 
             // Try to extract JSON from markdown if Gemini surrounds it with ```json
