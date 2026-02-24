@@ -10,64 +10,65 @@ export const TestProvider = ({ children }) => {
     const [submissions, setSubmissions] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // Initial load from Supabase
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const { data: testsData, error: testsError } = await supabase.from('tests').select('*');
-                if (testsError) console.error('Error fetching tests:', testsError);
-                let parsedTests = [];
-                if (testsData) {
-                    parsedTests = testsData.map(t => {
-                        let desc = t.description || '';
-                        let showAnswers = false;
-                        let oneByOne = false;
-                        let startTime = null;
-                        let endTime = null;
+    const fetchData = async () => {
+        try {
+            setLoading(true);
+            const { data: testsData, error: testsError } = await supabase.from('tests').select('*');
+            if (testsError) console.error('Error fetching tests:', testsError);
+            let parsedTests = [];
+            if (testsData) {
+                parsedTests = testsData.map(t => {
+                    let desc = t.description || '';
+                    let showAnswers = false;
+                    let oneByOne = false;
+                    let startTime = null;
+                    let endTime = null;
 
-                        if (desc.includes(':::SHOW_ANSWERS=true:::')) {
-                            showAnswers = true;
-                            desc = desc.replace(':::SHOW_ANSWERS=true:::', '');
-                        } else if (desc.includes(':::SHOW_ANSWERS=false:::')) {
-                            showAnswers = false;
-                            desc = desc.replace(':::SHOW_ANSWERS=false:::', '');
-                        }
+                    if (desc.includes(':::SHOW_ANSWERS=true:::')) {
+                        showAnswers = true;
+                        desc = desc.replace(':::SHOW_ANSWERS=true:::', '');
+                    } else if (desc.includes(':::SHOW_ANSWERS=false:::')) {
+                        showAnswers = false;
+                        desc = desc.replace(':::SHOW_ANSWERS=false:::', '');
+                    }
 
-                        if (desc.includes(':::ONE_BY_ONE=true:::')) {
-                            oneByOne = true;
-                            desc = desc.replace(':::ONE_BY_ONE=true:::', '');
-                        } else if (desc.includes(':::ONE_BY_ONE=false:::')) {
-                            oneByOne = false;
-                            desc = desc.replace(':::ONE_BY_ONE=false:::', '');
-                        }
+                    if (desc.includes(':::ONE_BY_ONE=true:::')) {
+                        oneByOne = true;
+                        desc = desc.replace(':::ONE_BY_ONE=true:::', '');
+                    } else if (desc.includes(':::ONE_BY_ONE=false:::')) {
+                        oneByOne = false;
+                        desc = desc.replace(':::ONE_BY_ONE=false:::', '');
+                    }
 
-                        const startMatch = desc.match(/:::START_TIME=([^:]+):::/);
-                        if (startMatch) {
-                            startTime = startMatch[1];
-                            desc = desc.replace(startMatch[0], '');
-                        }
+                    const startMatch = desc.match(/:::START_TIME=([^:]+):::/);
+                    if (startMatch) {
+                        startTime = startMatch[1];
+                        desc = desc.replace(startMatch[0], '');
+                    }
 
-                        const endMatch = desc.match(/:::END_TIME=([^:]+):::/);
-                        if (endMatch) {
-                            endTime = endMatch[1];
-                            desc = desc.replace(endMatch[0], '');
-                        }
+                    const endMatch = desc.match(/:::END_TIME=([^:]+):::/);
+                    if (endMatch) {
+                        endTime = endMatch[1];
+                        desc = desc.replace(endMatch[0], '');
+                    }
 
-                        return { ...t, description: desc, showAnswers, oneByOne, startTime, endTime };
-                    });
-                }
-                setTests(parsedTests);
-
-                const { data: subData, error: subError } = await supabase.from('submissions').select('*');
-                if (subError) console.error('Error fetching submissions:', subError);
-                else setSubmissions(subData || []);
-            } catch (err) {
-                console.error("Fetch data error:", err);
-            } finally {
-                setLoading(false);
+                    return { ...t, description: desc, showAnswers, oneByOne, startTime, endTime };
+                });
             }
-        };
+            setTests(parsedTests);
 
+            const { data: subData, error: subError } = await supabase.from('submissions').select('*');
+            if (subError) console.error('Error fetching submissions:', subError);
+            else setSubmissions(subData || []);
+        } catch (err) {
+            console.error("Fetch data error:", err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Initial load from Supabase - ideally only called when needed, but keeping for backward compatibility if other places rely on it
+    useEffect(() => {
         fetchData();
     }, []);
 
