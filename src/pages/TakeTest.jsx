@@ -166,9 +166,19 @@ const TakeTest = () => {
         // Also listen to blur events (losing window focus) as an extra measure
         window.addEventListener('blur', handleVisibilityChange);
 
+        // Warn before accidental reload/close
+        const handleBeforeUnload = (e) => {
+            if (!isSubmitted && test) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        };
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
         return () => {
             document.removeEventListener('visibilitychange', handleVisibilityChange);
             window.removeEventListener('blur', handleVisibilityChange);
+            window.removeEventListener('beforeunload', handleBeforeUnload);
         };
     }, [isSubmitted, test, doSubmit]);
 
@@ -324,7 +334,14 @@ const TakeTest = () => {
     const isTimerWarning = timeLeft !== null && timeLeft < 60;
 
     return (
-        <div className="fade-in" style={{ maxWidth: '800px', margin: '0 auto', paddingBottom: '4rem' }}>
+        <div
+            className="fade-in"
+            style={{ maxWidth: '800px', margin: '0 auto', paddingBottom: '4rem', userSelect: 'none', WebkitUserSelect: 'none' }}
+            onCopy={(e) => { e.preventDefault(); alert("Diqqat! Test savollaridan nusxa ko'chirish qat'iyan man etiladi."); }}
+            onCut={(e) => e.preventDefault()}
+            onPaste={(e) => e.preventDefault()}
+            onContextMenu={(e) => { e.preventDefault(); alert("Test vaqtida sichqonchaning o'ng tugmasidan foydalanish bloklangan."); }}
+        >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
                 <div>
                     <h2 style={{ fontSize: '2rem', marginBottom: '0.25rem' }}>{test.title}</h2>

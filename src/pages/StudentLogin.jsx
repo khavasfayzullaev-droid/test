@@ -76,9 +76,19 @@ const StudentLogin = () => {
                             style={{ textTransform: 'uppercase', letterSpacing: '2px', fontWeight: 'bold' }}
                             error={error}
                         />
+                        <div style={{ background: 'rgba(231, 76, 60, 0.05)', border: '1px solid rgba(231, 76, 60, 0.2)', padding: '1rem', borderRadius: 'var(--radius-sm)', marginTop: '0.5rem' }}>
+                            <h4 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', margin: '0 0 0.5rem 0', color: 'var(--danger)', fontSize: '0.9rem' }}>
+                                <AlertTriangle size={16} /> Qat'iy Qoidalar:
+                            </h4>
+                            <ul style={{ margin: 0, paddingLeft: '1.5rem', fontSize: '0.85rem', color: 'var(--text-main)', display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
+                                <li>Testni faqat <strong>1 marta</strong> ishlash mumkin.</li>
+                                <li>Test vaqtida <strong>boshqa sahifaga o'tsangiz</strong>, test avtomatik yopiladi va 0 ball qo'yiladi.</li>
+                                <li>Hech qaysi ism ostida qayta kira olmaysiz.</li>
+                            </ul>
+                        </div>
 
-                        <Button type="submit" variant="primary" fullWidth size="lg" style={{ marginTop: '1rem' }}>
-                            <UserCheck size={18} style={{ marginRight: '0.5rem' }} /> Testni Boshlash
+                        <Button type="submit" variant="primary" fullWidth size="lg" style={{ marginTop: '1.5rem' }}>
+                            <UserCheck size={18} style={{ marginRight: '0.5rem' }} /> Qoidalarga roziman, Boshlash
                         </Button>
                     </form>
                 </CardContent>
