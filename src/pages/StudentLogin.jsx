@@ -90,7 +90,7 @@ const StudentLogin = () => {
                             <ul style={{ margin: 0, paddingLeft: '1.5rem', fontSize: '0.85rem', color: 'var(--text-main)', display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
                                 <li>Testni faqat <strong>1 marta</strong> ishlash mumkin.</li>
                                 <li>Test vaqtida <strong>boshqa sahifaga o'tsangiz</strong>, test avtomatik yopiladi va 0 ball qo'yiladi.</li>
-                                <li>Hech qaysi ism ostida qayta kira olmaysiz.</li>
+                                <li>Platforma qurilmangizni eslab qoladi, faqat bir marta test yechish imkoningiz mavjud shuning uchun mas'uliyatli bo'lib testni boshlang.</li>
                             </ul>
                         </div>
 
