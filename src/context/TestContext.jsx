@@ -192,9 +192,9 @@ export const TestProvider = ({ children }) => {
     };
 
     const deleteSubmission = async (submissionId) => {
-        const { error } = await supabase.from('submissions').delete().eq('id', submissionId);
+        const { error, count } = await supabase.from('submissions').delete({ count: 'exact' }).eq('id', submissionId);
         if (error) console.error("Error deleting submission:", error);
-        return { error };
+        return { error, count };
     };
 
     const getSubmissionsForTest = async (testId) => {
