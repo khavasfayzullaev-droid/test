@@ -50,6 +50,7 @@ const TakeTest = () => {
             await submitTest({
                 testId: test.id,
                 studentName,
+                deviceId: location.state?.deviceId || null,
                 answers,
                 score: finalScore,
                 totalQuestions: test.questions.length

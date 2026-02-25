@@ -4,7 +4,8 @@ import { useTests } from '../context/TestContext';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { Card, CardHeader, CardContent } from '../components/ui/Card';
-import { ArrowLeft, UserCheck } from 'lucide-react';
+import { ArrowLeft, UserCheck, AlertTriangle } from 'lucide-react';
+import { generateDeviceFingerprint } from '../lib/fingerprint';
 
 const StudentLogin = () => {
     const [testCode, setTestCode] = useState('');
@@ -37,9 +38,15 @@ const StudentLogin = () => {
         }
 
         // Check if this student already took the test
-        const taken = await hasStudentTaken(testExists.id, studentName.trim());
+        const deviceId = await generateDeviceFingerprint();
+        const { taken, reason } = await hasStudentTaken(testExists.id, studentName.trim(), deviceId);
+
         if (taken) {
-            setError("Ushbu ism bilan test allaqachon topshirilgan! Iltimos, familiyangizni ham qo'shib yozing (Masalan: Ali Valiyev).");
+            if (reason === 'DEVICE') {
+                setError("Qurilma bloki: Ushbu IP/Qurilmadan test allaqachon topshirilgan.");
+            } else {
+                setError("Ushbu ism bilan test allaqachon topshirilgan! Iltimos, familiyangizni ham qo'shib yozing (Masalan: Ali Valiyev).");
+            }
             return;
         }
 
@@ -47,7 +54,7 @@ const StudentLogin = () => {
         sessionStorage.setItem('currentStudentName', studentName.trim());
 
         // Navigate to actual test
-        navigate(`/student/test/${codeUpper}`);
+        navigate(`/student/test/${codeUpper}`, { state: { deviceId } });
     };
 
     return (

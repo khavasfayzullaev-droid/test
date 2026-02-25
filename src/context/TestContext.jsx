@@ -200,6 +200,7 @@ export const TestProvider = ({ children }) => {
         const newSub = {
             testId: submission.testId,
             studentName: submission.studentName,
+            deviceId: submission.deviceId || null,
             answers: submission.answers,
             score: submission.score,
             totalQuestions: submission.totalQuestions,
@@ -270,29 +271,42 @@ export const TestProvider = ({ children }) => {
         if (error) console.error("Error updating test:", error);
     };
 
-    const hasStudentTaken = async (testId, studentName) => {
-        const { data, error } = await supabase
+    const hasStudentTaken = async (testId, studentName, deviceId = null) => {
+        let query = supabase
             .from('submissions')
-            .select('id')
-            .eq('testId', testId)
-            .ilike('studentName', studentName);
+            .select('id, studentName, deviceId')
+            .eq('testId', testId);
+
+        if (deviceId) {
+            query = query.or(`studentName.ilike.${studentName},deviceId.eq.${deviceId}`);
+        } else {
+            query = query.ilike('studentName', studentName);
+        }
+
+        const { data, error } = await query;
 
         if (error) {
             console.error("Error checking submission status:", error);
-            return false;
+            return { taken: false, reason: null };
         }
 
         if (data && data.length > 0) {
             const testObj = await fetchTestById(testId);
             const deletedList = testObj?.deletedSubs || [];
 
-            // If there's at least one submission not in the deleted list, they've taken it
-            const hasActiveSubmission = data.some(sub => !deletedList.includes(sub.id));
-            if (hasActiveSubmission) {
-                return true;
+            const activeSubmissions = data.filter(sub => !deletedList.includes(sub.id));
+
+            if (activeSubmissions.length > 0) {
+                const nameMatch = activeSubmissions.some(s => s.studentName.toLowerCase() === studentName.toLowerCase());
+                const deviceMatch = deviceId && activeSubmissions.some(s => s.deviceId === deviceId);
+
+                if (deviceMatch && !nameMatch) {
+                    return { taken: true, reason: 'DEVICE' };
+                }
+                return { taken: true, reason: 'NAME' };
             }
         }
-        return false;
+        return { taken: false, reason: null };
     };
 
     return (
