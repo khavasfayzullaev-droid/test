@@ -17,6 +17,7 @@ const TakeTest = () => {
     const [answers, setAnswers] = useState({});
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [score, setScore] = useState(0);
+    const [timeLeft, setTimeLeft] = useState(null);
     const timerRef = useRef(null);
     const submittingRef = useRef(false);
 
