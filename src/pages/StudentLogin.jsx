@@ -61,7 +61,7 @@ const StudentLogin = () => {
                 <CardContent>
                     <form onSubmit={handleJoin}>
                         <Input
-                            label="Ismingiz va Familiyangiz"
+                            label="Ism Familyangizni to'liq yozing"
                             placeholder="Masalan: Alisher Navoiy"
                             value={studentName}
                             onChange={(e) => setStudentName(e.target.value)}

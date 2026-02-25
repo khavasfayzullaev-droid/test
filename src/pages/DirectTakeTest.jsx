@@ -126,7 +126,7 @@ const DirectTakeTest = () => {
                             </div>
                             <div>
                                 <Input
-                                    label="F. I. Sh. / Ismingiz"
+                                    label="Ism Familyangizni to'liq yozing"
                                     placeholder="Masalan: To'rayev Alisher"
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
