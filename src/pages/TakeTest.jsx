@@ -16,6 +16,7 @@ const TakeTest = () => {
     const [studentName, setStudentName] = useState('');
     const [answers, setAnswers] = useState({});
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [isSubmittingUI, setIsSubmittingUI] = useState(false);
     const [score, setScore] = useState(0);
     const [timeLeft, setTimeLeft] = useState(null);
     const timerRef = useRef(null);
@@ -40,6 +41,7 @@ const TakeTest = () => {
     const doSubmit = useCallback(async () => {
         if (submittingRef.current) return;
         submittingRef.current = true;
+        setIsSubmittingUI(true);
 
         const finalScore = calculateScore();
         setScore(finalScore);
@@ -63,6 +65,8 @@ const TakeTest = () => {
         } catch (err) {
             console.error("Submission failed", err);
             submittingRef.current = false;
+        } finally {
+            setIsSubmittingUI(false);
         }
     }, [test, studentName, answers, calculateScore, submitTest]);
 
@@ -449,8 +453,8 @@ const TakeTest = () => {
 
                                     {isCurrentRevealed && (
                                         <div style={{ marginTop: '2rem', display: 'flex', justifyContent: 'flex-end' }}>
-                                            <Button variant="primary" size="lg" onClick={handleNextQuestion}>
-                                                {currentQIndex < test.questions.length - 1 ? 'Keyingi savol ➔' : 'Testni Yakunlash'}
+                                            <Button variant="primary" size="lg" onClick={handleNextQuestion} disabled={isSubmittingUI}>
+                                                {currentQIndex < test.questions.length - 1 ? 'Keyingi savol ➔' : (isSubmittingUI ? 'Yuborilmoqda...' : 'Testni Yakunlash')}
                                             </Button>
                                         </div>
                                     )}
@@ -516,8 +520,8 @@ const TakeTest = () => {
                         <div style={{ fontWeight: 500 }}>
                             Belgilangan: <span style={{ color: 'var(--primary)' }}>{Object.values(answers).filter(a => a !== null).length}</span> / {test.questions.length}
                         </div>
-                        <Button variant="primary" size="lg" onClick={handleSubmit}>
-                            Testni Yakunlash
+                        <Button variant="primary" size="lg" onClick={handleSubmit} disabled={isSubmittingUI}>
+                            {isSubmittingUI ? 'Yuborilmoqda...' : 'Testni Yakunlash'}
                         </Button>
                     </div>
                 </div>
