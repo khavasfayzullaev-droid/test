@@ -17,8 +17,8 @@ const TakeTest = () => {
     const [answers, setAnswers] = useState({});
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [score, setScore] = useState(0);
-    const [timeLeft, setTimeLeft] = useState(null); // in seconds
     const timerRef = useRef(null);
+    const submittingRef = useRef(false);
 
     // One-by-one mode states
     const [currentQIndex, setCurrentQIndex] = useState(0);
@@ -37,21 +37,32 @@ const TakeTest = () => {
     }, [test, answers]);
 
     const doSubmit = useCallback(async () => {
+        if (submittingRef.current) return;
+        submittingRef.current = true;
+
         const finalScore = calculateScore();
         setScore(finalScore);
 
-        await submitTest({
-            testId: test.id,
-            studentName,
-            answers,
-            score: finalScore,
-            totalQuestions: test.questions.length
-        });
+        try {
+            await submitTest({
+                testId: test.id,
+                studentName,
+                answers,
+                score: finalScore,
+                totalQuestions: test.questions.length
+            });
 
-        setIsSubmitted(true);
-        sessionStorage.removeItem('currentStudentName');
-        sessionStorage.removeItem(`test_answers_${test.id}`);
-        if (timerRef.current) clearInterval(timerRef.current);
+            // Set permanent local device lock against retaking
+            localStorage.setItem(`completed_test_${test.id}`, 'true');
+
+            setIsSubmitted(true);
+            sessionStorage.removeItem('currentStudentName');
+            sessionStorage.removeItem(`test_answers_${test.id}`);
+            if (timerRef.current) clearInterval(timerRef.current);
+        } catch (err) {
+            console.error("Submission failed", err);
+            submittingRef.current = false;
+        }
     }, [test, studentName, answers, calculateScore, submitTest]);
 
     useEffect(() => {

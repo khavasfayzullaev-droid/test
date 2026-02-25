@@ -11,10 +11,10 @@ const StudentLogin = () => {
     const [studentName, setStudentName] = useState('');
     const [error, setError] = useState('');
 
-    const { tests } = useTests();
+    const { tests, hasStudentTaken } = useTests();
     const navigate = useNavigate();
 
-    const handleJoin = (e) => {
+    const handleJoin = async (e) => {
         e.preventDefault();
         setError('');
 
@@ -28,6 +28,18 @@ const StudentLogin = () => {
 
         if (!testExists) {
             setError("Bunday test topilmadi. Kodni tekshirib qayta urinib ko'ring.");
+            return;
+        }
+
+        if (localStorage.getItem(`completed_test_${testExists.id}`)) {
+            setError("Siz bu testni ushbu qurilmadan allaqachon ishlab bo'lgansiz.");
+            return;
+        }
+
+        // Check if this student already took the test
+        const taken = await hasStudentTaken(testExists.id, studentName.trim());
+        if (taken) {
+            setError("Ushbu ism bilan test allaqachon topshirilgan! Iltimos, familiyangizni ham qo'shib yozing (Masalan: Ali Valiyev).");
             return;
         }
 
