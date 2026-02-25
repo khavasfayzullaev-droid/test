@@ -212,14 +212,16 @@ export const TestProvider = ({ children }) => {
     };
 
     const deleteSubmission = async (testId, submissionId) => {
-        const currentTest = tests.find(t => t.id === testId);
-        if (!currentTest) return { error: { message: "Test topilmadi" } };
+        // Soft delete by marking the submission as is_deleted = true
+        // This completely avoids touching the tests table, preventing data wiping bugs
+        const { error } = await supabase
+            .from('submissions')
+            .update({ is_deleted: true })
+            .eq('id', submissionId);
 
-        const currentDeleted = currentTest.deletedSubs || [];
-        if (!currentDeleted.includes(submissionId)) {
-            const newDeleted = [...currentDeleted, submissionId];
-            await updateTest(testId, { deletedSubs: newDeleted });
-        }
+        if (error) return { error };
+
+        // Also update local state if we were tracking it here (though TestResults refetches usually)
         return { error: null, count: 1 };
     };
 
@@ -228,6 +230,8 @@ export const TestProvider = ({ children }) => {
             .from('submissions')
             .select('*')
             .eq('testId', testId)
+            // Filter out soft-deleted submissions directly in the query 
+            // OR we can filter in JS if the schema change is fresh
             .order('submittedAt', { ascending: false });
 
         if (error) {
@@ -235,12 +239,11 @@ export const TestProvider = ({ children }) => {
             return [];
         }
 
+        // Support both old deletedSubs array (for legacy tests) and new is_deleted column
         const testObj = await fetchTestById(testId);
-        if (testObj && testObj.deletedSubs && testObj.deletedSubs.length > 0) {
-            return (data || []).filter(sub => !testObj.deletedSubs.includes(sub.id));
-        }
+        const legacyDeletedList = testObj?.deletedSubs || [];
 
-        return data || [];
+        return (data || []).filter(sub => !sub.is_deleted && !legacyDeletedList.includes(sub.id));
     };
 
     const updateTest = async (id, updatedData) => {
@@ -258,7 +261,7 @@ export const TestProvider = ({ children }) => {
 
         // Prepare payload for Supabase (with encoded description and without custom booleans/times)
         const dbPayload = { ...updatedData };
-        if (updatedData.hasOwnProperty('description') || updatedData.hasOwnProperty('showAnswers') || updatedData.hasOwnProperty('oneByOne') || updatedData.hasOwnProperty('startTime') || updatedData.hasOwnProperty('endTime') || updatedData.hasOwnProperty('deletedSubs')) {
+        if (updatedData.hasOwnProperty('description') || updatedData.hasOwnProperty('showAnswers') || updatedData.hasOwnProperty('oneByOne') || updatedData.hasOwnProperty('startTime') || updatedData.hasOwnProperty('endTime')) {
             dbPayload.description = encodedDesc;
         }
         delete dbPayload.showAnswers;
@@ -292,9 +295,10 @@ export const TestProvider = ({ children }) => {
 
         if (data && data.length > 0) {
             const testObj = await fetchTestById(testId);
-            const deletedList = testObj?.deletedSubs || [];
+            const legacyDeletedList = testObj?.deletedSubs || [];
 
-            const activeSubmissions = data.filter(sub => !deletedList.includes(sub.id));
+            // Filter out any submissions that are deleted (via column or legacy list)
+            const activeSubmissions = data.filter(sub => !sub.is_deleted && !legacyDeletedList.includes(sub.id));
 
             if (activeSubmissions.length > 0) {
                 const nameMatch = activeSubmissions.some(s => s.studentName.toLowerCase() === studentName.toLowerCase());
