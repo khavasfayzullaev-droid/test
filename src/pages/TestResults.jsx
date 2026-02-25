@@ -3,15 +3,24 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useTests } from '../context/TestContext';
 import { Button } from '../components/ui/Button';
 import { Card, CardHeader, CardContent } from '../components/ui/Card';
-import { ArrowLeft, Download, Trophy, Target, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, Download, Trophy, Target, AlertTriangle, Trash2 } from 'lucide-react';
 
 const TestResults = () => {
     const { id } = useParams();
-    const { tests, getSubmissionsForTest, loading } = useTests();
+    const { tests, getSubmissionsForTest, deleteSubmission, loading } = useTests();
     const navigate = useNavigate();
 
     const [test, setTest] = useState(null);
     const [submissions, setSubmissions] = useState([]);
+
+    const handleDeleteSubmission = async (subId, stName) => {
+        if (!window.confirm(`Rostdan ham ${stName} ismli o'quvchining natijasini o'chirib tashlamoqchimisiz?`)) return;
+
+        const { error } = await deleteSubmission(subId);
+        if (!error) {
+            setSubmissions(prev => prev.filter(s => s.id !== subId));
+        }
+    };
 
     useEffect(() => {
         if (loading) return; // Wait for data to fetch
@@ -145,6 +154,7 @@ const TestResults = () => {
                                         <th style={{ padding: '1rem 1.5rem', fontWeight: 600 }}>To'g'ri Javoblar</th>
                                         <th style={{ padding: '1rem 1.5rem', fontWeight: 600 }}>Foiz</th>
                                         <th style={{ padding: '1rem 1.5rem', fontWeight: 600 }}>Topshirilgan Vaqt</th>
+                                        <th style={{ padding: '1rem 1.5rem', fontWeight: 600 }}>Amallar</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -177,6 +187,11 @@ const TestResults = () => {
                                                 </td>
                                                 <td style={{ padding: '1rem 1.5rem', color: 'var(--text-muted)', fontSize: '0.875rem' }}>
                                                     {new Date(sub.submittedAt).toLocaleString('uz-UZ', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' })}
+                                                </td>
+                                                <td style={{ padding: '1rem 1.5rem' }}>
+                                                    <Button variant="ghost" size="sm" onClick={() => handleDeleteSubmission(sub.id, sub.studentName)} style={{ color: 'var(--danger)', padding: '0.25rem' }}>
+                                                        <Trash2 size={16} />
+                                                    </Button>
                                                 </td>
                                             </tr>
                                         );

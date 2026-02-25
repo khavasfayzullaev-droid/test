@@ -191,6 +191,12 @@ export const TestProvider = ({ children }) => {
         if (error) console.error("Error adding submission:", error);
     };
 
+    const deleteSubmission = async (submissionId) => {
+        const { error } = await supabase.from('submissions').delete().eq('id', submissionId);
+        if (error) console.error("Error deleting submission:", error);
+        return { error };
+    };
+
     const getSubmissionsForTest = async (testId) => {
         const { data, error } = await supabase
             .from('submissions')
@@ -251,6 +257,7 @@ export const TestProvider = ({ children }) => {
             addTest,
             deleteTest,
             submitTest,
+            deleteSubmission,
             getSubmissionsForTest,
             updateTest,
             hasStudentTaken,
