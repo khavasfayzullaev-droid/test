@@ -25,6 +25,7 @@ export const TestProvider = ({ children }) => {
                     let oneByOne = false;
                     let startTime = null;
                     let endTime = null;
+                    let deletedSubs = [];
 
                     if (desc.includes(':::SHOW_ANSWERS=true:::')) {
                         showAnswers = true;
@@ -54,7 +55,15 @@ export const TestProvider = ({ children }) => {
                         desc = desc.replace(endMatch[0], '');
                     }
 
-                    return { ...t, description: desc, showAnswers, oneByOne, startTime, endTime };
+                    const deletedMatch = desc.match(/:::DELETED_SUBS=(\[.*?\]):::/);
+                    if (deletedMatch) {
+                        try {
+                            deletedSubs = JSON.parse(deletedMatch[1]);
+                        } catch (e) { }
+                        desc = desc.replace(deletedMatch[0], '');
+                    }
+
+                    return { ...t, description: desc, showAnswers, oneByOne, startTime, endTime, deletedSubs };
                 });
             }
             setTests(parsedTests);
@@ -98,6 +107,7 @@ export const TestProvider = ({ children }) => {
                 let oneByOne = false;
                 let startTime = null;
                 let endTime = null;
+                let deletedSubs = [];
 
                 const ansMatch = desc.match(/:::SHOW_ANSWERS=(true|false):::/);
                 if (ansMatch) {
@@ -123,8 +133,16 @@ export const TestProvider = ({ children }) => {
                     desc = desc.replace(endMatch[0], '');
                 }
 
+                const deletedMatch = desc.match(/:::DELETED_SUBS=(\[.*?\]):::/);
+                if (deletedMatch) {
+                    try {
+                        deletedSubs = JSON.parse(deletedMatch[1]);
+                    } catch (e) { }
+                    desc = desc.replace(deletedMatch[0], '');
+                }
+
                 // Add to temporary state (or just return it without polluting global state)
-                const mappedTest = { ...data, description: desc, showAnswers, oneByOne, startTime, endTime };
+                const mappedTest = { ...data, description: desc, showAnswers, oneByOne, startTime, endTime, deletedSubs };
 
                 // Optional: Update global state or just return
                 // setTests(prev => [...prev.filter(t => t.id !== id), mappedTest]);
@@ -160,7 +178,8 @@ export const TestProvider = ({ children }) => {
             showAnswers: test.showAnswers === true,
             oneByOne: test.oneByOne === true,
             startTime: test.startTime || null,
-            endTime: test.endTime || null
+            endTime: test.endTime || null,
+            deletedSubs: []
         };
         setTests(prev => [...prev, stateTest]);
 
@@ -191,10 +210,16 @@ export const TestProvider = ({ children }) => {
         if (error) console.error("Error adding submission:", error);
     };
 
-    const deleteSubmission = async (submissionId) => {
-        const { error, count } = await supabase.from('submissions').delete({ count: 'exact' }).eq('id', submissionId);
-        if (error) console.error("Error deleting submission:", error);
-        return { error, count };
+    const deleteSubmission = async (testId, submissionId) => {
+        const currentTest = tests.find(t => t.id === testId);
+        if (!currentTest) return { error: { message: "Test topilmadi" } };
+
+        const currentDeleted = currentTest.deletedSubs || [];
+        if (!currentDeleted.includes(submissionId)) {
+            const newDeleted = [...currentDeleted, submissionId];
+            await updateTest(testId, { deletedSubs: newDeleted });
+        }
+        return { error: null, count: 1 };
     };
 
     const getSubmissionsForTest = async (testId) => {
@@ -208,6 +233,12 @@ export const TestProvider = ({ children }) => {
             console.error("Error fetching submissions:", error);
             return [];
         }
+
+        const testObj = await fetchTestById(testId);
+        if (testObj && testObj.deletedSubs && testObj.deletedSubs.length > 0) {
+            return (data || []).filter(sub => !testObj.deletedSubs.includes(sub.id));
+        }
+
         return data || [];
     };
 
@@ -217,19 +248,23 @@ export const TestProvider = ({ children }) => {
         let encodedDesc = `${mergedData.description || ''}:::SHOW_ANSWERS=${mergedData.showAnswers === true}::::::ONE_BY_ONE=${mergedData.oneByOne === true}:::`;
         if (mergedData.startTime) encodedDesc += `:::START_TIME=${mergedData.startTime}:::`;
         if (mergedData.endTime) encodedDesc += `:::END_TIME=${mergedData.endTime}:::`;
+        if (mergedData.deletedSubs && mergedData.deletedSubs.length > 0) {
+            encodedDesc += `:::DELETED_SUBS=${JSON.stringify(mergedData.deletedSubs)}:::`;
+        }
 
         // Update local React state with pure data (no encoding)
         setTests(prev => prev.map(t => t.id === id ? { ...t, ...updatedData } : t));
 
         // Prepare payload for Supabase (with encoded description and without custom booleans/times)
         const dbPayload = { ...updatedData };
-        if (updatedData.hasOwnProperty('description') || updatedData.hasOwnProperty('showAnswers') || updatedData.hasOwnProperty('oneByOne') || updatedData.hasOwnProperty('startTime') || updatedData.hasOwnProperty('endTime')) {
+        if (updatedData.hasOwnProperty('description') || updatedData.hasOwnProperty('showAnswers') || updatedData.hasOwnProperty('oneByOne') || updatedData.hasOwnProperty('startTime') || updatedData.hasOwnProperty('endTime') || updatedData.hasOwnProperty('deletedSubs')) {
             dbPayload.description = encodedDesc;
         }
         delete dbPayload.showAnswers;
         delete dbPayload.oneByOne;
         delete dbPayload.startTime;
         delete dbPayload.endTime;
+        delete dbPayload.deletedSubs;
 
         const { error } = await supabase.from('tests').update(dbPayload).eq('id', id);
         if (error) console.error("Error updating test:", error);
@@ -240,14 +275,24 @@ export const TestProvider = ({ children }) => {
             .from('submissions')
             .select('id')
             .eq('testId', testId)
-            .ilike('studentName', studentName)
-            .limit(1);
+            .ilike('studentName', studentName);
 
         if (error) {
             console.error("Error checking submission status:", error);
             return false;
         }
-        return data && data.length > 0;
+
+        if (data && data.length > 0) {
+            const testObj = await fetchTestById(testId);
+            const deletedList = testObj?.deletedSubs || [];
+
+            // If there's at least one submission not in the deleted list, they've taken it
+            const hasActiveSubmission = data.some(sub => !deletedList.includes(sub.id));
+            if (hasActiveSubmission) {
+                return true;
+            }
+        }
+        return false;
     };
 
     return (

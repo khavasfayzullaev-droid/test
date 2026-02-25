@@ -16,16 +16,11 @@ const TestResults = () => {
     const handleDeleteSubmission = async (subId, stName) => {
         if (!window.confirm(`Rostdan ham ${stName} ismli o'quvchining natijasini o'chirib tashlamoqchimisiz?`)) return;
 
-        const { error, count } = await deleteSubmission(subId);
+        const { error } = await deleteSubmission(test.id, subId);
 
         if (error) {
             alert(`O'chirishda xatolik yuz berdi: ${error.message}`);
             return;
-        }
-
-        if (count === 0) {
-            alert("⚠️ Supabase xavfsizlik (RLS) tizimi bu o'quvchini o'chirishga ruxsat bermadi. Baza qoidalari (Policies) to'liq yoqilmagan.");
-            return; // Don't filter state if db deletion didn't happen
         }
 
         setSubmissions(prev => prev.filter(s => s.id !== subId));
