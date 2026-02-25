@@ -16,7 +16,7 @@ const TeacherLogin = () => {
 
         // Hardcoded credentials for MVP
         if (login === 'AbdulmatinSirojov' && password === 'Zdrfv62924') {
-            sessionStorage.setItem('isTeacherLoggedIn', 'true');
+            localStorage.setItem('isTeacherLoggedIn', 'true');
             navigate('/teacher');
         } else {
             setError('Login yoki parol noto\'g\'ri!');

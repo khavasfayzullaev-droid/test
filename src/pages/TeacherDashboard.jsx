@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useTests } from '../context/TestContext';
 import { Button } from '../components/ui/Button';
 import { Card, CardHeader, CardContent, CardFooter } from '../components/ui/Card';
-import { PlusCircle, Copy, Trash2, Users, Edit3, Clock } from 'lucide-react';
+import { PlusCircle, Copy, Trash2, Users, Edit3, Clock, LogOut } from 'lucide-react';
 
 const TeacherDashboard = () => {
     const { tests, deleteTest, loading } = useTests();
@@ -16,6 +16,11 @@ const TeacherDashboard = () => {
     const handleCopyCode = (id) => {
         navigator.clipboard.writeText(`${window.location.origin}/take/${id}`);
         alert('Test ssilkasi nusxalandi! O\'quvchilarga yuborishingiz mumkin.');
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('isTeacherLoggedIn');
+        navigate('/');
     };
 
     // Group tests by category
@@ -35,9 +40,14 @@ const TeacherDashboard = () => {
                     </h2>
                     <p className="text-muted">Testlaringizni shu yerda tayyorlab o'zgartirish kiritishingiz mumkin.</p>
                 </div>
-                <Button variant="primary" size="lg" onClick={() => navigate('/teacher/create')}>
-                    <PlusCircle size={18} style={{ marginRight: '0.5rem' }} /> Test tayyorlash
-                </Button>
+                <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                    <Button variant="outline" size="lg" onClick={handleLogout} style={{ color: 'var(--danger)', borderColor: 'rgba(231, 76, 60, 0.3)' }}>
+                        <LogOut size={18} style={{ marginRight: '0.5rem' }} /> Profildan chiqish
+                    </Button>
+                    <Button variant="primary" size="lg" onClick={() => navigate('/teacher/create')}>
+                        <PlusCircle size={18} style={{ marginRight: '0.5rem' }} /> Test tayyorlash
+                    </Button>
+                </div>
             </div>
 
             {tests.length === 0 ? (

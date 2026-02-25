@@ -40,7 +40,7 @@ const Layout = ({ children }) => {
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
-  const isTeacherLoggedIn = sessionStorage.getItem('isTeacherLoggedIn') === 'true';
+  const isTeacherLoggedIn = localStorage.getItem('isTeacherLoggedIn') === 'true';
   const location = useLocation();
 
   if (!isTeacherLoggedIn) {
