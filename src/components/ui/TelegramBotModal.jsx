@@ -38,14 +38,15 @@ export const TelegramBotModal = ({ isOpen, onClose, test }) => {
 
         try {
             // Optional: First send a message with the exam title and link
-            const urlMessage = `https://api.telegram.org/bot${token.trim()}/sendMessage`;
             let introText = `📝 <b>TEST: ${test.title}</b>\n\n`;
             introText += `👇 Paski qismda anonim test (Viktorina) ishlang. Reytingli ishlash uchun esa quyidagi ssilkaga o'ting:\n🔗 ${window.location.origin}/take/${test.id.toUpperCase()}`;
 
-            await fetch(urlMessage, {
+            await fetch('/api/telegram', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
+                    endpoint: 'sendMessage',
+                    token: token.trim(),
                     chat_id: chatId.trim(),
                     text: introText,
                     parse_mode: 'HTML'
@@ -53,8 +54,6 @@ export const TelegramBotModal = ({ isOpen, onClose, test }) => {
             });
 
             // Send each question as a Poll -> Quiz
-            const urlPoll = `https://api.telegram.org/bot${token.trim()}/sendPoll`;
-
             for (let i = 0; i < test.questions.length; i++) {
                 const q = test.questions[i];
 
@@ -62,15 +61,17 @@ export const TelegramBotModal = ({ isOpen, onClose, test }) => {
                 const validOptions = q.options.slice(0, 10);
 
                 const payload = {
+                    endpoint: 'sendPoll',
+                    token: token.trim(),
                     chat_id: chatId.trim(),
                     question: `[${i + 1}/${test.questions.length}] ${q.text.substring(0, 290)}`,
-                    options: validOptions.map(opt => opt.substring(0, 100)), // Telegram limit 100 chars
+                    options: validOptions.map(opt => String(opt).substring(0, 100)), // Telegram limit 100 chars
                     is_anonymous: true,
                     type: "quiz",
                     correct_option_id: q.correctOption,
                 };
 
-                const res = await fetch(urlPoll, {
+                const res = await fetch('/api/telegram', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
