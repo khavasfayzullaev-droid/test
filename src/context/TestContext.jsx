@@ -358,6 +358,25 @@ export const TestProvider = ({ children }) => {
         }
     };
 
+    const renameFolder = async (id, oldName, newName) => {
+        try {
+            // Update folder name
+            const { error: folderError } = await supabase.from('folders').update({ name: newName }).eq('id', id);
+            if (folderError) return { error: folderError };
+
+            // Update associated tests categories
+            await supabase.from('tests').update({ category: newName }).eq('category', oldName);
+
+            // Update local state
+            setFolders(prev => prev.map(f => f.id === id ? { ...f, name: newName } : f));
+            setTests(prev => prev.map(t => (t.category || 'Umumiy') === oldName ? { ...t, category: newName } : t));
+
+            return { error: null };
+        } catch (error) {
+            return { error };
+        }
+    };
+
     return (
         <TestContext.Provider value={{
             tests,
@@ -374,7 +393,8 @@ export const TestProvider = ({ children }) => {
             fetchData,
             fetchTestById,
             addFolder,
-            deleteFolder
+            deleteFolder,
+            renameFolder
         }}>
             {children}
         </TestContext.Provider>
