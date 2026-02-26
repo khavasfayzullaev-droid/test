@@ -9,14 +9,20 @@ export const TelegramBotModal = ({ isOpen, onClose, test }) => {
     const [status, setStatus] = useState('idle'); // idle, sending, success, error
     const [progress, setProgress] = useState(0);
     const [errorMessage, setErrorMessage] = useState('');
+    const [showSettings, setShowSettings] = useState(true);
 
     useEffect(() => {
         if (isOpen) {
-            setToken(localStorage.getItem('telegram_bot_token') || '');
-            setChatId(localStorage.getItem('telegram_chat_id') || '');
+            const savedToken = localStorage.getItem('telegram_bot_token') || '';
+            const savedChatId = localStorage.getItem('telegram_chat_id') || '';
+            setToken(savedToken);
+            setChatId(savedChatId);
             setStatus('idle');
             setProgress(0);
             setErrorMessage('');
+
+            // Auto hide settings if already filled
+            setShowSettings(!savedToken || !savedChatId);
         }
     }, [isOpen]);
 
@@ -73,7 +79,7 @@ export const TelegramBotModal = ({ isOpen, onClose, test }) => {
 
                 let success = false;
                 let retryCount = 0;
-                
+
                 while (!success && retryCount < 3) {
                     const res = await fetch('/api/telegram', {
                         method: 'POST',
@@ -96,7 +102,7 @@ export const TelegramBotModal = ({ isOpen, onClose, test }) => {
                         success = true;
                     }
                 }
-                
+
                 if (!success) {
                     throw new Error("Telegram tarmog'i bandligi uchun yuborish to'xtatildi. Keyinroq qayta urinib ko'ring.");
                 }
@@ -155,28 +161,55 @@ export const TelegramBotModal = ({ isOpen, onClose, test }) => {
                         </div>
                     ) : (
                         <>
-                            <div style={{ background: 'rgba(52, 152, 219, 0.1)', padding: '1rem', borderRadius: 'var(--radius-sm)', marginBottom: '1.5rem', fontSize: '0.9rem', color: 'var(--text-main)', display: 'flex', gap: '0.75rem' }}>
-                                <AlertCircle size={20} color="var(--primary)" style={{ flexShrink: 0, marginTop: '2px' }} />
-                                <div>
-                                    Tasvir bo'yicha haqiqiy viktorinalar chiqarish uchun bot kerak. BotFather orqali yangi bot oching. Unig <b>Tokenini</b> shu yerga yozing va botni o'z kanalingizga admin qiling.
+                            {showSettings ? (
+                                <>
+                                    <div style={{ background: 'rgba(52, 152, 219, 0.1)', padding: '1rem', borderRadius: 'var(--radius-sm)', marginBottom: '1.5rem', fontSize: '0.9rem', color: 'var(--text-main)', display: 'flex', gap: '0.75rem' }}>
+                                        <AlertCircle size={20} color="var(--primary)" style={{ flexShrink: 0, marginTop: '2px' }} />
+                                        <div>
+                                            Tasvir bo'yicha haqiqiy viktorinalar chiqarish uchun bot kerak. BotFather orqali bot oching. <b>Token</b> ni yozing va botni o'zingizning kanalingizga admin qiling.
+                                        </div>
+                                    </div>
+
+                                    <Input
+                                        label="Bot Tokeni (BotFather olingan)"
+                                        placeholder="Masalan: 123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11"
+                                        value={token}
+                                        onChange={(e) => setToken(e.target.value)}
+                                        disabled={status === 'sending'}
+                                    />
+
+                                    <Input
+                                        label="Kanal yoki Guruh manzili / ID si"
+                                        placeholder="Masalan: @mening_kanalim"
+                                        value={chatId}
+                                        onChange={(e) => setChatId(e.target.value)}
+                                        disabled={status === 'sending'}
+                                    />
+
+                                    {token && chatId && (
+                                        <div style={{ textAlign: 'right', marginTop: '-0.5rem', marginBottom: '1rem' }}>
+                                            <Button variant="ghost" size="sm" onClick={() => setShowSettings(false)}>
+                                                Sozlamalarni yashirish
+                                            </Button>
+                                        </div>
+                                    )}
+                                </>
+                            ) : (
+                                <div style={{ background: 'rgba(46, 204, 113, 0.1)', padding: '1rem', borderRadius: 'var(--radius-sm)', marginBottom: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <div>
+                                        <div style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                            <CheckCircle size={16} color="var(--success)" />
+                                            Telegram bot sozlamalari saqlangan
+                                        </div>
+                                        <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
+                                            Mo'ljal: {chatId}
+                                        </div>
+                                    </div>
+                                    <Button variant="outline" size="sm" onClick={() => setShowSettings(true)} disabled={status === 'sending'}>
+                                        O'zgartirish
+                                    </Button>
                                 </div>
-                            </div>
-
-                            <Input
-                                label="Bot Tokeni (BotFather olingan)"
-                                placeholder="Masalan: 123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11"
-                                value={token}
-                                onChange={(e) => setToken(e.target.value)}
-                                disabled={status === 'sending'}
-                            />
-
-                            <Input
-                                label="Kanal yoki Guruh manzili / ID si"
-                                placeholder="Masalan: @mening_kanalim"
-                                value={chatId}
-                                onChange={(e) => setChatId(e.target.value)}
-                                disabled={status === 'sending'}
-                            />
+                            )}
 
                             {errorMessage && (
                                 <div style={{ color: 'var(--danger)', fontSize: '0.85rem', marginTop: '0.5rem', marginBottom: '1rem' }}>
