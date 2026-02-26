@@ -49,6 +49,15 @@ const TeacherDashboard = () => {
         }
     };
 
+    // A helper function to determine which folder a test belongs to
+    const getFolderForTest = (test) => {
+        const cat = test.category || 'Umumiy';
+        // If the category matches a created folder name, it belongs there
+        if (folders && folders.some(f => f.name === cat)) return cat;
+        // Otherwise, it falls back to 'Umumiy'
+        return 'Umumiy';
+    };
+
     // Combine custom folders with the default 'Umumiy' folder
     const allFolders = [{ id: 'default-umumiy', name: 'Umumiy' }, ...(folders || [])];
 
@@ -97,7 +106,7 @@ const TeacherDashboard = () => {
                 // --- FOLDERS VIEW ---
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.5rem' }}>
                     {allFolders.map(folder => {
-                        const testCount = tests.filter(t => (t.category || 'Umumiy') === folder.name).length;
+                        const testCount = tests.filter(t => getFolderForTest(t) === folder.name).length;
                         return (
                             <Card
                                 key={folder.id}
@@ -126,7 +135,7 @@ const TeacherDashboard = () => {
             ) : (
                 // --- TESTS IN FOLDER VIEW ---
                 <>
-                    {tests.filter(t => (t.category || 'Umumiy') === currentFolder).length === 0 ? (
+                    {tests.filter(t => getFolderForTest(t) === currentFolder).length === 0 ? (
                         <Card style={{ textAlign: 'center', padding: '4rem 1rem' }} glass>
                             <CardContent>
                                 <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📝</div>
@@ -139,7 +148,7 @@ const TeacherDashboard = () => {
                         </Card>
                     ) : (
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.5rem' }}>
-                            {tests.filter(t => (t.category || 'Umumiy') === currentFolder).map(test => (
+                            {tests.filter(t => getFolderForTest(t) === currentFolder).map(test => (
                                 <Card key={test.id} glass>
                                     <CardHeader
                                         title={test.title}
