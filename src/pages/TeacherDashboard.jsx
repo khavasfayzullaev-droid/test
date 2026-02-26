@@ -194,7 +194,7 @@ const TeacherDashboard = () => {
                     ) : (
                         <>
                             <Button variant="outline" size="lg" onClick={() => handlePDFExport(currentFolder)} style={{ color: 'var(--primary)', borderColor: 'var(--primary)', background: 'var(--bg-glass)' }}>
-                                <FileText size={18} style={{ marginRight: '0.5rem' }} /> PDF Yuklab olish
+                                <FileText size={18} style={{ marginRight: '0.5rem' }} /> Barcha testlarni Pdf yuklash
                             </Button>
                             <Button variant="primary" size="lg" onClick={() => navigate('/teacher/create', { state: { defaultCategory: currentFolder } })}>
                                 <PlusCircle size={18} style={{ marginRight: '0.5rem' }} /> Test tayyorlash
