@@ -4,6 +4,7 @@ import { useTests } from '../context/TestContext';
 import { Button } from '../components/ui/Button';
 import { Card, CardHeader, CardContent } from '../components/ui/Card';
 import { CheckCircle, Clock, AlertTriangle, XCircle, EyeOff } from 'lucide-react';
+import { generateDeviceFingerprint } from '../lib/fingerprint';
 
 const TakeTest = () => {
     const { id } = useParams();
@@ -47,10 +48,12 @@ const TakeTest = () => {
         setScore(finalScore);
 
         try {
+            const deviceIdHash = await generateDeviceFingerprint();
+
             await submitTest({
                 testId: test.id,
                 studentName,
-                deviceId: location.state?.deviceId || null,
+                deviceId: deviceIdHash,
                 answers,
                 score: finalScore,
                 totalQuestions: test.questions.length

@@ -11,50 +11,64 @@ const StudentLogin = () => {
     const [testCode, setTestCode] = useState('');
     const [studentName, setStudentName] = useState('');
     const [error, setError] = useState('');
+    const [isStarting, setIsStarting] = useState(false);
 
     const { tests, hasStudentTaken } = useTests();
     const navigate = useNavigate();
 
     const handleJoin = async (e) => {
         e.preventDefault();
+        if (isStarting) return;
+
         setError('');
+        setIsStarting(true);
 
-        if (!testCode.trim() || !studentName.trim()) {
-            setError("Iltimos, ismingiz va test kodini kiriting!");
-            return;
-        }
-
-        const codeUpper = testCode.trim().toUpperCase();
-        const testExists = tests.find(t => t.id.toUpperCase() === codeUpper);
-
-        if (!testExists) {
-            setError("Bunday test topilmadi. Kodni tekshirib qayta urinib ko'ring.");
-            return;
-        }
-
-        if (localStorage.getItem(`completed_test_${testExists.id}`)) {
-            setError("Siz bu testni ushbu qurilmadan allaqachon ishlab bo'lgansiz.");
-            return;
-        }
-
-        // Check if this student already took the test
-        const deviceId = await generateDeviceFingerprint();
-        const { taken, reason } = await hasStudentTaken(testExists.id, studentName.trim(), deviceId);
-
-        if (taken) {
-            if (reason === 'DEVICE') {
-                setError("Qurilma bloki: Ushbu IP/Qurilmadan test allaqachon topshirilgan.");
-            } else {
-                setError("Ushbu ism bilan test allaqachon topshirilgan! Iltimos, familiyangizni ham qo'shib yozing (Masalan: Ali Valiyev).");
+        try {
+            if (!testCode.trim() || !studentName.trim()) {
+                setError("Iltimos, ismingiz va test kodini kiriting!");
+                setIsStarting(false);
+                return;
             }
-            return;
+
+            const codeUpper = testCode.trim().toUpperCase();
+            const testExists = tests.find(t => t.id.toUpperCase() === codeUpper);
+
+            if (!testExists) {
+                setError("Bunday test topilmadi. Kodni tekshirib qayta urinib ko'ring.");
+                setIsStarting(false);
+                return;
+            }
+
+            if (localStorage.getItem(`completed_test_${testExists.id}`)) {
+                setError("Siz bu testni ushbu qurilmadan allaqachon ishlab bo'lgansiz.");
+                setIsStarting(false);
+                return;
+            }
+
+            // Check if this student already took the test
+            const deviceId = await generateDeviceFingerprint();
+            const { taken, reason } = await hasStudentTaken(testExists.id, studentName.trim(), deviceId);
+
+            if (taken) {
+                if (reason === 'DEVICE') {
+                    setError("Qurilma bloki: Ushbu IP/Qurilmadan test allaqachon topshirilgan.");
+                } else {
+                    setError("Ushbu ism bilan test allaqachon topshirilgan! Iltimos, familiyangizni ham qo'shib yozing (Masalan: Ali Valiyev).");
+                }
+                setIsStarting(false);
+                return;
+            }
+
+            // Save student details briefly to persist during test
+            sessionStorage.setItem('currentStudentName', studentName.trim());
+
+            // Navigate to actual test
+            navigate(`/student/test/${codeUpper}`, { state: { deviceId } });
+        } catch (error) {
+            console.error(error);
+            setError("Tizimda xatolik yuz berdi. Qaytadan urinib ko'ring.");
+            setIsStarting(false);
         }
-
-        // Save student details briefly to persist during test
-        sessionStorage.setItem('currentStudentName', studentName.trim());
-
-        // Navigate to actual test
-        navigate(`/student/test/${codeUpper}`, { state: { deviceId } });
     };
 
     return (
@@ -94,8 +108,9 @@ const StudentLogin = () => {
                             </ul>
                         </div>
 
-                        <Button type="submit" variant="primary" fullWidth size="lg" style={{ marginTop: '1.5rem' }}>
-                            <UserCheck size={18} style={{ marginRight: '0.5rem' }} /> Qoidalarga roziman, Boshlash
+                        <Button type="submit" variant="primary" fullWidth size="lg" style={{ marginTop: '1.5rem' }} disabled={isStarting}>
+                            <UserCheck size={18} style={{ marginRight: '0.5rem' }} />
+                            {isStarting ? "Tekshirilmoqda..." : "Qoidalarga roziman, Boshlash"}
                         </Button>
                     </form>
                 </CardContent>

@@ -17,6 +17,7 @@ const DirectTakeTest = () => {
     const [name, setName] = useState('');
     const [alreadyTaken, setAlreadyTaken] = useState(false);
     const [timeStatus, setTimeStatus] = useState({ isValid: true, message: '' });
+    const [isStarting, setIsStarting] = useState(false);
 
     useEffect(() => {
         const loadSingleTest = async () => {
@@ -66,23 +67,32 @@ const DirectTakeTest = () => {
 
     const handleStart = async (e) => {
         e.preventDefault();
-        if (!name.trim()) return;
+        if (!name.trim() || isStarting) return;
 
-        // Check if this student already took the test
-        const deviceId = await generateDeviceFingerprint();
-        const { taken, reason } = await hasStudentTaken(test.id, name.trim(), deviceId);
+        setIsStarting(true);
 
-        if (taken) {
-            if (reason === 'DEVICE') {
-                alert("⚠️ Qurilma bloki: Ushbu IP/Qurilmadan test allaqachon topshirilgan.\n\nHech qaysi ism ostida bu qurilmadan qayta kira olmaysiz.");
-            } else {
-                alert("⚠️ Ushbu ism bilan test allaqachon topshirilgan!\n\nIltimos, ismingiz yoniga familiyangizni ham qo'shing (Masalan: Ali Valiyev). Namunadagidek farqli ism kiritsangizgina tizim sizni qabul qiladi.");
+        try {
+            // Check if this student already took the test
+            const deviceId = await generateDeviceFingerprint();
+            const { taken, reason } = await hasStudentTaken(test.id, name.trim(), deviceId);
+
+            if (taken) {
+                if (reason === 'DEVICE') {
+                    alert("⚠️ Qurilma bloki: Ushbu IP/Qurilmadan test allaqachon topshirilgan.\n\nHech qaysi ism ostida bu qurilmadan qayta kira olmaysiz.");
+                } else {
+                    alert("⚠️ Ushbu ism bilan test allaqachon topshirilgan!\n\nIltimos, ismingiz yoniga familiyangizni ham qo'shing (Masalan: Ali Valiyev). Namunadagidek farqli ism kiritsangizgina tizim sizni qabul qiladi.");
+                }
+                setIsStarting(false);
+                return;
             }
-            return;
-        }
 
-        sessionStorage.setItem('currentStudentName', name.trim());
-        navigate(`/student/test/${test.id}`, { state: { testData: test, studentName: name.trim(), deviceId } });
+            sessionStorage.setItem('currentStudentName', name.trim());
+            navigate(`/student/test/${test.id}`, { state: { testData: test, studentName: name.trim(), deviceId } });
+        } catch (error) {
+            console.error("Xatolik:", error);
+            alert("Ulanishda xatolik yuz berdi. Iltimos qayta urinib ko'ring.");
+            setIsStarting(false);
+        }
     };
 
     if (loadingTest || !test) {
@@ -140,8 +150,9 @@ const DirectTakeTest = () => {
                                     autoFocus
                                 />
                             </div>
-                            <Button variant="primary" type="submit" size="lg" disabled={!name.trim()}>
-                                Shu qoidalarga roziman, Boshlash
+                            <Button type="submit" variant="primary" fullWidth size="lg" style={{ marginTop: '1.5rem' }} disabled={isStarting || !name.trim()}>
+                                <Clock size={18} style={{ marginRight: '0.5rem' }} />
+                                {isStarting ? 'Tekshirilmoqda...' : 'Qoidalarga roziman, Boshlash'}
                             </Button>
                         </form>
                     )}
