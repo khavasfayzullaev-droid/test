@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useTests } from '../context/TestContext';
 import { Button } from '../components/ui/Button';
 import { Card, CardHeader, CardContent, CardFooter } from '../components/ui/Card';
-import { PlusCircle, Copy, Trash2, Users, Edit3, Clock, LogOut } from 'lucide-react';
+import { PlusCircle, Copy, Trash2, Users, Edit3, Clock, LogOut, Send } from 'lucide-react';
 
 const TeacherDashboard = () => {
     const { tests, deleteTest, loading } = useTests();
@@ -21,6 +21,28 @@ const TeacherDashboard = () => {
     const handleLogout = () => {
         localStorage.removeItem('isTeacherLoggedIn');
         navigate('/');
+    };
+
+    const handleTelegramExport = (test) => {
+        let text = `📝 TEST: ${test.title}\n`;
+        if (test.category && test.category !== 'Umumiy') text += `📁 Kategoriya: ${test.category}\n`;
+        if (test.timeLimit > 0) text += `⏳ Vaqt: ${test.timeLimit} daqiqa\n`;
+        text += `🔢 Jami: ${test.questions.length} ta savol\n\n`;
+        text += `🖥 Onlayn reytingli ishlash uchun:\n👉 ${window.location.origin}/take/${test.id.toUpperCase()}\n\n`;
+        text += `👇 Paski qismda anonim telegram viktorina:\n➖➖➖➖➖➖➖➖➖➖\n\n`;
+
+        test.questions.forEach((q, index) => {
+            text += `❓ ${index + 1}-savol: ${q.text}\n`;
+            const letters = ['A', 'B', 'C', 'D'];
+            q.options.forEach((opt, optIndex) => {
+                text += `${letters[optIndex]}) ${opt}\n`;
+            });
+            const correctOpt = q.options[q.correctOption];
+            text += `\n✅ Javob: || ${letters[q.correctOption]}) ${correctOpt} ||\n\n`;
+        });
+
+        navigator.clipboard.writeText(text);
+        alert('✅ Diqqat! Test Telegram formatida nusxalandi.\n\nSirli spoilerlar ishlashi uchun uni Telegram guruh yoki kanalingizga shunchaki Paste (Tashlash) qilib yuboring. To\'g\'ri javoblar qora chiziq ostida yashirin holatda bo\'ladi, uni ustiga bossangiz ochiladi.');
     };
 
     // Group tests by category
@@ -98,12 +120,15 @@ const TeacherDashboard = () => {
                                             </div>
                                         </CardContent>
                                         <CardFooter style={{ justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
-                                            <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                            <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                                                 <Button variant="outline" size="sm" onClick={() => navigate(`/teacher/results/${test.id}`)}>
-                                                    <Users size={16} style={{ marginRight: '0.5rem' }} /> Natijalar
+                                                    <Users size={16} style={{ marginRight: '0.4rem' }} /> Natijalar
                                                 </Button>
                                                 <Button variant="outline" size="sm" onClick={() => navigate(`/teacher/edit/${test.id}`)}>
-                                                    <Edit3 size={16} style={{ marginRight: '0.5rem' }} /> Tahrirlash
+                                                    <Edit3 size={16} style={{ marginRight: '0.4rem' }} /> Tahrirlash
+                                                </Button>
+                                                <Button variant="outline" size="sm" onClick={() => handleTelegramExport(test)} style={{ color: 'var(--primary)', borderColor: 'rgba(52, 152, 219, 0.3)' }}>
+                                                    <Send size={16} style={{ marginRight: '0.4rem' }} /> Telegram
                                                 </Button>
                                             </div>
                                             <Button variant="ghost" size="sm" style={{ color: 'var(--danger)' }} onClick={async () => { if (window.confirm('Testni o\'chirishni xohlaysizmi?')) await deleteTest(test.id); }}>
