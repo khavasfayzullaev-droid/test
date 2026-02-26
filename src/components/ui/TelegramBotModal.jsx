@@ -71,22 +71,41 @@ export const TelegramBotModal = ({ isOpen, onClose, test }) => {
                     correct_option_id: q.correctOption,
                 };
 
-                const res = await fetch('/api/telegram', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
+                let success = false;
+                let retryCount = 0;
+                
+                while (!success && retryCount < 3) {
+                    const res = await fetch('/api/telegram', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
 
-                const data = await res.json();
+                    const data = await res.json();
 
-                if (!data.ok) {
-                    throw new Error(data.description || "Telegram API xatoligi yuz berdi");
+                    if (res.status === 429) {
+                        // Rate limited
+                        const retryAfter = data.parameters?.retry_after || 30;
+                        setErrorMessage(`Telegram cheklovi: ${retryAfter} soniya kutilmoqda... (Savol: ${i + 1})`);
+                        await new Promise(r => setTimeout(r, retryAfter * 1000));
+                        setErrorMessage(''); // clear message and retry
+                        retryCount++;
+                    } else if (!data.ok) {
+                        throw new Error(data.description || "Telegram API xatoligi yuz berdi");
+                    } else {
+                        success = true;
+                    }
+                }
+                
+                if (!success) {
+                    throw new Error("Telegram tarmog'i bandligi uchun yuborish to'xtatildi. Keyinroq qayta urinib ko'ring.");
                 }
 
                 setProgress(Math.round(((i + 1) / test.questions.length) * 100));
 
-                // Delay to prevent hitting Telegram API limits (approx 1 sec per message is safe)
-                await new Promise(r => setTimeout(r, 1000));
+                // Telegram has strict limits (approx 20 msgs per minute in channels). 
+                // Wait 3.5 seconds between each poll to be safe.
+                await new Promise(r => setTimeout(r, 3500));
             }
 
             setStatus('success');
