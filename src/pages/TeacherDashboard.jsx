@@ -279,10 +279,10 @@ const TeacherDashboard = () => {
                                     </CardContent>
                                     <CardFooter style={{ justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
                                         <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                                            <Button variant="outline" size="sm" onClick={() => navigate(`/ teacher / results / ${test.id} `)}>
+                                            <Button variant="outline" size="sm" onClick={() => navigate(`/teacher/results/${test.id}`)}>
                                                 <Users size={16} style={{ marginRight: '0.4rem' }} /> Natijalar
                                             </Button>
-                                            <Button variant="outline" size="sm" onClick={() => navigate(`/ teacher / edit / ${test.id} `)}>
+                                            <Button variant="outline" size="sm" onClick={() => navigate(`/teacher/edit/${test.id}`)}>
                                                 <Edit3 size={16} style={{ marginRight: '0.4rem' }} /> Tahrirlash
                                             </Button>
                                             <Button variant="outline" size="sm" onClick={() => handleTelegramExport(test)} style={{ color: 'var(--primary)', borderColor: 'rgba(52, 152, 219, 0.3)' }}>
