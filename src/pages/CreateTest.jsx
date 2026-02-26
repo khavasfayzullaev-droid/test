@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useTests } from '../context/TestContext';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
@@ -8,13 +8,14 @@ import { PlusCircle, Trash2, ArrowLeft, Save, Sparkles, Image as ImageIcon, X } 
 import { AiGeneratorModal } from '../components/ui/AiGeneratorModal';
 
 const CreateTest = () => {
-    const { addTest, tests, updateTest } = useTests();
+    const { addTest, tests, updateTest, folders } = useTests();
     const navigate = useNavigate();
+    const location = useLocation();
     const { editId } = useParams();
 
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [category, setCategory] = useState('');
+    const [category, setCategory] = useState(location.state?.defaultCategory || 'Umumiy');
     const [timeLimit, setTimeLimit] = useState('');
     const [showAnswers, setShowAnswers] = useState(false);
     const [oneByOne, setOneByOne] = useState(false);
@@ -174,12 +175,31 @@ const CreateTest = () => {
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                     />
-                    <Input
-                        label="Test Bo'limi (Kategoriyasi)"
-                        placeholder="Masalan: Beginner, 5-sinf, IELTS..."
-                        value={category}
-                        onChange={(e) => setCategory(e.target.value)}
-                    />
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1.5rem' }}>
+                        <label style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-main)', display: 'block' }}>Qaysi Papkaga saqlansin?</label>
+                        <select
+                            value={category}
+                            onChange={(e) => setCategory(e.target.value)}
+                            style={{
+                                width: '100%', padding: '0.8rem 1rem',
+                                borderRadius: 'var(--radius-md)',
+                                border: '1px solid var(--border-light)',
+                                background: 'var(--bg-document)',
+                                color: 'var(--text-main)',
+                                fontSize: '1rem',
+                                outline: 'none',
+                                appearance: 'none',
+                                cursor: 'pointer'
+                            }}
+                        >
+                            <option value="Umumiy">Umumiy (Asosiy testlar)</option>
+                            {folders && folders.map(f => (
+                                <option key={f.id} value={f.name}>{f.name}</option>
+                            ))}
+                        </select>
+                    </div>
+
                     <Input
                         label="⏱️ Vaqt chegarasi (daqiqada)"
                         placeholder="Masalan: 30 (bo'sh qoldirsangiz — taymer chiqmaydi)"

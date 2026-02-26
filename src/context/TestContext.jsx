@@ -7,11 +7,22 @@ export const useTests = () => useContext(TestContext);
 
 export const TestProvider = ({ children }) => {
     const [tests, setTests] = useState([]);
+    const [folders, setFolders] = useState([]);
     const [loading, setLoading] = useState(true);
 
     const fetchData = async () => {
         try {
             setLoading(true);
+
+            // Fetch Folders First
+            const { data: folderData, error: folderErr } = await supabase.from('folders')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (folderErr) console.error("Error fetching folders:", folderErr);
+            if (folderData) setFolders(folderData);
+
+            // Fetch Tests
             const { data: testsData, error: testsError } = await supabase.from('tests')
                 .select('*')
                 .order('created_at', { ascending: false })
@@ -313,9 +324,45 @@ export const TestProvider = ({ children }) => {
         return { taken: false, reason: null };
     };
 
+    const addFolder = async (name) => {
+        try {
+            const { data, error } = await supabase
+                .from('folders')
+                .insert([{ name }])
+                .select()
+                .single();
+            if (error) return { error };
+            setFolders(prev => [data, ...prev]);
+            return { data };
+        } catch (error) {
+            return { error };
+        }
+    };
+
+    const deleteFolder = async (id, folderName) => {
+        try {
+            // Move tests from this folder to 'Umumiy'
+            await supabase.from('tests').update({ category: 'Umumiy' }).eq('category', folderName);
+
+            // Delete the folder
+            const { error } = await supabase.from('folders').delete().eq('id', id);
+            if (error) return { error };
+
+            // Update local state
+            setFolders(prev => prev.filter(f => f.id !== id));
+            setTests(prev => prev.map(t => t.category === folderName ? { ...t, category: 'Umumiy' } : t));
+
+            return { error: null };
+        } catch (error) {
+            return { error };
+        }
+    };
+
     return (
         <TestContext.Provider value={{
             tests,
+            folders,
+            setFolders,
             loading,
             addTest,
             deleteTest,
@@ -325,7 +372,9 @@ export const TestProvider = ({ children }) => {
             updateTest,
             hasStudentTaken,
             fetchData,
-            fetchTestById
+            fetchTestById,
+            addFolder,
+            deleteFolder
         }}>
             {children}
         </TestContext.Provider>
