@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useTests } from '../context/TestContext';
 import { Button } from '../components/ui/Button';
 import { Card, CardHeader, CardContent, CardFooter } from '../components/ui/Card';
@@ -9,10 +9,11 @@ import { TelegramBotModal } from '../components/ui/TelegramBotModal';
 const TeacherDashboard = () => {
     const { tests, folders, addFolder, deleteFolder, renameFolder, deleteTest, loading } = useTests();
     const navigate = useNavigate();
+    const location = useLocation();
 
     const [telegramModalOpen, setTelegramModalOpen] = useState(false);
     const [selectedTestForTelegram, setSelectedTestForTelegram] = useState(null);
-    const [currentFolder, setCurrentFolder] = useState(null);
+    const [currentFolder, setCurrentFolder] = useState(location.state?.folder || null);
 
     if (loading) {
         return <div style={{ textAlign: 'center', padding: '4rem' }}>Ma'lumotlar yuklanmoqda...</div>;
@@ -283,10 +284,10 @@ const TeacherDashboard = () => {
                                     </CardContent>
                                     <CardFooter style={{ justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
                                         <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                                            <Button variant="outline" size="sm" onClick={() => navigate(`/teacher/results/${test.id}`)}>
+                                            <Button variant="outline" size="sm" onClick={() => navigate(`/teacher/results/${test.id}`, { state: { folder: currentFolder } })}>
                                                 <Users size={16} style={{ marginRight: '0.4rem' }} /> Natijalar
                                             </Button>
-                                            <Button variant="outline" size="sm" onClick={() => navigate(`/teacher/edit/${test.id}`)}>
+                                            <Button variant="outline" size="sm" onClick={() => navigate(`/teacher/edit/${test.id}`, { state: { folder: currentFolder } })}>
                                                 <Edit3 size={16} style={{ marginRight: '0.4rem' }} /> Tahrirlash
                                             </Button>
                                             <Button variant="outline" size="sm" onClick={() => handleTelegramExport(test)} style={{ color: 'var(--primary)', borderColor: 'rgba(52, 152, 219, 0.3)' }}>

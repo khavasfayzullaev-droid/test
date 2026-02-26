@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useTests } from '../context/TestContext';
 import { Button } from '../components/ui/Button';
 import { Card, CardHeader, CardContent } from '../components/ui/Card';
@@ -9,6 +9,7 @@ const TestResults = () => {
     const { id } = useParams();
     const { tests, getSubmissionsForTest, deleteSubmission, loading } = useTests();
     const navigate = useNavigate();
+    const location = useLocation();
 
     const [test, setTest] = useState(null);
     const [submissions, setSubmissions] = useState([]);
@@ -31,7 +32,7 @@ const TestResults = () => {
 
         const foundTest = tests.find(t => t.id === id);
         if (!foundTest) {
-            navigate('/teacher');
+            navigate('/teacher', { state: { folder: location.state?.folder } });
             return;
         }
         setTest(foundTest);
@@ -83,7 +84,7 @@ const TestResults = () => {
     return (
         <div className="fade-in" style={{ maxWidth: '900px', margin: '0 auto' }}>
             <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2rem' }}>
-                <Button variant="ghost" onClick={() => navigate('/teacher')} style={{ marginRight: '1rem', padding: '0.5rem' }}>
+                <Button variant="ghost" onClick={() => navigate('/teacher', { state: { folder: location.state?.folder } })} style={{ marginRight: '1rem', padding: '0.5rem' }}>
                     <ArrowLeft size={24} />
                 </Button>
                 <div>

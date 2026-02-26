@@ -44,7 +44,7 @@ const CreateTest = () => {
                 setEndTime(existing.endTime || '');
                 setQuestions(existing.questions);
             } else {
-                navigate('/teacher');
+                navigate('/teacher', { state: { folder: location.state?.defaultCategory } });
             }
         }
     }, [editId, tests, navigate]);
@@ -142,7 +142,7 @@ const CreateTest = () => {
                 const testId = await addTest(payload);
                 alert(`Test yaratildi! Test kodi: ${testId.toUpperCase()}`);
             }
-            navigate('/teacher');
+            navigate('/teacher', { state: { folder: category } });
         } catch (err) {
             alert("Testni saqlashda xatolik yuz berdi. Iltimos qaytadan urunib ko'ring.");
             console.error(err);
@@ -152,7 +152,7 @@ const CreateTest = () => {
     return (
         <div className="fade-in" style={{ maxWidth: '800px', margin: '0 auto' }}>
             <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2rem' }}>
-                <Button variant="ghost" onClick={() => navigate('/teacher')} style={{ marginRight: '1rem', padding: '0.5rem' }}>
+                <Button variant="ghost" onClick={() => navigate('/teacher', { state: { folder: category || location.state?.defaultCategory } })} style={{ marginRight: '1rem', padding: '0.5rem' }}>
                     <ArrowLeft size={24} />
                 </Button>
                 <div>
