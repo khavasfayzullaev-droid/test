@@ -4,10 +4,14 @@ import { useTests } from '../context/TestContext';
 import { Button } from '../components/ui/Button';
 import { Card, CardHeader, CardContent, CardFooter } from '../components/ui/Card';
 import { PlusCircle, Copy, Trash2, Users, Edit3, Clock, LogOut, Send } from 'lucide-react';
+import { TelegramBotModal } from '../components/ui/TelegramBotModal';
 
 const TeacherDashboard = () => {
     const { tests, deleteTest, loading } = useTests();
     const navigate = useNavigate();
+
+    const [telegramModalOpen, setTelegramModalOpen] = useState(false);
+    const [selectedTestForTelegram, setSelectedTestForTelegram] = useState(null);
 
     if (loading) {
         return <div style={{ textAlign: 'center', padding: '4rem' }}>Ma'lumotlar yuklanmoqda...</div>;
@@ -24,25 +28,8 @@ const TeacherDashboard = () => {
     };
 
     const handleTelegramExport = (test) => {
-        let text = `📝 TEST: ${test.title}\n`;
-        if (test.category && test.category !== 'Umumiy') text += `📁 Kategoriya: ${test.category}\n`;
-        if (test.timeLimit > 0) text += `⏳ Vaqt: ${test.timeLimit} daqiqa\n`;
-        text += `🔢 Jami: ${test.questions.length} ta savol\n\n`;
-        text += `🖥 Onlayn reytingli ishlash uchun:\n👉 ${window.location.origin}/take/${test.id.toUpperCase()}\n\n`;
-        text += `👇 Paski qismda anonim telegram viktorina:\n➖➖➖➖➖➖➖➖➖➖\n\n`;
-
-        test.questions.forEach((q, index) => {
-            text += `❓ ${index + 1}-savol: ${q.text}\n`;
-            const letters = ['A', 'B', 'C', 'D'];
-            q.options.forEach((opt, optIndex) => {
-                text += `${letters[optIndex]}) ${opt}\n`;
-            });
-            const correctOpt = q.options[q.correctOption];
-            text += `\n✅ Javob: || ${letters[q.correctOption]}) ${correctOpt} ||\n\n`;
-        });
-
-        navigator.clipboard.writeText(text);
-        alert('✅ Diqqat! Test Telegram formatida nusxalandi.\n\nSirli spoilerlar ishlashi uchun uni Telegram guruh yoki kanalingizga shunchaki Paste (Tashlash) qilib yuboring. To\'g\'ri javoblar qora chiziq ostida yashirin holatda bo\'ladi, uni ustiga bossangiz ochiladi.');
+        setSelectedTestForTelegram(test);
+        setTelegramModalOpen(true);
     };
 
     // Group tests by category
@@ -142,6 +129,12 @@ const TeacherDashboard = () => {
                     ))}
                 </div>
             )}
+
+            <TelegramBotModal
+                isOpen={telegramModalOpen}
+                onClose={() => setTelegramModalOpen(false)}
+                test={selectedTestForTelegram}
+            />
         </div>
     );
 };
