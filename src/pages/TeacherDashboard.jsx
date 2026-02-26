@@ -213,7 +213,7 @@ const TeacherDashboard = () => {
                             <Card
                                 key={folder.id}
                                 glass
-                                style={{ cursor: 'pointer', transition: 'transform 0.2s' }}
+                                style={{ cursor: 'pointer', transition: 'transform 0.2s', position: 'relative' }}
                                 onClick={() => setCurrentFolder(folder.name)}
                             >
                                 <CardContent style={{ padding: '2rem 1.5rem', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
@@ -223,7 +223,7 @@ const TeacherDashboard = () => {
                                         {testCount} ta test
                                     </div>
                                 </CardContent>
-                                {folder.id !== 'default-umumiy' && (
+                                {folder.id !== 'default-umumiy' ? (
                                     <div style={{ position: 'absolute', top: '0.5rem', right: '0.5rem', display: 'flex', gap: '0.25rem' }}>
                                         <Button variant="ghost" size="sm" style={{ color: 'var(--text-muted)', padding: '0.4rem', background: 'var(--bg-main)' }} onClick={(e) => handleRenameFolder(e, folder)}>
                                             <Edit2 size={16} />
@@ -231,6 +231,10 @@ const TeacherDashboard = () => {
                                         <Button variant="ghost" size="sm" style={{ color: 'var(--danger)', padding: '0.4rem', background: 'var(--bg-main)' }} onClick={(e) => handleDeleteFolder(e, folder)}>
                                             <Trash2 size={16} />
                                         </Button>
+                                    </div>
+                                ) : (
+                                    <div style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}>
+                                        <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', background: 'var(--bg-main)', padding: '0.2rem 0.6rem', borderRadius: 'var(--radius-full)', fontWeight: 500 }}>Asosiy Papka</span>
                                     </div>
                                 )}
                             </Card>
