@@ -57,8 +57,6 @@ const Home = () => (
       Test tayyorlash <br /> endi yanada oson.
     </h1>
     <p style={{ fontSize: '1.25rem', color: 'var(--text-muted)', marginBottom: '3rem', maxWidth: '600px', margin: '0 auto 3rem' }}>
-      Ustozlar uchun mukammal test platformasi. Mashg'ulotlarni testlar bilan boyiting,
-      bo'limlar orqali boshqaring va o'quvchilarga maxsus linklarni yuboring.
     </p>
 
     <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', flexWrap: 'wrap' }}>
