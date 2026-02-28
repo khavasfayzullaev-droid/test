@@ -28,14 +28,15 @@ export const AiGeneratorModal = ({ isOpen, onClose, onGenerated }) => {
         setLoading(true);
 
         const prompt = `
-O'qituvchi senga test matnini kiritdi. Matnda test savollari, A,B,C,D variantlari va oxirida yoki boshida to'g'ri javoblar kaliti aralash holatda qatnashgan bo'lishi mumkin.
-Sening yagona vazifang ushbu matndan testlarni sof holatda ajratib olish va ularni qat'iy JSON formatida qaytarishdir. 
-Hech qanday qo'shimcha matn yozma, "Mana JSON" deb yozma. Mutlaqo faqat JSON Array qaytar ([ bilan boshlanib ] bilan tugasin).
+O'qituvchi senga test matnini kiritdi. Matnda test savollari, A,B,C,D variantlari va oxirida tushunarsiz javoblar kaliti qatnashgan. Muhimi matn Arab (yoki boshqa RTL) tilida g'alati formatda ham bo'lishi mumkin.
+Sening yagona vazifang ushbu matndan testlarni toza holda bittalab ajratib olish va ularni qat'iy JSON formatida qaytarishdir. 
+Hech qanday qo'shimcha gap yozma, mutlaqo faqat JSON Array qaytar ([ bilan boshlanib, ] bilan tugasin).
 
-Qoidalar:
-1. Agar foydalanuvchi javoblar kalitini (masalan: 1-A, 2-B, 3-C) testning eng tagida bergan bo'lsa, ushbu A, B, C kalitlar asosida JSON dagi "correctOption" (Tog'ri variant) maydonini tahlil qil. Bu raqam bo'lishi shart (A=0, B=1, C=2, D=3).
-2. Agar matnda umuman to'g'ri javob ko'rsatilmagan bo'lsa, o'z aqlingni ishga solib, haqiqiy fan va bilimingga tayangan holda eng to'g'ri bo'lgan variantni "correctOption" ga to'g'irla!
-3. Savolning oxirida "Javoblar: 1-A" degan izohlar chiqib qolmasligiga qattiq ehtiyot bo'l.
+QIP-QIZIL QOIDALAR:
+1. "correctOption" tahlili: Agar foydalanuvchi javoblar kalitini (masalan: 1-A, 2-B, yoki "1. A") matnning eng tagida bergan bo'lsa, ushbu kalit asosida "correctOption" ga to'g'ri indeksni yoz. Indeks qat'iy raqam (0, 1, 2, 3) bo'lishi shart (Masalan: A=0, B=1, C=2, D=3). Agar umuman javob topa olmasang, 0 yoz.
+2. Variantlarni uzish: Savolning matni ("text") ga ASLO variantlarni qo'shib yuborma! Arab yoki aralash tilli matnlarda variantlar (A, B, C, D harflari) bitta qatorda yozilib ketgan bo'lsa ham, ularni savoldan "shafqatsizlarcha" kesib ajratib ol va faqat "options" massivi ichiga mustaqil matn sifatida sol.
+3. 4 ta Array: "options" massivi doimo roppa-rosa 4 ta elementdan iborat bo'lishi shart. Javob matnidan A), B), C), D) kabi bosh harflarni olib tashlab, faqat sof javobning o'zini yoz.
+4. Javoblar blokini filtrlash: Matnning eng oxirida keladigan "Javoblar: 1-A..." kabi kalit izohlar aslo oxirgi savolning matniga ulanib qolmasin. Kalit qismini savol deb o'ylab xato qilib tizimga kiritma. U butunlay inkor qilinishi (ignore) kerak.
 
 Kutilayotgan qat'iy JSON strukturasi (Boshqacha bo'lmasin):
 [
@@ -181,7 +182,7 @@ Javoblar: 1-B, 2-A"
                     </div>
                 </CardContent>
             </Card>
-            <style>{\`@keyframes spin {100 % { transform: rotate(360deg); }}\`}</style>
+            <style dangerouslySetInnerHTML={{ __html: "@keyframes spin { 100% { transform: rotate(360deg); } }" }} />
         </div>
     );
 };
