@@ -1,13 +1,9 @@
 import React, { useState } from 'react';
 import { Button } from './Button';
 import { Card, CardHeader, CardContent } from './Card';
-import { Input } from './Input';
 import { Sparkles, X, Loader2 } from 'lucide-react';
 
 export const AiGeneratorModal = ({ isOpen, onClose, onGenerated }) => {
-    // Attempt to load API key from environment, fallback to manual input if missing
-    const envApiKey = import.meta.env.VITE_GEMINI_API_KEY || '';
-    const [apiKey, setApiKey] = useState(envApiKey);
     const [rawText, setRawText] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -15,10 +11,6 @@ export const AiGeneratorModal = ({ isOpen, onClose, onGenerated }) => {
     if (!isOpen) return null;
 
     const handleGenerate = async () => {
-        if (!apiKey.trim()) {
-            setError("Iltimos, Google Gemini API kalitini kiritng!");
-            return;
-        }
         if (!rawText.trim() || rawText.length < 5) {
             setError("Matn juda qisqa. Kamida 5 belgidan iborat javoblar yoxud test kiriting.");
             return;
@@ -27,93 +19,154 @@ export const AiGeneratorModal = ({ isOpen, onClose, onGenerated }) => {
         setError('');
         setLoading(true);
 
-        const prompt = `
-O'qituvchi senga test matnini kiritdi. Matnda test savollari, A,B,C,D variantlari va oxirida tushunarsiz javoblar kaliti qatnashgan. Muhimi matn Arab (yoki boshqa RTL) tilida g'alati formatda ham bo'lishi mumkin. Yoki Dars o'tuvchi FAKATGINA javoblar ro'yxatini (Masalan: 1-A, 2-B, yoki 1️⃣ B, 2️⃣ A) kiritgan bo'lishi mumkin.
-Sening yagona vazifang ushbu matndan testlarni toza holda bittalab ajratib olish va ularni qat'iy JSON formatida qaytarishdir. 
-Hech qanday qo'shimcha gap yozma, mutlaqo faqat JSON Array qaytar ([ bilan boshlanib, ] bilan tugasin). Hech qanday markdown (masalan \`\`\`json) lardan foydalanma.
-
-QIP-QIZIL QOIDALAR:
-1. FAQAT JAVOBLAR (ANSWER KEY ONLY) HOLATI yoxud EMOJILAR: Agar foydalanuvchi matnda hech qanday savol yozmasdan, faqatgina "1-A, 2-B" yoxud emoji/raqamli ro'yxat (Masalan: "1️⃣ B, 2️⃣ C") kiritgan bo'lsa, buni xato deb hisoblaMA! Sen o'zing avtomatik tarzda "1-savol", "2-savol" kabi nomlar bilan bo'm-bo'sh savollar (stublar) yaratib, "options" ga ["A", "B", "C", "D"] ni qo'yib, "correctOption" ni o'sha berilgan kalitlarga moslab terib chiqib ber! Emojilarni to'g'ri raqam ketma-ketligi deb tushun (1️⃣ = 1, 🔟 = 10, v.h).
-2. "correctOption" tahlili: Agar foydalanuvchi javoblar kalitini matnning eng tagida yoki ro'yxatda bergan bo'lsa, ushbu kalit asosida "correctOption" ga to'g'ri indeksni yoz. Indeks qat'iy raqam (0, 1, 2, 3) bo'lishi shart (Masalan: A=0, B=1, C=2, D=3).
-3. Variantlarni uzish: Savolning matni ("text") ga ASLO variantlarni qo'shib yuborma! Arab yoki aralash tilli matnlarda variantlar (A, B, C, D harflari) bitta qatorda yozilib ketgan bo'lsa ham, ularni savoldan "shafqatsizlarcha" kesib ajratib ol va faqat "options" massivi ichiga mustaqil matn sifatida sol.
-4. 4 ta Array: "options" massivi doimo roppa-rosa 4 ta elementdan iborat bo'lishi shart. Javob matnidan A), B), C), D) kabi bosh harflarni olib tashlab, faqat sof javobning o'zini yoz.
-5. Javoblar blokini filtrlash: Matnning eng oxirida keladigan "مفتاح الإجابة" (Javoblar kaliti) yoxud "Javoblar: 1-A..." yoxud "JAVOBLAR KALITI" kabi barcha izohlar aslo oxirgi savolning matniga ulanib qolmasin. Uni faqat "correctOption" ni topish uchun o'qi-yu, lekin o'zini butunlay inkor qil (ignore).
-6. TO'LIQLIK KAFOLATI: Agar matnda 30 ta yoki hatto 50 ta savol bo'lsa ham, ularning BARCHASINI bittalab JSON ga solib chiq. Qilib yarmida uzib qo'yma, barcha testlarni to'liq qamrab olgani amin bo'l!
-
-Kutilayotgan qat'iy JSON strukturasi (Boshqacha bo'lmasin):
-[
-  {
-    "text": "O'zbekistonning poytaxti qayer?",
-    "options": ["Toshkent", "Samarqand", "Buxoro", "Xiva"],
-    "correctOption": 0 
-  }
-]
-
-Mana Foydalanuvchi kiritgan va tahlil qilishing kerak bo'lgan matn:
-=======================
-${rawText}
-=======================
-`;
-
         try {
-            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey.trim()}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    contents: [{ parts: [{ text: prompt }] }],
-                    generationConfig: {
-                        temperature: 0.1, // very low temperature for highly structured output
-                    }
-                })
+            // Give a tiny delay simulating processing time so UI doesn't freeze jarringly
+            await new Promise(resolve => setTimeout(resolve, 600));
+
+            const lines = rawText.split('\n').map(l => l.trim()).filter(l => l);
+            const parsedQuestions = [];
+            const answerKeys = {};
+
+            // 1. Detect if the ENTIRE text is just an Answer Key (e.g. "1 B", "2 C" or Emojis)
+            const isPureAnswerKey = lines.every(line => {
+                const cleaned = line.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+                return cleaned.length >= 2 && cleaned.length <= 5 && /^\d+[ABCD]$/.test(cleaned);
             });
 
-            if (!response.ok) {
-                const errData = await response.json();
-                throw new Error("API xatosi: " + (errData.error?.message || response.statusText));
+            if (isPureAnswerKey) {
+                lines.forEach((line, idx) => {
+                    const cleaned = line.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+                    const match = cleaned.match(/^(\d+)([ABCD])$/);
+                    let correctIdx = 0;
+                    if (match) {
+                        const letter = match[2];
+                        if (letter === 'B') correctIdx = 1;
+                        if (letter === 'C') correctIdx = 2;
+                        if (letter === 'D') correctIdx = 3;
+                    }
+                    parsedQuestions.push({
+                        id: Date.now() + idx,
+                        text: `${match ? match[1] : idx + 1}-savol (Faqat javob kiritilgan)`,
+                        options: ["A variant", "B variant", "C variant", "D variant"],
+                        correctOption: correctIdx
+                    });
+                });
+                onGenerated(parsedQuestions);
+                setRawText('');
+                onClose();
+                setLoading(false);
+                return;
             }
 
-            const data = await response.json();
-            const rawOutput = data.candidates[0].content.parts[0].text;
+            // 2. Standard Test Parsing
+            let currentQuestion = null;
+            let parsingKeys = false;
+            let currentOptionIndex = -1;
 
-            let jsonString = rawOutput.trim();
-            // Remove markdown syntax if Gemini hallucinated it
-            if (jsonString.startsWith('```json')) {
-                jsonString = jsonString.replace(/^```json/, '').replace(/```$/, '').trim();
-            } else if (jsonString.startsWith('```')) {
-                jsonString = jsonString.replace(/^```/, '').replace(/```$/, '').trim();
+            const questionRegex = /^(\d+)[.)\-\s]+(.+)/;
+            const optionRegex = /^([A-D])[.)\-\s]+(.+)/i;
+            const inlineOptionsRegex = /A[.)\-\s]+(.+?)\s+B[.)\-\s]+(.+?)\s+C[.)\-\s]+(.+?)\s+D[.)\-\s]+(.+)/i;
+            // Catch answer section headers (Javoblar, kalit, kaliti, مفتاح الإجابة)
+            const answerKeyHeaderRegex = /(javoblar|kalit|مفتاح الإجابة)/i;
+            const keyLineRegex = /^(\d+)[^A-Za-z0-9]*([A-D])/i;
+
+            lines.forEach((line) => {
+                // If we reach an answers header
+                if (answerKeyHeaderRegex.test(line)) {
+                    parsingKeys = true;
+                    return;
+                }
+
+                if (parsingKeys) {
+                    const cleaned = line.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+                    const keyMatch = cleaned.match(/^(\d+)([ABCD])$/);
+                    if (keyMatch) {
+                        const qNum = parseInt(keyMatch[1]);
+                        const letter = keyMatch[2];
+                        let correctIdx = 0;
+                        if (letter === 'B') correctIdx = 1;
+                        if (letter === 'C') correctIdx = 2;
+                        if (letter === 'D') correctIdx = 3;
+                        answerKeys[qNum] = correctIdx;
+                    } else {
+                        // Sometimes the line is pure like "1-A, 2-B" inline
+                        const multiMatches = line.match(/\d+[^A-Za-z0-9]+[A-D]/gi);
+                        if (multiMatches) {
+                            multiMatches.forEach(m => {
+                                const cl = m.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+                                const km = cl.match(/^(\d+)([ABCD])$/);
+                                if (km) {
+                                    let correctIdx = 0;
+                                    if (km[2] === 'B') correctIdx = 1;
+                                    if (km[2] === 'C') correctIdx = 2;
+                                    if (km[2] === 'D') correctIdx = 3;
+                                    answerKeys[parseInt(km[1])] = correctIdx;
+                                }
+                            });
+                        }
+                    }
+                    return;
+                }
+
+                // Check for inline options: A) ... B) ... C) ... D) ...
+                const inlineMatch = line.match(inlineOptionsRegex);
+                if (inlineMatch && currentQuestion) {
+                    currentQuestion.options = [inlineMatch[1].trim(), inlineMatch[2].trim(), inlineMatch[3].trim(), inlineMatch[4].trim()];
+                    currentOptionIndex = -1;
+                    return;
+                }
+
+                // Check for block option: A) ...
+                const optMatch = line.match(optionRegex);
+                if (optMatch && currentQuestion) {
+                    const letter = optMatch[1].toUpperCase();
+                    const text = optMatch[2].trim();
+                    if (letter === 'A') { currentQuestion.options[0] = text; currentOptionIndex = 0; }
+                    if (letter === 'B') { currentQuestion.options[1] = text; currentOptionIndex = 1; }
+                    if (letter === 'C') { currentQuestion.options[2] = text; currentOptionIndex = 2; }
+                    if (letter === 'D') { currentQuestion.options[3] = text; currentOptionIndex = 3; }
+                    return;
+                }
+
+                // Check for a new Question: 1. ... 
+                const qMatch = line.match(questionRegex);
+                if (qMatch) {
+                    if (currentQuestion) parsedQuestions.push(currentQuestion);
+                    currentQuestion = {
+                        qNum: parseInt(qMatch[1]),
+                        text: qMatch[2].trim(),
+                        options: ["A variant", "B variant", "C variant", "D variant"], // Defaults
+                        correctOption: 0
+                    };
+                    currentOptionIndex = -1;
+                    return;
+                }
+
+                // If it's a multiline extension
+                if (currentQuestion) {
+                    if (currentOptionIndex >= 0) {
+                        currentQuestion.options[currentOptionIndex] += "\n" + line.trim();
+                    } else {
+                        currentQuestion.text += "\n" + line.trim();
+                    }
+                }
+            });
+
+            if (currentQuestion) parsedQuestions.push(currentQuestion);
+
+            if (parsedQuestions.length === 0) {
+                throw new Error("Matndan savollarni va variantlarni ajratib bo'lmadi. Iltimos standartroq format kiriting (masalan: 1. Savol... A)...).");
             }
 
-            // Fallback bracket extractor just in case
-            const firstBracketInd = jsonString.indexOf('[');
-            const lastBracketInd = jsonString.lastIndexOf(']');
-            if (firstBracketInd !== -1 && lastBracketInd !== -1 && lastBracketInd > firstBracketInd) {
-                jsonString = jsonString.slice(firstBracketInd, lastBracketInd + 1);
-            } else {
-                throw new Error("AI formatni tushunmadi (JSON Qavslar topilmadi). Qayta urinib ko'ring.");
-            }
-
-            let parsedQuestions;
-            try {
-                parsedQuestions = JSON.parse(jsonString);
-            } catch (jsonErr) {
-                console.error("JSON PARSE ERROR:", jsonErr);
-                console.log("Faulty string:", jsonString);
-                throw new Error("AI noto'g'ri (buzilgan) JSON qaytardi. Matnni tekshirib qayta urinib ko'ring.");
-            }
-
-            if (!Array.isArray(parsedQuestions) || parsedQuestions.length === 0) {
-                throw new Error("Testlar topilmadi.");
-            }
-
-            // Ensure robustness of the object before sending to main app
-            const formattedQs = parsedQuestions.map((q, idx) => ({
+            // Map correct answers
+            const finalQs = parsedQuestions.map((q, idx) => ({
                 id: Date.now() + idx,
-                text: q.text || "Savol yozilmagan?",
-                options: q.options && Array.isArray(q.options) && q.options.length === 4 ? q.options : ["A variant", "B variant", "C variant", "D variant"],
-                correctOption: typeof q.correctOption === 'number' && q.correctOption >= 0 && q.correctOption <= 3 ? q.correctOption : 0
+                text: q.text,
+                options: q.options,
+                correctOption: answerKeys[q.qNum] !== undefined ? answerKeys[q.qNum] : 0
             }));
 
-            onGenerated(formattedQs);
+            onGenerated(finalQs);
             setRawText('');
             onClose();
 
@@ -136,7 +189,7 @@ ${rawText}
                 <CardHeader
                     title={
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--primary)' }}>
-                            <Sparkles size={20} /> AI Qudrati Bilant Test Yasash
+                            <Sparkles size={20} /> Avtomatik Test Yasash
                         </div>
                     }
                     action={<Button variant="ghost" onClick={onClose} disabled={loading}><X size={20} /></Button>}
@@ -144,21 +197,9 @@ ${rawText}
                 <CardContent>
                     <div style={{ marginBottom: '1.5rem' }}>
                         <p className="text-muted" style={{ fontSize: '0.875rem', marginBottom: '1rem' }}>
-                            Telegram yoki Word-dan olingan tartibsiz testlarni shu yerga qo'ying. Sun'iy Intellekt ularni avtomatik tarzda chuqur o'qib-tahlil qilib, o'zi platformaga ko'rinishida (4 ta variant va to'g'ri kalitini topgan holda) mukammal joylashtirib beradi.
+                            Telegram yoki Word-dan olingan tartibsiz testlarni shu yerga qo'ying. Tizim ularni oflayn va tezkor tarzda o'qib-tahlil qilib, o'zi platformaga ko'rinishida mukammal joylashtirib beradi.
                         </p>
                     </div>
-
-                    {!envApiKey && (
-                        <div style={{ marginBottom: '1rem' }}>
-                            <Input
-                                type="password"
-                                label="Gemini API Kaliti (Key)"
-                                placeholder="AIzaSy..."
-                                value={apiKey}
-                                onChange={e => setApiKey(e.target.value)}
-                            />
-                        </div>
-                    )}
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1.5rem' }}>
                         <label className="input-label">Aralash tartibsiz matn:</label>
