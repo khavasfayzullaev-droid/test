@@ -59,9 +59,6 @@ const TakeTest = () => {
                 totalQuestions: test.questions.length
             });
 
-            // Set permanent local device lock against retaking
-            localStorage.setItem(`completed_test_${test.id}`, 'true');
-
             setIsSubmitted(true);
             sessionStorage.removeItem('currentStudentName');
             sessionStorage.removeItem(`test_answers_${test.id}`);

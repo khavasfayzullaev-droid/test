@@ -39,22 +39,12 @@ const StudentLogin = () => {
                 return;
             }
 
-            if (localStorage.getItem(`completed_test_${testExists.id}`)) {
-                setError("Siz bu testni ushbu qurilmadan allaqachon ishlab bo'lgansiz.");
-                setIsStarting(false);
-                return;
-            }
-
-            // Check if this student already took the test
+            // Check if this student already took the test by name
             const deviceId = await generateDeviceFingerprint();
-            const { taken, reason } = await hasStudentTaken(testExists.id, studentName.trim(), deviceId);
+            const { taken } = await hasStudentTaken(testExists.id, studentName.trim(), deviceId);
 
             if (taken) {
-                if (reason === 'DEVICE') {
-                    setError("Qurilma bloki: Ushbu IP/Qurilmadan test allaqachon topshirilgan.");
-                } else {
-                    setError("Ushbu ism bilan test allaqachon topshirilgan! Iltimos, familiyangizni ham qo'shib yozing (Masalan: Ali Valiyev).");
-                }
+                setError("Ushbu ism bilan test allaqachon topshirilgan! Boshqa ism kiriting yoki familiyangizni ham qo'shib yozing (Masalan: Ali Valiyev).");
                 setIsStarting(false);
                 return;
             }

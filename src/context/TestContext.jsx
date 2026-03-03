@@ -291,11 +291,8 @@ export const TestProvider = ({ children }) => {
             .select('id, studentName, deviceId')
             .eq('testId', testId);
 
-        if (deviceId) {
-            query = query.or(`studentName.ilike.${studentName},deviceId.eq.${deviceId}`);
-        } else {
-            query = query.ilike('studentName', studentName);
-        }
+        // Only check by name to prevent the exact same name from taking it twice
+        query = query.ilike('studentName', studentName);
 
         const { data, error } = await query;
 
@@ -312,12 +309,6 @@ export const TestProvider = ({ children }) => {
             const activeSubmissions = data.filter(sub => !sub.is_deleted && !legacyDeletedList.includes(sub.id));
 
             if (activeSubmissions.length > 0) {
-                const nameMatch = activeSubmissions.some(s => s.studentName.toLowerCase() === studentName.toLowerCase());
-                const deviceMatch = deviceId && activeSubmissions.some(s => s.deviceId === deviceId);
-
-                if (deviceMatch && !nameMatch) {
-                    return { taken: true, reason: 'DEVICE' };
-                }
                 return { taken: true, reason: 'NAME' };
             }
         }

@@ -72,16 +72,12 @@ const DirectTakeTest = () => {
         setIsStarting(true);
 
         try {
-            // Check if this student already took the test
+            // Check if this student already took the test by name
             const deviceId = await generateDeviceFingerprint();
-            const { taken, reason } = await hasStudentTaken(test.id, name.trim(), deviceId);
+            const { taken } = await hasStudentTaken(test.id, name.trim(), deviceId);
 
             if (taken) {
-                if (reason === 'DEVICE') {
-                    alert("⚠️ Qurilma bloki: Ushbu IP/Qurilmadan test allaqachon topshirilgan.\n\nHech qaysi ism ostida bu qurilmadan qayta kira olmaysiz.");
-                } else {
-                    alert("⚠️ Ushbu ism bilan test allaqachon topshirilgan!\n\nIltimos, ismingiz yoniga familiyangizni ham qo'shing (Masalan: Ali Valiyev). Namunadagidek farqli ism kiritsangizgina tizim sizni qabul qiladi.");
-                }
+                alert("⚠️ Ushbu ism bilan test allaqachon topshirilgan!\n\nIltimos, ismingiz yoniga familiyangizni ham qo'shing (Masalan: Ali Valiyev). Namunadagidek farqli ism kiritsangizgina tizim sizni qabul qiladi.");
                 setIsStarting(false);
                 return;
             }
