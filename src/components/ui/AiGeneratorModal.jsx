@@ -28,16 +28,17 @@ export const AiGeneratorModal = ({ isOpen, onClose, onGenerated }) => {
         setLoading(true);
 
         const prompt = `
-O'qituvchi senga test matnini kiritdi. Matnda test savollari, A,B,C,D variantlari va oxirida tushunarsiz javoblar kaliti qatnashgan. Muhimi matn Arab (yoki boshqa RTL) tilida g'alati formatda ham bo'lishi mumkin. Yoki Dars o'tuvchi FAKATGINA javoblar ro'yxatini (Masalan: 1-A, 2-B yoki 1 1 B) kiritgan bo'lishi mumkin.
+O'qituvchi senga test matnini kiritdi. Matnda test savollari, A,B,C,D variantlari va oxirida tushunarsiz javoblar kaliti qatnashgan. Muhimi matn Arab (yoki boshqa RTL) tilida g'alati formatda ham bo'lishi mumkin. Yoki Dars o'tuvchi FAKATGINA javoblar ro'yxatini (Masalan: 1-A, 2-B, yoki 1️⃣ B, 2️⃣ A) kiritgan bo'lishi mumkin.
 Sening yagona vazifang ushbu matndan testlarni toza holda bittalab ajratib olish va ularni qat'iy JSON formatida qaytarishdir. 
-Hech qanday qo'shimcha gap yozma, mutlaqo faqat JSON Array qaytar ([ bilan boshlanib, ] bilan tugasin).
+Hech qanday qo'shimcha gap yozma, mutlaqo faqat JSON Array qaytar ([ bilan boshlanib, ] bilan tugasin). Hech qanday markdown (masalan \`\`\`json) lardan foydalanma.
 
 QIP-QIZIL QOIDALAR:
-1. FAQAT JAVOBLAR (ANSWER KEY ONLY) HOLATI: Agar foydalanuvchi matnda hech qanday savol yozmasdan, faqatgina "1-A, 2-B" yoxud emoji/raqamli ro'yxat (Masalan: "11 B, 12 C") kiritgan bo'lsa, buni xato deb hisoblaMA! Sen o'zing avtomatik tarzda "1-savol", "2-savol" kabi nomlar bilan bo'm-bo'sh savollar (stublar) yaratib, "options" ga ["A", "B", "C", "D"] ni qo'yib, "correctOption" ni o'sha berilgan kalitlarga moslab terib chiqib ber!
-2. "correctOption" tahlili: Agar foydalanuvchi javoblar kalitini matnning eng tagida yoki ro'yxatda bergan bo'lsa, ushbu kalit asosida "correctOption" ga to'g'ri indeksni yoz. Indeks qat'iy raqam (0, 1, 2, 3) bo'lishi shart (Masalan: A=0, B=1, C=2, D=3). Agar umuman javob topa olmasang, 0 yoz.
+1. FAQAT JAVOBLAR (ANSWER KEY ONLY) HOLATI yoxud EMOJILAR: Agar foydalanuvchi matnda hech qanday savol yozmasdan, faqatgina "1-A, 2-B" yoxud emoji/raqamli ro'yxat (Masalan: "1️⃣ B, 2️⃣ C") kiritgan bo'lsa, buni xato deb hisoblaMA! Sen o'zing avtomatik tarzda "1-savol", "2-savol" kabi nomlar bilan bo'm-bo'sh savollar (stublar) yaratib, "options" ga ["A", "B", "C", "D"] ni qo'yib, "correctOption" ni o'sha berilgan kalitlarga moslab terib chiqib ber! Emojilarni to'g'ri raqam ketma-ketligi deb tushun (1️⃣ = 1, 🔟 = 10, v.h).
+2. "correctOption" tahlili: Agar foydalanuvchi javoblar kalitini matnning eng tagida yoki ro'yxatda bergan bo'lsa, ushbu kalit asosida "correctOption" ga to'g'ri indeksni yoz. Indeks qat'iy raqam (0, 1, 2, 3) bo'lishi shart (Masalan: A=0, B=1, C=2, D=3).
 3. Variantlarni uzish: Savolning matni ("text") ga ASLO variantlarni qo'shib yuborma! Arab yoki aralash tilli matnlarda variantlar (A, B, C, D harflari) bitta qatorda yozilib ketgan bo'lsa ham, ularni savoldan "shafqatsizlarcha" kesib ajratib ol va faqat "options" massivi ichiga mustaqil matn sifatida sol.
 4. 4 ta Array: "options" massivi doimo roppa-rosa 4 ta elementdan iborat bo'lishi shart. Javob matnidan A), B), C), D) kabi bosh harflarni olib tashlab, faqat sof javobning o'zini yoz.
-5. Javoblar blokini filtrlash: Matnning eng oxirida keladigan "Javoblar: 1-A..." kabi kalit izohlar aslo oxirgi savolning matniga ulanib qolmasin. Kalit qismini savol deb o'ylab xato qilib tizimga kiritma. U butunlay inkor qilinishi (ignore) kerak.
+5. Javoblar blokini filtrlash: Matnning eng oxirida keladigan "مفتاح الإجابة" (Javoblar kaliti) yoxud "Javoblar: 1-A..." yoxud "JAVOBLAR KALITI" kabi barcha izohlar aslo oxirgi savolning matniga ulanib qolmasin. Uni faqat "correctOption" ni topish uchun o'qi-yu, lekin o'zini butunlay inkor qil (ignore).
+6. TO'LIQLIK KAFOLATI: Agar matnda 30 ta yoki hatto 50 ta savol bo'lsa ham, ularning BARCHASINI bittalab JSON ga solib chiq. Qilib yarmida uzib qo'yma, barcha testlarni to'liq qamrab olgani amin bo'l!
 
 Kutilayotgan qat'iy JSON strukturasi (Boshqacha bo'lmasin):
 [
@@ -62,6 +63,7 @@ ${rawText}
                     contents: [{ parts: [{ text: prompt }] }],
                     generationConfig: {
                         temperature: 0.1, // very low temperature for highly structured output
+                        maxOutputTokens: 8192, // Prevent truncation for 30+ questions
                     }
                 })
             });
@@ -76,14 +78,24 @@ ${rawText}
 
             // Extract JSON blocks using regex
             let jsonString = rawOutput;
-            const jsonMatch = rawOutput.match(/\[[\s\S]*\]/);
-            if (jsonMatch) {
-                jsonString = jsonMatch[0];
+            // Find the outermost array brackets
+            const firstBracketInd = rawOutput.indexOf('[');
+            const lastBracketInd = rawOutput.lastIndexOf(']');
+
+            if (firstBracketInd !== -1 && lastBracketInd !== -1 && lastBracketInd > firstBracketInd) {
+                jsonString = rawOutput.slice(firstBracketInd, lastBracketInd + 1);
             } else {
                 throw new Error("Sun'iy intellekt tushunarsiz format qaytardi.");
             }
 
-            const parsedQuestions = JSON.parse(jsonString);
+            let parsedQuestions;
+            try {
+                parsedQuestions = JSON.parse(jsonString);
+            } catch (jsonErr) {
+                console.error("JSON PARSE ERROR:", jsonErr);
+                console.log("Faulty string:", jsonString);
+                throw new Error("Sun'iy intellekt noto'g'ri (buzilgan) JSON qaytardi.");
+            }
 
             if (!Array.isArray(parsedQuestions) || parsedQuestions.length === 0) {
                 throw new Error("Testlar topilmadi.");
