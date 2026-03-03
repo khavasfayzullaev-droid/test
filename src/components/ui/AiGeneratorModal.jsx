@@ -76,16 +76,21 @@ ${rawText}
             const data = await response.json();
             const rawOutput = data.candidates[0].content.parts[0].text;
 
-            // Extract JSON blocks using regex
-            let jsonString = rawOutput;
-            // Find the outermost array brackets
-            const firstBracketInd = rawOutput.indexOf('[');
-            const lastBracketInd = rawOutput.lastIndexOf(']');
+            let jsonString = rawOutput.trim();
+            // Remove markdown syntax if Gemini hallucinated it
+            if (jsonString.startsWith('```json')) {
+                jsonString = jsonString.replace(/^```json/, '').replace(/```$/, '').trim();
+            } else if (jsonString.startsWith('```')) {
+                jsonString = jsonString.replace(/^```/, '').replace(/```$/, '').trim();
+            }
 
+            // Fallback bracket extractor just in case
+            const firstBracketInd = jsonString.indexOf('[');
+            const lastBracketInd = jsonString.lastIndexOf(']');
             if (firstBracketInd !== -1 && lastBracketInd !== -1 && lastBracketInd > firstBracketInd) {
-                jsonString = rawOutput.slice(firstBracketInd, lastBracketInd + 1);
+                jsonString = jsonString.slice(firstBracketInd, lastBracketInd + 1);
             } else {
-                throw new Error("Sun'iy intellekt tushunarsiz format qaytardi.");
+                throw new Error("AI formatni tushunmadi (JSON Qavslar topilmadi). Qayta urinib ko'ring.");
             }
 
             let parsedQuestions;
@@ -94,7 +99,7 @@ ${rawText}
             } catch (jsonErr) {
                 console.error("JSON PARSE ERROR:", jsonErr);
                 console.log("Faulty string:", jsonString);
-                throw new Error("Sun'iy intellekt noto'g'ri (buzilgan) JSON qaytardi.");
+                throw new Error("AI noto'g'ri (buzilgan) JSON qaytardi. Matnni tekshirib qayta urinib ko'ring.");
             }
 
             if (!Array.isArray(parsedQuestions) || parsedQuestions.length === 0) {
@@ -115,7 +120,7 @@ ${rawText}
 
         } catch (err) {
             console.error(err);
-            setError("Test tuzishda xatolik yuz berdi: Matnda mantiqiy xatolar mavjud yoki to'g'ri kelmas format.");
+            setError(`Texnik Xatolik: ${err.message}`);
         } finally {
             setLoading(false);
         }
