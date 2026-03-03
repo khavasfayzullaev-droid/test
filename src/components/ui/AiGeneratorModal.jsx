@@ -19,8 +19,8 @@ export const AiGeneratorModal = ({ isOpen, onClose, onGenerated }) => {
             setError("Iltimos, Google Gemini API kalitini kiritng!");
             return;
         }
-        if (!rawText.trim() || rawText.length < 20) {
-            setError("Matn juda qisqa. Sifatli test chiqishi uchun to'liqroq matn kiriting.");
+        if (!rawText.trim() || rawText.length < 5) {
+            setError("Matn juda qisqa. Kamida 5 belgidan iborat javoblar yoxud test kiriting.");
             return;
         }
 
