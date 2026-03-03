@@ -28,15 +28,16 @@ export const AiGeneratorModal = ({ isOpen, onClose, onGenerated }) => {
         setLoading(true);
 
         const prompt = `
-O'qituvchi senga test matnini kiritdi. Matnda test savollari, A,B,C,D variantlari va oxirida tushunarsiz javoblar kaliti qatnashgan. Muhimi matn Arab (yoki boshqa RTL) tilida g'alati formatda ham bo'lishi mumkin.
+O'qituvchi senga test matnini kiritdi. Matnda test savollari, A,B,C,D variantlari va oxirida tushunarsiz javoblar kaliti qatnashgan. Muhimi matn Arab (yoki boshqa RTL) tilida g'alati formatda ham bo'lishi mumkin. Yoki Dars o'tuvchi FAKATGINA javoblar ro'yxatini (Masalan: 1-A, 2-B yoki 1 1 B) kiritgan bo'lishi mumkin.
 Sening yagona vazifang ushbu matndan testlarni toza holda bittalab ajratib olish va ularni qat'iy JSON formatida qaytarishdir. 
 Hech qanday qo'shimcha gap yozma, mutlaqo faqat JSON Array qaytar ([ bilan boshlanib, ] bilan tugasin).
 
 QIP-QIZIL QOIDALAR:
-1. "correctOption" tahlili: Agar foydalanuvchi javoblar kalitini (masalan: 1-A, 2-B, yoki "1. A") matnning eng tagida bergan bo'lsa, ushbu kalit asosida "correctOption" ga to'g'ri indeksni yoz. Indeks qat'iy raqam (0, 1, 2, 3) bo'lishi shart (Masalan: A=0, B=1, C=2, D=3). Agar umuman javob topa olmasang, 0 yoz.
-2. Variantlarni uzish: Savolning matni ("text") ga ASLO variantlarni qo'shib yuborma! Arab yoki aralash tilli matnlarda variantlar (A, B, C, D harflari) bitta qatorda yozilib ketgan bo'lsa ham, ularni savoldan "shafqatsizlarcha" kesib ajratib ol va faqat "options" massivi ichiga mustaqil matn sifatida sol.
-3. 4 ta Array: "options" massivi doimo roppa-rosa 4 ta elementdan iborat bo'lishi shart. Javob matnidan A), B), C), D) kabi bosh harflarni olib tashlab, faqat sof javobning o'zini yoz.
-4. Javoblar blokini filtrlash: Matnning eng oxirida keladigan "Javoblar: 1-A..." kabi kalit izohlar aslo oxirgi savolning matniga ulanib qolmasin. Kalit qismini savol deb o'ylab xato qilib tizimga kiritma. U butunlay inkor qilinishi (ignore) kerak.
+1. FAQAT JAVOBLAR (ANSWER KEY ONLY) HOLATI: Agar foydalanuvchi matnda hech qanday savol yozmasdan, faqatgina "1-A, 2-B" yoxud emoji/raqamli ro'yxat (Masalan: "11 B, 12 C") kiritgan bo'lsa, buni xato deb hisoblaMA! Sen o'zing avtomatik tarzda "1-savol", "2-savol" kabi nomlar bilan bo'm-bo'sh savollar (stublar) yaratib, "options" ga ["A", "B", "C", "D"] ni qo'yib, "correctOption" ni o'sha berilgan kalitlarga moslab terib chiqib ber!
+2. "correctOption" tahlili: Agar foydalanuvchi javoblar kalitini matnning eng tagida yoki ro'yxatda bergan bo'lsa, ushbu kalit asosida "correctOption" ga to'g'ri indeksni yoz. Indeks qat'iy raqam (0, 1, 2, 3) bo'lishi shart (Masalan: A=0, B=1, C=2, D=3). Agar umuman javob topa olmasang, 0 yoz.
+3. Variantlarni uzish: Savolning matni ("text") ga ASLO variantlarni qo'shib yuborma! Arab yoki aralash tilli matnlarda variantlar (A, B, C, D harflari) bitta qatorda yozilib ketgan bo'lsa ham, ularni savoldan "shafqatsizlarcha" kesib ajratib ol va faqat "options" massivi ichiga mustaqil matn sifatida sol.
+4. 4 ta Array: "options" massivi doimo roppa-rosa 4 ta elementdan iborat bo'lishi shart. Javob matnidan A), B), C), D) kabi bosh harflarni olib tashlab, faqat sof javobning o'zini yoz.
+5. Javoblar blokini filtrlash: Matnning eng oxirida keladigan "Javoblar: 1-A..." kabi kalit izohlar aslo oxirgi savolning matniga ulanib qolmasin. Kalit qismini savol deb o'ylab xato qilib tizimga kiritma. U butunlay inkor qilinishi (ignore) kerak.
 
 Kutilayotgan qat'iy JSON strukturasi (Boshqacha bo'lmasin):
 [
